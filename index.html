@@ -652,150 +652,157 @@ select option{background:var(–bg2);color:var(–text)}
 </div>
 
 <script>
-// ===================== SUPABASE CONFIG =====================
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
-// Şimdilik localStorage kullanılacak — Supabase bağlantısı eklenince burası aktif edilecek
-// const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ===================== STATE =====================
+const SUPABASE_URL = 'https://ctfdfzghegdsddquhnxj.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0ZmRmemhlZ2RzZGRxdWhueGoiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0MTcyMDM4MCwiZXhwIjoyMDU3Mjk2MzgwfQ.yus0GW-vSrGEChZXfzXetLcz5EcwZd8kvVxpyMJDH_g';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 let adminCredentials = JSON.parse(localStorage.getItem('adminCredentials') || 'null') || { username: 'admin', password: 'admin123' };
 let currentTheme = localStorage.getItem('theme') || 'dark';
 let summaryFilter = 'month';
 let confirmCallback = null;
 let barChartInst = null, pieChartInst = null, lineChartInst = null;
 let currentUser = null;
+let _cache = {};
 
-// ===================== DATA HELPERS =====================
-function getData(key) {
-  try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { return []; }
+async function dbGet(table) {
+  if (_cache[table]) return _cache[table];
+  try {
+    const res = await sb.from(table).select('*');
+    if (res.error) throw res.error;
+    _cache[table] = res.data || [];
+    return _cache[table];
+  } catch(e) { console.error('dbGet', table, e); return []; }
 }
-function setData(key, val) {
-  localStorage.setItem(key, JSON.stringify(val));
+
+async function dbInsert(table, row) {
+  _cache[table] = null;
+  try {
+    const res = await sb.from(table).insert(row);
+    if (res.error) throw res.error;
+    return true;
+  } catch(e) { console.error('dbInsert', e); showToast('Kayit hatasi: ' + (e.message || ''), 'error'); return false; }
 }
-function genId() {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+
+async function dbUpdate(table, id, row) {
+  _cache[table] = null;
+  try {
+    const res = await sb.from(table).update(row).eq('id', id);
+    if (res.error) throw res.error;
+    return true;
+  } catch(e) { console.error('dbUpdate', e); showToast('Guncelleme hatasi: ' + (e.message || ''), 'error'); return false; }
 }
-function today() {
-  return new Date().toISOString().split('T')[0];
+
+async function dbDelete(table, id) {
+  _cache[table] = null;
+  try {
+    const res = await sb.from(table).delete().eq('id', id);
+    if (res.error) throw res.error;
+    return true;
+  } catch(e) { console.error('dbDelete', e); showToast('Silme hatasi: ' + (e.message || ''), 'error'); return false; }
 }
+
+function normPersonnel(r) { return { id: r.id, name: r.name, surname: r.surname, wage: Number(r.wage), username: r.username, password: r.password, createdAt: r.created_at }; }
+function normTimesheet(r) { return { id: r.id, personnelId: r.personnel_id, date: r.date, hours: Number(r.hours), note: r.note || '', createdAt: r.created_at }; }
+function normIncome(r) { return { id: r.id, date: r.date, cash: Number(r.cash || 0), card: Number(r.card || 0), note: r.note || '', createdAt: r.created_at }; }
+function normCategory(r) { return { id: r.id, name: r.name }; }
+function normExpense(r) { return { id: r.id, categoryId: r.category_id, amount: Number(r.amount), date: r.date, note: r.note || '', createdAt: r.created_at }; }
+
+async function getPersonnel() { return (await dbGet('personnel')).map(normPersonnel); }
+async function getTimesheet() { return (await dbGet('timesheet')).map(normTimesheet); }
+async function getIncome() { return (await dbGet('income')).map(normIncome); }
+async function getCategories() { return (await dbGet('categories')).map(normCategory); }
+async function getExpenses() { return (await dbGet('expenses')).map(normExpense); }
+
+function genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2,5); }
+function today() { return new Date().toISOString().split('T')[0]; }
 function fmtDate(d) {
-  if (!d) return '—';
+  if (!d) return '-';
   const dt = new Date(d + 'T00:00:00');
   return dt.toLocaleDateString('tr-TR', { day:'2-digit', month:'2-digit', year:'numeric' });
 }
 function fmtMoney(n) {
-  const sym = getSetting('bizCurrency', '₺');
-  return sym + ' ' + Number(n || 0).toLocaleString('tr-TR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+  const sym = getSetting('bizCurrency', 'TL');
+  return sym + ' ' + Number(n||0).toLocaleString('tr-TR', { minimumFractionDigits:2, maximumFractionDigits:2 });
 }
-function getSetting(key, def) {
+function getSetting(k, def) {
   const s = JSON.parse(localStorage.getItem('bizSettings') || '{}');
-  return s[key] !== undefined ? s[key] : def;
+  return s[k] !== undefined ? s[k] : def;
 }
-function saveSetting(key, val) {
+function saveSetting(k, v) {
   const s = JSON.parse(localStorage.getItem('bizSettings') || '{}');
-  s[key] = val;
-  localStorage.setItem('bizSettings', JSON.stringify(s));
+  s[k] = v; localStorage.setItem('bizSettings', JSON.stringify(s));
+}
+function showLoading(id) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = '<div class="loading"><div class="spinner"></div> Yukleniyor...</div>';
 }
 
-// ===================== THEME =====================
 function applyTheme(t) {
   document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : '');
   currentTheme = t;
   localStorage.setItem('theme', t);
-  document.getElementById('themeBtn').textContent = t === 'light' ? '🌙' : '☀️';
+  const tb = document.getElementById('themeBtn');
+  if (tb) tb.textContent = t === 'light' ? '\u{1F319}' : '\u2600\uFE0F';
   const pb = document.getElementById('persThemeBtn');
-  if (pb) pb.textContent = t === 'light' ? '🌙' : '☀️';
+  if (pb) pb.textContent = t === 'light' ? '\u{1F319}' : '\u2600\uFE0F';
   const dk = document.getElementById('darkToggle');
   if (dk) dk.checked = (t === 'dark');
 }
-function toggleTheme() {
-  applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
-}
-function applyThemeFromToggle() {
-  const dk = document.getElementById('darkToggle');
-  applyTheme(dk && dk.checked ? 'dark' : 'light');
-}
-function applyCompact() {
-  const c = document.getElementById('compactToggle');
-  document.body.classList.toggle('compact', c && c.checked);
-}
-function applyAnim() {
-  const a = document.getElementById('animToggle');
-  document.body.style.setProperty('--transition', (!a || a.checked) ? '0.25s cubic-bezier(0.4,0,0.2,1)' : '0s');
-}
+function toggleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+function applyThemeFromToggle() { const dk = document.getElementById('darkToggle'); applyTheme(dk && dk.checked ? 'dark' : 'light'); }
+function applyCompact() { const c = document.getElementById('compactToggle'); document.body.classList.toggle('compact', c && c.checked); }
+function applyAnim() { const a = document.getElementById('animToggle'); document.body.style.setProperty('--transition', (!a || a.checked) ? '0.25s cubic-bezier(0.4,0,0.2,1)' : '0s'); }
 applyTheme(currentTheme);
 
-// ===================== TOAST =====================
-function showToast(msg, type='success') {
-  const icons = { success:'✅', error:'❌', warning:'⚠️' };
+function showToast(msg, type) {
+  type = type || 'success';
+  const icons = { success: '\u2705', error: '\u274C', warning: '\u26A0\uFE0F' };
   const el = document.createElement('div');
   el.className = 'toast ' + type;
   el.innerHTML = '<span style="font-size:18px">' + icons[type] + '</span><span>' + msg + '</span>';
   document.getElementById('toastContainer').appendChild(el);
-  setTimeout(() => {
-    el.style.animation = 'toastOut 0.3s ease forwards';
-    setTimeout(() => el.remove(), 300);
-  }, 3000);
+  setTimeout(function() { el.style.animation = 'toastOut 0.3s ease forwards'; setTimeout(function() { el.remove(); }, 300); }, 3000);
 }
 
-// ===================== CONFIRM =====================
 function showConfirm(title, msg, cb) {
   document.getElementById('confirmTitle').textContent = title;
   document.getElementById('confirmMsg').textContent = msg;
   confirmCallback = cb;
   document.getElementById('confirmDialog').classList.add('active');
 }
-function closeConfirm() {
-  document.getElementById('confirmDialog').classList.remove('active');
-  confirmCallback = null;
-}
-document.getElementById('confirmOk').onclick = function() {
-  if (confirmCallback) confirmCallback();
-  closeConfirm();
-};
+function closeConfirm() { document.getElementById('confirmDialog').classList.remove('active'); confirmCallback = null; }
+document.getElementById('confirmOk').onclick = function() { if (confirmCallback) confirmCallback(); closeConfirm(); };
 
-// ===================== MODAL =====================
 function openModal(id) { document.getElementById(id).classList.add('active'); }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('active'); });
+document.querySelectorAll('.modal-overlay').forEach(function(m) {
+  m.addEventListener('click', function(e) { if (e.target === m) m.classList.remove('active'); });
 });
 
-// ===================== AUTH =====================
-function handleLogin() {
+async function handleLogin() {
   const u = document.getElementById('loginUser').value.trim();
   const p = document.getElementById('loginPass').value;
   document.getElementById('loginError').style.display = 'none';
-
   if (u === adminCredentials.username && p === adminCredentials.password) {
     currentUser = { role: 'admin', username: u };
     localStorage.setItem('session', JSON.stringify(currentUser));
-    showAdmin();
-    return;
+    showAdmin(); return;
   }
-
-  const personnel = getData('personnel');
-  const found = personnel.find(x => x.username === u && x.password === p);
+  const personnel = await getPersonnel();
+  const found = personnel.find(function(x) { return x.username === u && x.password === p; });
   if (found) {
     currentUser = { role: 'personnel', id: found.id, username: u };
     localStorage.setItem('session', JSON.stringify(currentUser));
-    showPersonnelDash(found);
-    return;
+    showPersonnelDash(found); return;
   }
-
   document.getElementById('loginError').style.display = 'block';
 }
-
-document.getElementById('loginPass').addEventListener('keydown', e => {
-  if (e.key === 'Enter') handleLogin();
-});
-document.getElementById('loginUser').addEventListener('keydown', e => {
-  if (e.key === 'Enter') handleLogin();
-});
+document.getElementById('loginPass').addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
+document.getElementById('loginUser').addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
 
 function handleLogout() {
-  currentUser = null;
+  currentUser = null; _cache = {};
   localStorage.removeItem('session');
   document.getElementById('app').style.display = 'none';
   document.getElementById('personnelDashboard').style.display = 'none';
@@ -818,102 +825,99 @@ function showPersonnelDash(person) {
   document.getElementById('persFullName').textContent = person.name + ' ' + person.surname;
   document.getElementById('persNameDisplay').textContent = person.name;
   document.getElementById('persAvatarInitial').textContent = (person.name || 'P')[0].toUpperCase();
-  document.getElementById('persWelcomeSub').textContent = 'Saatlik ücret: ' + fmtMoney(person.wage) + ' / Saat';
+  document.getElementById('persWelcomeSub').textContent = 'Saatlik ucret: ' + fmtMoney(person.wage) + ' / Saat';
   currentUser = { role: 'personnel', id: person.id, person: person };
   renderPersonnelDashboard();
 }
 
-// check existing session
-(function() {
+(async function() {
   const s = localStorage.getItem('session');
-  if (s) {
-    try {
-      const sess = JSON.parse(s);
-      if (sess.role === 'admin') { currentUser = sess; showAdmin(); }
-      else if (sess.role === 'personnel') {
-        const p = getData('personnel').find(x => x.id === sess.id);
-        if (p) { currentUser = sess; showPersonnelDash(p); }
-      }
-    } catch(e) {}
-  }
+  if (!s) return;
+  try {
+    const sess = JSON.parse(s);
+    if (sess.role === 'admin') { currentUser = sess; showAdmin(); }
+    else if (sess.role === 'personnel') {
+      const list = await getPersonnel();
+      const p = list.find(function(x) { return x.id === sess.id; });
+      if (p) { currentUser = sess; showPersonnelDash(p); }
+    }
+  } catch(e) {}
 })();
 
-// ===================== ADMIN INIT =====================
-function initAdmin() {
-  renderPersonnel();
-  populatePersonnelDropdowns();
-  renderTimesheet();
-  renderIncome();
-  renderCategories();
-  renderExpenses();
-  updateSummary();
-  loadSettings();
+async function initAdmin() {
   document.getElementById('tsDate').value = today();
   document.getElementById('incDate').value = today();
   document.getElementById('expDate').value = today();
+  await renderPersonnel();
+  await populatePersonnelDropdowns();
+  await renderTimesheet();
+  await renderIncome();
+  await renderCategories();
+  await renderExpenses();
+  loadSettings();
 }
 
-function switchTab(tab) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+async function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
   document.getElementById('tab-' + tab).classList.add('active');
   document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
-  if (tab === 'summary') updateSummary();
-  if (tab === 'settings') loadSettingsStats();
+  _cache = {};
+  if (tab === 'summary') await updateSummary();
+  else if (tab === 'settings') await loadSettingsStats();
+  else if (tab === 'timesheet') { await populatePersonnelDropdowns(); await renderTimesheet(); }
+  else if (tab === 'expense') { await renderCategories(); await renderExpenses(); }
+  else if (tab === 'income') await renderIncome();
+  else if (tab === 'personnel') await renderPersonnel();
 }
 
-// ===================== PERSONNEL =====================
-function addPersonnel() {
+async function addPersonnel() {
   const name = document.getElementById('pName').value.trim();
   const surname = document.getElementById('pSurname').value.trim();
   const wage = parseFloat(document.getElementById('pWage').value);
   const username = document.getElementById('pUsername').value.trim();
   const password = document.getElementById('pPassword').value;
-
-  if (!name || !surname || !username || !password || isNaN(wage)) {
-    showToast('Lütfen tüm alanları doldurun.', 'error'); return;
-  }
-  const personnel = getData('personnel');
-  if (personnel.find(p => p.username === username)) {
-    showToast('Bu kullanıcı adı zaten kullanılıyor.', 'error'); return;
-  }
-  personnel.push({ id: genId(), name, surname, wage, username, password, createdAt: today() });
-  setData('personnel', personnel);
+  if (!name || !surname || !username || !password || isNaN(wage)) { showToast('Lutfen tum alanlari doldurun.', 'error'); return; }
+  const list = await getPersonnel();
+  if (list.find(function(p) { return p.username === username; })) { showToast('Bu kullanici adi zaten kullaniliyor.', 'error'); return; }
+  const ok = await dbInsert('personnel', { id: genId(), name: name, surname: surname, wage: wage, username: username, password: password, created_at: today() });
+  if (!ok) return;
   document.getElementById('pName').value = '';
   document.getElementById('pSurname').value = '';
   document.getElementById('pWage').value = '';
   document.getElementById('pUsername').value = '';
   document.getElementById('pPassword').value = '';
-  renderPersonnel();
-  populatePersonnelDropdowns();
-  showToast('Personel başarıyla eklendi!');
+  await renderPersonnel();
+  await populatePersonnelDropdowns();
+  showToast('Personel basariyla eklendi!');
 }
 
-function renderPersonnel() {
-  const personnel = getData('personnel');
+async function renderPersonnel() {
+  showLoading('personnelTableWrap');
+  const list = await getPersonnel();
   const wrap = document.getElementById('personnelTableWrap');
-  if (!personnel.length) {
-    wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">👥</div><h3>Henüz personel yok</h3><p>Yukarıdan yeni personel ekleyin.</p></div>';
-    return;
+  if (!list.length) {
+    wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F465}</div><h3>Henuz personel yok</h3><p>Yukaridan yeni personel ekleyin.</p></div>'; return;
   }
-  wrap.innerHTML = '<div class="table-wrap"><table><thead><tr><th>#</th><th>Ad Soyad</th><th>Kullanıcı Adı</th><th>Şifre</th><th>Saatlik Ücret</th><th>Kayıt Tarihi</th><th>İşlemler</th></tr></thead><tbody>' +
-    personnel.map((p, i) => `<tr>
-      <td>${i + 1}</td>
-      <td><strong>${p.name} ${p.surname}</strong></td>
-      <td><span class="badge badge-purple">${p.username}</span></td>
-      <td><span class="pwd-mask">••••••••</span></td>
-      <td><strong>${fmtMoney(p.wage)}</strong></td>
-      <td>${fmtDate(p.createdAt)}</td>
-      <td><div class="actions">
-        <button class="btn btn-warning btn-sm btn-icon" onclick="openEditPersonnel('${p.id}')" title="Düzenle">✏️</button>
-        <button class="btn btn-danger btn-sm btn-icon" onclick="deletePersonnel('${p.id}')" title="Sil">🗑️</button>
-      </div></td>
-    </tr>`).join('') +
-    '</tbody></table></div>';
+  let html = '<div class="table-wrap"><table><thead><tr><th>#</th><th>Ad Soyad</th><th>Kullanici Adi</th><th>Sifre</th><th>Saatlik Ucret</th><th>Kayit Tarihi</th><th>Islemler</th></tr></thead><tbody>';
+  list.forEach(function(p, i) {
+    html += '<tr><td>' + (i+1) + '</td><td><strong>' + p.name + ' ' + p.surname + '</strong></td>';
+    html += '<td><span class="badge badge-purple">' + p.username + '</span></td>';
+    html += '<td><span class="pwd-mask">\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022</span></td>';
+    html += '<td><strong>' + fmtMoney(p.wage) + '</strong></td>';
+    html += '<td>' + fmtDate(p.createdAt) + '</td>';
+    html += '<td><div class="actions">';
+    html += '<button class="btn btn-warning btn-sm btn-icon" onclick="openEditPersonnel(\'' + p.id + '\')">\u270F\uFE0F</button>';
+    html += '<button class="btn btn-danger btn-sm btn-icon" onclick="deletePersonnel(\'' + p.id + '\')">\u{1F5D1}\uFE0F</button>';
+    html += '</div></td></tr>';
+  });
+  html += '</tbody></table></div>';
+  wrap.innerHTML = html;
 }
 
-function openEditPersonnel(id) {
-  const p = getData('personnel').find(x => x.id === id);
+async function openEditPersonnel(id) {
+  const list = await getPersonnel();
+  const p = list.find(function(x) { return x.id === id; });
   if (!p) return;
   document.getElementById('editPId').value = id;
   document.getElementById('editPName').value = p.name;
@@ -924,112 +928,98 @@ function openEditPersonnel(id) {
   openModal('editPersonnelModal');
 }
 
-function saveEditPersonnel() {
+async function saveEditPersonnel() {
   const id = document.getElementById('editPId').value;
-  const personnel = getData('personnel');
-  const idx = personnel.findIndex(x => x.id === id);
-  if (idx < 0) return;
   const newUsername = document.getElementById('editPUsername').value.trim();
-  const conflict = personnel.find((x, i) => x.username === newUsername && i !== idx);
-  if (conflict) { showToast('Bu kullanıcı adı başka bir personelde kullanılıyor.', 'error'); return; }
-  personnel[idx].name = document.getElementById('editPName').value.trim();
-  personnel[idx].surname = document.getElementById('editPSurname').value.trim();
-  personnel[idx].wage = parseFloat(document.getElementById('editPWage').value);
-  personnel[idx].username = newUsername;
-  const newPass = document.getElementById('editPPassword').value;
-  if (newPass) personnel[idx].password = newPass;
-  setData('personnel', personnel);
+  const list = await getPersonnel();
+  if (list.find(function(x) { return x.username === newUsername && x.id !== id; })) { showToast('Bu kullanici adi baskasinda kullaniliyor.', 'error'); return; }
+  const row = { name: document.getElementById('editPName').value.trim(), surname: document.getElementById('editPSurname').value.trim(), wage: parseFloat(document.getElementById('editPWage').value), username: newUsername };
+  const np = document.getElementById('editPPassword').value;
+  if (np) row.password = np;
+  const ok = await dbUpdate('personnel', id, row);
+  if (!ok) return;
   closeModal('editPersonnelModal');
-  renderPersonnel();
-  populatePersonnelDropdowns();
-  showToast('Personel güncellendi!');
+  await renderPersonnel();
+  await populatePersonnelDropdowns();
+  showToast('Personel guncellendi!');
 }
 
-function deletePersonnel(id) {
-  showConfirm('Personeli Sil', 'Bu personeli silmek istediğinize emin misiniz? Puantaj kayıtları da silinecek.', () => {
-    let personnel = getData('personnel');
-    personnel = personnel.filter(x => x.id !== id);
-    setData('personnel', personnel);
-    let ts = getData('timesheet');
-    ts = ts.filter(x => x.personnelId !== id);
-    setData('timesheet', ts);
-    renderPersonnel();
-    populatePersonnelDropdowns();
-    renderTimesheet();
+async function deletePersonnel(id) {
+  showConfirm('Personeli Sil', 'Bu personeli silmek istediginize emin misiniz?', async function() {
+    const ok = await dbDelete('personnel', id);
+    if (!ok) return;
+    _cache['timesheet'] = null;
+    await renderPersonnel();
+    await populatePersonnelDropdowns();
+    await renderTimesheet();
     showToast('Personel silindi.', 'warning');
   });
 }
 
-function populatePersonnelDropdowns() {
-  const personnel = getData('personnel');
-  const opts = '<option value="">Personel Seçin</option>' + personnel.map(p => `<option value="${p.id}">${p.name} ${p.surname}</option>`).join('');
-  ['tsPersonnel', 'editTsPersonnel', 'tsFilterPersonnel'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      const cur = el.value;
-      el.innerHTML = (id === 'tsFilterPersonnel' ? '<option value="">Tüm Personel</option>' : '<option value="">Personel Seçin</option>') +
-        personnel.map(p => `<option value="${p.id}">${p.name} ${p.surname}</option>`).join('');
-      if (cur) el.value = cur;
-    }
+async function populatePersonnelDropdowns() {
+  const list = await getPersonnel();
+  ['tsPersonnel','editTsPersonnel','tsFilterPersonnel'].forEach(function(did) {
+    const el = document.getElementById(did);
+    if (!el) return;
+    const cur = el.value;
+    const prefix = did === 'tsFilterPersonnel' ? '<option value="">Tum Personel</option>' : '<option value="">Personel Secin</option>';
+    el.innerHTML = prefix + list.map(function(p) { return '<option value="' + p.id + '">' + p.name + ' ' + p.surname + '</option>'; }).join('');
+    if (cur) el.value = cur;
   });
 }
 
-// ===================== TIMESHEET =====================
-function addTimesheet() {
+async function addTimesheet() {
   const personnelId = document.getElementById('tsPersonnel').value;
   const date = document.getElementById('tsDate').value;
   const hours = parseFloat(document.getElementById('tsHours').value);
   const note = document.getElementById('tsNote').value.trim();
-  if (!personnelId || !date || isNaN(hours) || hours <= 0) {
-    showToast('Lütfen tüm zorunlu alanları doldurun.', 'error'); return;
-  }
-  const ts = getData('timesheet');
-  ts.push({ id: genId(), personnelId, date, hours, note, createdAt: today() });
-  setData('timesheet', ts);
+  if (!personnelId || !date || isNaN(hours) || hours <= 0) { showToast('Lutfen tum zorunlu alanlari doldurun.', 'error'); return; }
+  const ok = await dbInsert('timesheet', { id: genId(), personnel_id: personnelId, date: date, hours: hours, note: note || null, created_at: today() });
+  if (!ok) return;
   document.getElementById('tsHours').value = '';
   document.getElementById('tsNote').value = '';
-  renderTimesheet();
+  await renderTimesheet();
   showToast('Puantaj kaydedildi!');
 }
 
-function renderTimesheet() {
-  const ts = getData('timesheet');
-  const personnel = getData('personnel');
+async function renderTimesheet() {
+  showLoading('timesheetTableWrap');
+  const list = await getTimesheet();
+  const personnel = await getPersonnel();
   const filterMonth = document.getElementById('tsFilterMonth') ? document.getElementById('tsFilterMonth').value : '';
   const filterPers = document.getElementById('tsFilterPersonnel') ? document.getElementById('tsFilterPersonnel').value : '';
-  let filtered = ts.filter(t => {
-    if (filterMonth && !t.date.startsWith(filterMonth)) return false;
+  let filtered = list.filter(function(t) {
+    if (filterMonth && t.date.indexOf(filterMonth) !== 0) return false;
     if (filterPers && t.personnelId !== filterPers) return false;
     return true;
   });
-  filtered.sort((a, b) => b.date.localeCompare(a.date));
+  filtered.sort(function(a, b) { return b.date.localeCompare(a.date); });
   const wrap = document.getElementById('timesheetTableWrap');
-  if (!filtered.length) {
-    wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">🕐</div><h3>Kayıt bulunamadı</h3><p>Henüz puantaj kaydı yok.</p></div>'; return;
-  }
-  wrap.innerHTML = '<div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Personel</th><th>Saat</th><th>Ücret</th><th>Not</th><th>İşlemler</th></tr></thead><tbody>' +
-    filtered.map(t => {
-      const p = personnel.find(x => x.id === t.personnelId);
-      const earning = p ? p.wage * t.hours : 0;
-      return `<tr>
-        <td>${fmtDate(t.date)}</td>
-        <td><strong>${p ? p.name + ' ' + p.surname : '—'}</strong></td>
-        <td><span class="badge badge-purple">${t.hours} saat</span></td>
-        <td><strong style="color:var(--success)">${fmtMoney(earning)}</strong></td>
-        <td style="color:var(--text2)">${t.note || '—'}</td>
-        <td><div class="actions">
-          <button class="btn btn-warning btn-sm btn-icon" onclick="openEditTimesheet('${t.id}')" title="Düzenle">✏️</button>
-          <button class="btn btn-danger btn-sm btn-icon" onclick="deleteTimesheet('${t.id}')" title="Sil">🗑️</button>
-        </div></td>
-      </tr>`;
-    }).join('') + '</tbody></table></div>';
+  if (!filtered.length) { wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F550}</div><h3>Kayit bulunamadi</h3><p>Henuz puantaj kaydi yok.</p></div>'; return; }
+  let html = '<div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Personel</th><th>Saat</th><th>Ucret</th><th>Not</th><th>Islemler</th></tr></thead><tbody>';
+  filtered.forEach(function(t) {
+    const p = personnel.find(function(x) { return x.id === t.personnelId; });
+    const earning = p ? p.wage * t.hours : 0;
+    html += '<tr><td>' + fmtDate(t.date) + '</td>';
+    html += '<td><strong>' + (p ? p.name + ' ' + p.surname : '-') + '</strong></td>';
+    html += '<td><span class="badge badge-purple">' + t.hours + ' saat</span></td>';
+    html += '<td><strong style="color:var(--success)">' + fmtMoney(earning) + '</strong></td>';
+    html += '<td style="color:var(--text2)">' + (t.note || '-') + '</td>';
+    html += '<td><div class="actions">';
+    html += '<button class="btn btn-warning btn-sm btn-icon" onclick="openEditTimesheet(\'' + t.id + '\')">\u270F\uFE0F</button>';
+    html += '<button class="btn btn-danger btn-sm btn-icon" onclick="deleteTimesheet(\'' + t.id + '\')">\u{1F5D1}\uFE0F</button>';
+    html += '</div></td></tr>';
+  });
+  html += '</tbody></table></div>';
+  wrap.innerHTML = html;
 }
 
-function openEditTimesheet(id) {
-  const t = getData('timesheet').find(x => x.id === id);
+async function openEditTimesheet(id) {
+  const list = await getTimesheet();
+  const t = list.find(function(x) { return x.id === id; });
   if (!t) return;
   document.getElementById('editTsId').value = id;
-  populatePersonnelDropdowns();
+  await populatePersonnelDropdowns();
   document.getElementById('editTsPersonnel').value = t.personnelId;
   document.getElementById('editTsDate').value = t.date;
   document.getElementById('editTsHours').value = t.hours;
@@ -1037,28 +1027,22 @@ function openEditTimesheet(id) {
   openModal('editTimesheetModal');
 }
 
-function saveEditTimesheet() {
+async function saveEditTimesheet() {
   const id = document.getElementById('editTsId').value;
-  const ts = getData('timesheet');
-  const idx = ts.findIndex(x => x.id === id);
-  if (idx < 0) return;
-  ts[idx].personnelId = document.getElementById('editTsPersonnel').value;
-  ts[idx].date = document.getElementById('editTsDate').value;
-  ts[idx].hours = parseFloat(document.getElementById('editTsHours').value);
-  ts[idx].note = document.getElementById('editTsNote').value;
-  setData('timesheet', ts);
+  const row = { personnel_id: document.getElementById('editTsPersonnel').value, date: document.getElementById('editTsDate').value, hours: parseFloat(document.getElementById('editTsHours').value), note: document.getElementById('editTsNote').value || null };
+  const ok = await dbUpdate('timesheet', id, row);
+  if (!ok) return;
   closeModal('editTimesheetModal');
-  renderTimesheet();
-  showToast('Puantaj güncellendi!');
+  await renderTimesheet();
+  showToast('Puantaj guncellendi!');
 }
 
-function deleteTimesheet(id) {
-  showConfirm('Puantaj Kaydını Sil', 'Bu kaydı silmek istediğinize emin misiniz?', () => {
-    let ts = getData('timesheet');
-    ts = ts.filter(x => x.id !== id);
-    setData('timesheet', ts);
-    renderTimesheet();
-    showToast('Kayıt silindi.', 'warning');
+async function deleteTimesheet(id) {
+  showConfirm('Puantaj Kaydini Sil', 'Bu kaydi silmek istediginize emin misiniz?', async function() {
+    const ok = await dbDelete('timesheet', id);
+    if (!ok) return;
+    await renderTimesheet();
+    showToast('Kayit silindi.', 'warning');
   });
 }
 
@@ -1068,53 +1052,48 @@ function clearTsFilter() {
   renderTimesheet();
 }
 
-// ===================== INCOME =====================
-function addIncome() {
+async function addIncome() {
   const date = document.getElementById('incDate').value;
   const cash = parseFloat(document.getElementById('incCash').value) || 0;
   const card = parseFloat(document.getElementById('incCard').value) || 0;
   const note = document.getElementById('incNote').value.trim();
-  if (!date || (cash === 0 && card === 0)) {
-    showToast('Tarih ve en az bir gelir giriniz.', 'error'); return;
-  }
-  const income = getData('income');
-  income.push({ id: genId(), date, cash, card, note, createdAt: today() });
-  setData('income', income);
+  if (!date || (cash === 0 && card === 0)) { showToast('Tarih ve en az bir gelir giriniz.', 'error'); return; }
+  const ok = await dbInsert('income', { id: genId(), date: date, cash: cash, card: card, note: note || null, created_at: today() });
+  if (!ok) return;
   document.getElementById('incCash').value = '';
   document.getElementById('incCard').value = '';
   document.getElementById('incNote').value = '';
-  renderIncome();
+  await renderIncome();
   showToast('Gelir kaydedildi!');
 }
 
-function renderIncome() {
-  const income = getData('income');
+async function renderIncome() {
+  showLoading('incomeTableWrap');
+  const list = await getIncome();
   const filterMonth = document.getElementById('incFilterMonth') ? document.getElementById('incFilterMonth').value : '';
-  let filtered = income.filter(i => {
-    if (filterMonth && !i.date.startsWith(filterMonth)) return false;
-    return true;
-  });
-  filtered.sort((a, b) => b.date.localeCompare(a.date));
+  let filtered = list.filter(function(i) { return !filterMonth || i.date.indexOf(filterMonth) === 0; });
+  filtered.sort(function(a, b) { return b.date.localeCompare(a.date); });
   const wrap = document.getElementById('incomeTableWrap');
-  if (!filtered.length) {
-    wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">💰</div><h3>Gelir kaydı yok</h3><p>Henüz gelir girişi yapılmamış.</p></div>'; return;
-  }
-  wrap.innerHTML = '<div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Nakit</th><th>Kredi Kartı</th><th>Toplam</th><th>Açıklama</th><th>İşlemler</th></tr></thead><tbody>' +
-    filtered.map(i => `<tr>
-      <td>${fmtDate(i.date)}</td>
-      <td style="color:var(--success)">${fmtMoney(i.cash)}</td>
-      <td style="color:var(--accent3)">${fmtMoney(i.card)}</td>
-      <td><strong>${fmtMoney((i.cash || 0) + (i.card || 0))}</strong></td>
-      <td style="color:var(--text2)">${i.note || '—'}</td>
-      <td><div class="actions">
-        <button class="btn btn-warning btn-sm btn-icon" onclick="openEditIncome('${i.id}')" title="Düzenle">✏️</button>
-        <button class="btn btn-danger btn-sm btn-icon" onclick="deleteIncome('${i.id}')" title="Sil">🗑️</button>
-      </div></td>
-    </tr>`).join('') + '</tbody></table></div>';
+  if (!filtered.length) { wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F4B0}</div><h3>Gelir kaydi yok</h3><p>Henuz gelir girisi yapilmamis.</p></div>'; return; }
+  let html = '<div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Nakit</th><th>Kredi Karti</th><th>Toplam</th><th>Aciklama</th><th>Islemler</th></tr></thead><tbody>';
+  filtered.forEach(function(i) {
+    html += '<tr><td>' + fmtDate(i.date) + '</td>';
+    html += '<td style="color:var(--success)">' + fmtMoney(i.cash) + '</td>';
+    html += '<td style="color:var(--accent3)">' + fmtMoney(i.card) + '</td>';
+    html += '<td><strong>' + fmtMoney(i.cash + i.card) + '</strong></td>';
+    html += '<td style="color:var(--text2)">' + (i.note || '-') + '</td>';
+    html += '<td><div class="actions">';
+    html += '<button class="btn btn-warning btn-sm btn-icon" onclick="openEditIncome(\'' + i.id + '\')">\u270F\uFE0F</button>';
+    html += '<button class="btn btn-danger btn-sm btn-icon" onclick="deleteIncome(\'' + i.id + '\')">\u{1F5D1}\uFE0F</button>';
+    html += '</div></td></tr>';
+  });
+  html += '</tbody></table></div>';
+  wrap.innerHTML = html;
 }
 
-function openEditIncome(id) {
-  const i = getData('income').find(x => x.id === id);
+async function openEditIncome(id) {
+  const list = await getIncome();
+  const i = list.find(function(x) { return x.id === id; });
   if (!i) return;
   document.getElementById('editIncId').value = id;
   document.getElementById('editIncDate').value = i.date;
@@ -1124,166 +1103,148 @@ function openEditIncome(id) {
   openModal('editIncomeModal');
 }
 
-function saveEditIncome() {
+async function saveEditIncome() {
   const id = document.getElementById('editIncId').value;
-  const income = getData('income');
-  const idx = income.findIndex(x => x.id === id);
-  if (idx < 0) return;
-  income[idx].date = document.getElementById('editIncDate').value;
-  income[idx].cash = parseFloat(document.getElementById('editIncCash').value) || 0;
-  income[idx].card = parseFloat(document.getElementById('editIncCard').value) || 0;
-  income[idx].note = document.getElementById('editIncNote').value;
-  setData('income', income);
+  const row = { date: document.getElementById('editIncDate').value, cash: parseFloat(document.getElementById('editIncCash').value) || 0, card: parseFloat(document.getElementById('editIncCard').value) || 0, note: document.getElementById('editIncNote').value || null };
+  const ok = await dbUpdate('income', id, row);
+  if (!ok) return;
   closeModal('editIncomeModal');
-  renderIncome();
-  showToast('Gelir güncellendi!');
+  await renderIncome();
+  showToast('Gelir guncellendi!');
 }
 
-function deleteIncome(id) {
-  showConfirm('Gelir Kaydını Sil', 'Bu kaydı silmek istediğinize emin misiniz?', () => {
-    let income = getData('income');
-    income = income.filter(x => x.id !== id);
-    setData('income', income);
-    renderIncome();
+async function deleteIncome(id) {
+  showConfirm('Gelir Kaydini Sil', 'Bu kaydi silmek istediginize emin misiniz?', async function() {
+    const ok = await dbDelete('income', id);
+    if (!ok) return;
+    await renderIncome();
     showToast('Gelir silindi.', 'warning');
   });
 }
 
-// ===================== EXPENSE =====================
-function addCategory() {
+async function addCategory() {
   const name = document.getElementById('catName').value.trim();
-  if (!name) { showToast('Kategori adı girin.', 'error'); return; }
-  const cats = getData('categories');
-  if (cats.find(c => c.name.toLowerCase() === name.toLowerCase())) {
-    showToast('Bu kategori zaten mevcut.', 'error'); return;
-  }
-  cats.push({ id: genId(), name });
-  setData('categories', cats);
+  if (!name) { showToast('Kategori adi girin.', 'error'); return; }
+  const list = await getCategories();
+  if (list.find(function(c) { return c.name.toLowerCase() === name.toLowerCase(); })) { showToast('Bu kategori zaten mevcut.', 'error'); return; }
+  const ok = await dbInsert('categories', { id: genId(), name: name });
+  if (!ok) return;
   document.getElementById('catName').value = '';
-  renderCategories();
-  populateCategoryDropdowns();
+  await renderCategories();
+  await populateCategoryDropdowns();
   showToast('Kategori eklendi!');
 }
 
-function renderCategories() {
-  const cats = getData('categories');
+async function renderCategories() {
+  const list = await getCategories();
   const el = document.getElementById('categoryList');
-  if (!cats.length) {
-    el.innerHTML = '<p style="color:var(--text3);font-size:14px;text-align:center;padding:20px">Henüz kategori yok.</p>'; return;
-  }
-  el.innerHTML = cats.map(c => `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
-    <span>${c.name}</span>
-    <div class="actions">
-      <button class="btn btn-warning btn-sm btn-icon" onclick="openEditCategory('${c.id}')" title="Düzenle">✏️</button>
-      <button class="btn btn-danger btn-sm btn-icon" onclick="deleteCategory('${c.id}')" title="Sil">🗑️</button>
-    </div>
-  </div>`).join('');
-  populateCategoryDropdowns();
+  if (!list.length) { el.innerHTML = '<p style="color:var(--text3);font-size:14px;text-align:center;padding:20px">Henuz kategori yok.</p>'; return; }
+  let html = '';
+  list.forEach(function(c) {
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">';
+    html += '<span>' + c.name + '</span>';
+    html += '<div class="actions">';
+    html += '<button class="btn btn-warning btn-sm btn-icon" onclick="openEditCategory(\'' + c.id + '\')">\u270F\uFE0F</button>';
+    html += '<button class="btn btn-danger btn-sm btn-icon" onclick="deleteCategory(\'' + c.id + '\')">\u{1F5D1}\uFE0F</button>';
+    html += '</div></div>';
+  });
+  el.innerHTML = html;
+  await populateCategoryDropdowns();
 }
 
-function openEditCategory(id) {
-  const c = getData('categories').find(x => x.id === id);
+async function openEditCategory(id) {
+  const list = await getCategories();
+  const c = list.find(function(x) { return x.id === id; });
   if (!c) return;
   document.getElementById('editCatId').value = id;
   document.getElementById('editCatName').value = c.name;
   openModal('editCategoryModal');
 }
 
-function saveEditCategory() {
+async function saveEditCategory() {
   const id = document.getElementById('editCatId').value;
   const name = document.getElementById('editCatName').value.trim();
-  if (!name) { showToast('Kategori adı boş olamaz.', 'error'); return; }
-  const cats = getData('categories');
-  const idx = cats.findIndex(x => x.id === id);
-  if (idx < 0) return;
-  cats[idx].name = name;
-  setData('categories', cats);
+  if (!name) { showToast('Kategori adi bos olamaz.', 'error'); return; }
+  const ok = await dbUpdate('categories', id, { name: name });
+  if (!ok) return;
   closeModal('editCategoryModal');
-  renderCategories();
-  populateCategoryDropdowns();
-  showToast('Kategori güncellendi!');
+  await renderCategories();
+  await populateCategoryDropdowns();
+  showToast('Kategori guncellendi!');
 }
 
-function deleteCategory(id) {
-  showConfirm('Kategori Sil', 'Bu kategoriyi ve bağlı giderleri silmek istediğinize emin misiniz?', () => {
-    let cats = getData('categories');
-    cats = cats.filter(x => x.id !== id);
-    setData('categories', cats);
-    let exp = getData('expenses');
-    exp = exp.filter(x => x.categoryId !== id);
-    setData('expenses', exp);
-    renderCategories();
-    renderExpenses();
+async function deleteCategory(id) {
+  showConfirm('Kategori Sil', 'Bu kategoriyi silmek istediginize emin misiniz?', async function() {
+    const ok = await dbDelete('categories', id);
+    if (!ok) return;
+    _cache['expenses'] = null;
+    await renderCategories();
+    await renderExpenses();
     showToast('Kategori silindi.', 'warning');
   });
 }
 
-function populateCategoryDropdowns() {
-  const cats = getData('categories');
-  const opts = '<option value="">Kategori Seçin</option>' + cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-  ['expCategory', 'editExpCategory', 'expFilterCat'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      const cur = el.value;
-      el.innerHTML = (id === 'expFilterCat' ? '<option value="">Tüm Kategoriler</option>' : '<option value="">Kategori Seçin</option>') +
-        cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-      if (cur) el.value = cur;
-    }
+async function populateCategoryDropdowns() {
+  const list = await getCategories();
+  ['expCategory','editExpCategory','expFilterCat'].forEach(function(did) {
+    const el = document.getElementById(did);
+    if (!el) return;
+    const cur = el.value;
+    const prefix = did === 'expFilterCat' ? '<option value="">Tum Kategoriler</option>' : '<option value="">Kategori Secin</option>';
+    el.innerHTML = prefix + list.map(function(c) { return '<option value="' + c.id + '">' + c.name + '</option>'; }).join('');
+    if (cur) el.value = cur;
   });
 }
 
-function addExpense() {
+async function addExpense() {
   const categoryId = document.getElementById('expCategory').value;
   const amount = parseFloat(document.getElementById('expAmount').value);
   const date = document.getElementById('expDate').value;
   const note = document.getElementById('expNote').value.trim();
-  if (!categoryId || isNaN(amount) || amount <= 0 || !date) {
-    showToast('Lütfen tüm alanları doldurun.', 'error'); return;
-  }
-  const exp = getData('expenses');
-  exp.push({ id: genId(), categoryId, amount, date, note, createdAt: today() });
-  setData('expenses', exp);
+  if (!categoryId || isNaN(amount) || amount <= 0 || !date) { showToast('Lutfen tum alanlari doldurun.', 'error'); return; }
+  const ok = await dbInsert('expenses', { id: genId(), category_id: categoryId, amount: amount, date: date, note: note || null, created_at: today() });
+  if (!ok) return;
   document.getElementById('expAmount').value = '';
   document.getElementById('expNote').value = '';
-  renderExpenses();
+  await renderExpenses();
   showToast('Gider kaydedildi!');
 }
 
-function renderExpenses() {
-  const exp = getData('expenses');
-  const cats = getData('categories');
+async function renderExpenses() {
+  showLoading('expenseTableWrap');
+  const list = await getExpenses();
+  const cats = await getCategories();
   const filterMonth = document.getElementById('expFilterMonth') ? document.getElementById('expFilterMonth').value : '';
   const filterCat = document.getElementById('expFilterCat') ? document.getElementById('expFilterCat').value : '';
-  let filtered = exp.filter(e => {
-    if (filterMonth && !e.date.startsWith(filterMonth)) return false;
+  let filtered = list.filter(function(e) {
+    if (filterMonth && e.date.indexOf(filterMonth) !== 0) return false;
     if (filterCat && e.categoryId !== filterCat) return false;
     return true;
   });
-  filtered.sort((a, b) => b.date.localeCompare(a.date));
+  filtered.sort(function(a, b) { return b.date.localeCompare(a.date); });
   const wrap = document.getElementById('expenseTableWrap');
-  if (!filtered.length) {
-    wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">💸</div><h3>Gider kaydı yok</h3><p>Henüz gider girişi yapılmamış.</p></div>'; return;
-  }
-  wrap.innerHTML = '<div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Kategori</th><th>Tutar</th><th>Açıklama</th><th>İşlemler</th></tr></thead><tbody>' +
-    filtered.map(e => {
-      const cat = cats.find(x => x.id === e.categoryId);
-      return `<tr>
-        <td>${fmtDate(e.date)}</td>
-        <td><span class="badge badge-yellow">${cat ? cat.name : '—'}</span></td>
-        <td><strong style="color:var(--danger)">${fmtMoney(e.amount)}</strong></td>
-        <td style="color:var(--text2)">${e.note || '—'}</td>
-        <td><div class="actions">
-          <button class="btn btn-warning btn-sm btn-icon" onclick="openEditExpense('${e.id}')" title="Düzenle">✏️</button>
-          <button class="btn btn-danger btn-sm btn-icon" onclick="deleteExpense('${e.id}')" title="Sil">🗑️</button>
-        </div></td>
-      </tr>`;
-    }).join('') + '</tbody></table></div>';
+  if (!filtered.length) { wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F4B8}</div><h3>Gider kaydi yok</h3><p>Henuz gider girisi yapilmamis.</p></div>'; return; }
+  let html = '<div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Kategori</th><th>Tutar</th><th>Aciklama</th><th>Islemler</th></tr></thead><tbody>';
+  filtered.forEach(function(e) {
+    const cat = cats.find(function(x) { return x.id === e.categoryId; });
+    html += '<tr><td>' + fmtDate(e.date) + '</td>';
+    html += '<td><span class="badge badge-yellow">' + (cat ? cat.name : '-') + '</span></td>';
+    html += '<td><strong style="color:var(--danger)">' + fmtMoney(e.amount) + '</strong></td>';
+    html += '<td style="color:var(--text2)">' + (e.note || '-') + '</td>';
+    html += '<td><div class="actions">';
+    html += '<button class="btn btn-warning btn-sm btn-icon" onclick="openEditExpense(\'' + e.id + '\')">\u270F\uFE0F</button>';
+    html += '<button class="btn btn-danger btn-sm btn-icon" onclick="deleteExpense(\'' + e.id + '\')">\u{1F5D1}\uFE0F</button>';
+    html += '</div></td></tr>';
+  });
+  html += '</tbody></table></div>';
+  wrap.innerHTML = html;
 }
 
-function openEditExpense(id) {
-  const e = getData('expenses').find(x => x.id === id);
+async function openEditExpense(id) {
+  const list = await getExpenses();
+  const e = list.find(function(x) { return x.id === id; });
   if (!e) return;
-  populateCategoryDropdowns();
+  await populateCategoryDropdowns();
   document.getElementById('editExpId').value = id;
   document.getElementById('editExpCategory').value = e.categoryId;
   document.getElementById('editExpAmount').value = e.amount;
@@ -1292,27 +1253,21 @@ function openEditExpense(id) {
   openModal('editExpenseModal');
 }
 
-function saveEditExpense() {
+async function saveEditExpense() {
   const id = document.getElementById('editExpId').value;
-  const exp = getData('expenses');
-  const idx = exp.findIndex(x => x.id === id);
-  if (idx < 0) return;
-  exp[idx].categoryId = document.getElementById('editExpCategory').value;
-  exp[idx].amount = parseFloat(document.getElementById('editExpAmount').value);
-  exp[idx].date = document.getElementById('editExpDate').value;
-  exp[idx].note = document.getElementById('editExpNote').value;
-  setData('expenses', exp);
+  const row = { category_id: document.getElementById('editExpCategory').value, amount: parseFloat(document.getElementById('editExpAmount').value), date: document.getElementById('editExpDate').value, note: document.getElementById('editExpNote').value || null };
+  const ok = await dbUpdate('expenses', id, row);
+  if (!ok) return;
   closeModal('editExpenseModal');
-  renderExpenses();
-  showToast('Gider güncellendi!');
+  await renderExpenses();
+  showToast('Gider guncellendi!');
 }
 
-function deleteExpense(id) {
-  showConfirm('Gider Kaydını Sil', 'Bu kaydı silmek istediğinize emin misiniz?', () => {
-    let exp = getData('expenses');
-    exp = exp.filter(x => x.id !== id);
-    setData('expenses', exp);
-    renderExpenses();
+async function deleteExpense(id) {
+  showConfirm('Gider Kaydini Sil', 'Bu kaydi silmek istediginize emin misiniz?', async function() {
+    const ok = await dbDelete('expenses', id);
+    if (!ok) return;
+    await renderExpenses();
     showToast('Gider silindi.', 'warning');
   });
 }
@@ -1323,466 +1278,235 @@ function clearExpFilter() {
   renderExpenses();
 }
 
-// ===================== DATE FILTER =====================
 function getDateRange() {
   const now = new Date();
-  if (summaryFilter === 'week') {
-    const d = new Date(now);
-    d.setDate(d.getDate() - 7);
-    return { from: d.toISOString().split('T')[0], to: now.toISOString().split('T')[0] };
-  }
-  if (summaryFilter === 'month') {
-    return { from: new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0], to: now.toISOString().split('T')[0] };
-  }
-  if (summaryFilter === 'year') {
-    return { from: new Date(now.getFullYear(), 0, 1).toISOString().split('T')[0], to: now.toISOString().split('T')[0] };
-  }
-  if (summaryFilter === 'custom') {
-    return {
-      from: document.getElementById('summaryFrom').value || '2000-01-01',
-      to: document.getElementById('summaryTo').value || now.toISOString().split('T')[0]
-    };
-  }
+  if (summaryFilter === 'week') { const d = new Date(now); d.setDate(d.getDate()-7); return { from: d.toISOString().split('T')[0], to: now.toISOString().split('T')[0] }; }
+  if (summaryFilter === 'month') { return { from: new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0], to: now.toISOString().split('T')[0] }; }
+  if (summaryFilter === 'year') { return { from: new Date(now.getFullYear(), 0, 1).toISOString().split('T')[0], to: now.toISOString().split('T')[0] }; }
+  if (summaryFilter === 'custom') { return { from: document.getElementById('summaryFrom').value || '2000-01-01', to: document.getElementById('summaryTo').value || now.toISOString().split('T')[0] }; }
   return { from: '2000-01-01', to: '2099-12-31' };
 }
 
 function setSummaryFilter(f, btn) {
   summaryFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
   updateSummary();
 }
 
-function inRange(date, range) {
-  return date >= range.from && date <= range.to;
-}
+function inRange(date, range) { return date >= range.from && date <= range.to; }
 
-// ===================== SUMMARY =====================
-function updateSummary() {
-  if (!document.getElementById('tab-summary').classList.contains('active') &&
-      !document.getElementById('tab-summary').offsetParent) return;
+async function updateSummary() {
   const range = getDateRange();
-  const income = getData('income').filter(i => inRange(i.date, range));
-  const expenses = getData('expenses').filter(e => inRange(e.date, range));
-  const ts = getData('timesheet').filter(t => inRange(t.date, range));
-  const personnel = getData('personnel');
-  const cats = getData('categories');
+  const allIncome = await getIncome();
+  const allExpenses = await getExpenses();
+  const allTs = await getTimesheet();
+  const personnel = await getPersonnel();
+  const cats = await getCategories();
 
-  const totalCash = income.reduce((s, i) => s + (i.cash || 0), 0);
-  const totalCard = income.reduce((s, i) => s + (i.card || 0), 0);
+  const income = allIncome.filter(function(i) { return inRange(i.date, range); });
+  const expenses = allExpenses.filter(function(e) { return inRange(e.date, range); });
+  const ts = allTs.filter(function(t) { return inRange(t.date, range); });
+
+  const totalCash = income.reduce(function(s,i) { return s + i.cash; }, 0);
+  const totalCard = income.reduce(function(s,i) { return s + i.card; }, 0);
   const totalIncome = totalCash + totalCard;
-  const totalExp = expenses.reduce((s, e) => s + (e.amount || 0), 0);
-  const totalWages = ts.reduce((s, t) => {
-    const p = personnel.find(x => x.id === t.personnelId);
-    return s + (p ? p.wage * t.hours : 0);
-  }, 0);
+  const totalExp = expenses.reduce(function(s,e) { return s + e.amount; }, 0);
+  const totalWages = ts.reduce(function(s,t) { const p = personnel.find(function(x) { return x.id === t.personnelId; }); return s + (p ? p.wage * t.hours : 0); }, 0);
   const netProfit = totalIncome - totalExp - totalWages;
 
-  // STAT CARDS
-  document.getElementById('summaryCards').innerHTML = `
-    <div class="stat-card purple"><span class="stat-icon">💰</span><div class="stat-label">Toplam Gelir</div><div class="stat-value purple">${fmtMoney(totalIncome)}</div><div class="stat-sub">Nakit: ${fmtMoney(totalCash)} | KK: ${fmtMoney(totalCard)}</div></div>
-    <div class="stat-card pink"><span class="stat-icon">💸</span><div class="stat-label">Toplam Gider</div><div class="stat-value pink">${fmtMoney(totalExp)}</div><div class="stat-sub">${expenses.length} kayıt</div></div>
-    <div class="stat-card cyan"><span class="stat-icon">👥</span><div class="stat-label">Toplam Maaş</div><div class="stat-value cyan">${fmtMoney(totalWages)}</div><div class="stat-sub">${ts.length} puantaj kaydı</div></div>
-    <div class="stat-card ${netProfit >= 0 ? 'green' : 'red'}"><span class="stat-icon">${netProfit >= 0 ? '📈' : '📉'}</span><div class="stat-label">Net Kar</div><div class="stat-value ${netProfit >= 0 ? 'green' : 'red'}">${fmtMoney(netProfit)}</div><div class="stat-sub">Gelir - Gider - Maaş</div></div>
-  `;
+  document.getElementById('summaryCards').innerHTML =
+    '<div class="stat-card purple"><span class="stat-icon">\u{1F4B0}</span><div class="stat-label">Toplam Gelir</div><div class="stat-value purple">' + fmtMoney(totalIncome) + '</div><div class="stat-sub">Nakit: ' + fmtMoney(totalCash) + ' | KK: ' + fmtMoney(totalCard) + '</div></div>' +
+    '<div class="stat-card pink"><span class="stat-icon">\u{1F4B8}</span><div class="stat-label">Toplam Gider</div><div class="stat-value pink">' + fmtMoney(totalExp) + '</div><div class="stat-sub">' + expenses.length + ' kayit</div></div>' +
+    '<div class="stat-card cyan"><span class="stat-icon">\u{1F465}</span><div class="stat-label">Toplam Maas</div><div class="stat-value cyan">' + fmtMoney(totalWages) + '</div><div class="stat-sub">' + ts.length + ' puantaj kaydi</div></div>' +
+    '<div class="stat-card ' + (netProfit >= 0 ? 'green' : 'red') + '"><span class="stat-icon">' + (netProfit >= 0 ? '\u{1F4C8}' : '\u{1F4C9}') + '</span><div class="stat-label">Net Kar</div><div class="stat-value ' + (netProfit >= 0 ? 'green' : 'red') + '">' + fmtMoney(netProfit) + '</div><div class="stat-sub">Gelir - Gider - Maas</div></div>';
 
-  // PERSONNEL DETAIL TABLE
-  const persData = personnel.map(p => {
-    const pTs = ts.filter(t => t.personnelId === p.id);
-    const totalHours = pTs.reduce((s, t) => s + t.hours, 0);
-    const totalEarn = totalHours * p.wage;
-    return { ...p, totalHours, totalEarn, recordCount: pTs.length };
-  });
   const persEl = document.getElementById('personnelSummaryTable');
-  if (!persData.length) {
-    persEl.innerHTML = '<div class="empty-state"><div class="empty-icon">👥</div><h3>Personel yok</h3></div>';
-  } else {
-    persEl.innerHTML = '<div class="table-wrap"><table><thead><tr><th>Ad Soyad</th><th>Saatlik Ücret</th><th>Toplam Saat</th><th>Toplam Kazanç</th><th>Kayıt Sayısı</th><th>Oran</th></tr></thead><tbody>' +
-      persData.map(p => {
-        const pct = totalWages > 0 ? (p.totalEarn / totalWages * 100) : 0;
-        return `<tr>
-          <td><strong>${p.name} ${p.surname}</strong></td>
-          <td>${fmtMoney(p.wage)}</td>
-          <td><span class="badge badge-purple">${p.totalHours} saat</span></td>
-          <td><strong style="color:var(--accent)">${fmtMoney(p.totalEarn)}</strong></td>
-          <td>${p.recordCount} kayıt</td>
-          <td style="min-width:120px">
-            <div style="font-size:12px;color:var(--text2);margin-bottom:4px">${pct.toFixed(1)}%</div>
-            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-          </td>
-        </tr>`;
-      }).join('') +
-      `<tr style="background:var(--bg2)"><td><strong>TOPLAM</strong></td><td>—</td><td><strong>${ts.reduce((s,t)=>s+t.hours,0)} saat</strong></td><td><strong style="color:var(--accent)">${fmtMoney(totalWages)}</strong></td><td>${ts.length}</td><td>100%</td></tr>` +
-      '</tbody></table></div>';
+  if (!personnel.length) { persEl.innerHTML = '<div class="empty-state"><h3>Personel yok</h3></div>'; }
+  else {
+    let html = '<div class="table-wrap"><table><thead><tr><th>Ad Soyad</th><th>Saatlik Ucret</th><th>Toplam Saat</th><th>Toplam Kazanc</th><th>Kayit Sayisi</th><th>Oran</th></tr></thead><tbody>';
+    personnel.forEach(function(p) {
+      const pTs = ts.filter(function(t) { return t.personnelId === p.id; });
+      const totalHours = pTs.reduce(function(s,t) { return s + t.hours; }, 0);
+      const totalEarn = totalHours * p.wage;
+      const pct = totalWages > 0 ? (totalEarn / totalWages * 100) : 0;
+      html += '<tr><td><strong>' + p.name + ' ' + p.surname + '</strong></td><td>' + fmtMoney(p.wage) + '</td>';
+      html += '<td><span class="badge badge-purple">' + totalHours + ' saat</span></td>';
+      html += '<td><strong style="color:var(--accent)">' + fmtMoney(totalEarn) + '</strong></td>';
+      html += '<td>' + pTs.length + ' kayit</td>';
+      html += '<td style="min-width:120px"><div style="font-size:12px;color:var(--text2);margin-bottom:4px">' + pct.toFixed(1) + '%</div><div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></td></tr>';
+    });
+    const totHours = ts.reduce(function(s,t) { return s + t.hours; }, 0);
+    html += '<tr style="background:var(--bg2)"><td><strong>TOPLAM</strong></td><td>-</td><td><strong>' + totHours + ' saat</strong></td><td><strong style="color:var(--accent)">' + fmtMoney(totalWages) + '</strong></td><td>' + ts.length + '</td><td>100%</td></tr>';
+    html += '</tbody></table></div>';
+    persEl.innerHTML = html;
   }
 
-  // INCOME DETAIL
   const incEl = document.getElementById('incomeDetailSummary');
-  if (!income.length) {
-    incEl.innerHTML = '<p style="color:var(--text3);text-align:center;padding:20px">Bu dönemde gelir kaydı yok.</p>';
-  } else {
-    incEl.innerHTML = `
-      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
-        <div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg2);border-radius:10px">
-          <span>💵 Nakit Toplam</span><strong style="color:var(--success)">${fmtMoney(totalCash)}</strong>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg2);border-radius:10px">
-          <span>💳 Kredi Kartı Toplam</span><strong style="color:var(--accent3)">${fmtMoney(totalCard)}</strong>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:12px;background:linear-gradient(135deg,rgba(108,99,255,0.1),rgba(247,37,133,0.1));border-radius:10px;border:1px solid var(--border)">
-          <span><strong>💰 Genel Toplam</strong></span><strong style="color:var(--accent)">${fmtMoney(totalIncome)}</strong>
-        </div>
-      </div>
-      <p style="font-size:12px;color:var(--text3)">${income.length} kayıt, ${range.from} — ${range.to}</p>
-    `;
+  if (!income.length) { incEl.innerHTML = '<p style="color:var(--text3);text-align:center;padding:20px">Bu donemde gelir kaydi yok.</p>'; }
+  else {
+    incEl.innerHTML = '<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">' +
+      '<div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg2);border-radius:10px"><span>Nakit Toplam</span><strong style="color:var(--success)">' + fmtMoney(totalCash) + '</strong></div>' +
+      '<div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg2);border-radius:10px"><span>Kredi Karti Toplam</span><strong style="color:var(--accent3)">' + fmtMoney(totalCard) + '</strong></div>' +
+      '<div style="display:flex;justify-content:space-between;padding:12px;background:linear-gradient(135deg,rgba(108,99,255,0.1),rgba(247,37,133,0.1));border-radius:10px;border:1px solid var(--border)"><strong>Genel Toplam</strong><strong style="color:var(--accent)">' + fmtMoney(totalIncome) + '</strong></div></div>' +
+      '<p style="font-size:12px;color:var(--text3)">' + income.length + ' kayit</p>';
   }
 
-  // EXPENSE BY CATEGORY
   const expEl = document.getElementById('expenseDetailSummary');
   const byCat = {};
-  expenses.forEach(e => {
-    const cat = cats.find(c => c.id === e.categoryId);
-    const key = cat ? cat.name : 'Diğer';
-    byCat[key] = (byCat[key] || 0) + e.amount;
-  });
-  const catEntries = Object.entries(byCat).sort((a, b) => b[1] - a[1]);
-  if (!catEntries.length) {
-    expEl.innerHTML = '<p style="color:var(--text3);text-align:center;padding:20px">Bu dönemde gider kaydı yok.</p>';
-  } else {
-    expEl.innerHTML = '<div style="display:flex;flex-direction:column;gap:8px">' +
-      catEntries.map(([name, amt]) => {
-        const pct = totalExp > 0 ? (amt / totalExp * 100) : 0;
-        return `<div style="padding:12px;background:var(--bg2);border-radius:10px">
-          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-            <span>${name}</span><strong style="color:var(--danger)">${fmtMoney(amt)}</strong>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:${pct}%;background:linear-gradient(90deg,var(--accent2),var(--accent))"></div></div>
-            <span style="font-size:12px;color:var(--text2);width:40px">${pct.toFixed(0)}%</span>
-          </div>
-        </div>`;
-      }).join('') +
-      `<div style="display:flex;justify-content:space-between;padding:12px;background:linear-gradient(135deg,rgba(239,35,60,0.1),rgba(247,37,133,0.1));border-radius:10px;border:1px solid var(--border)">
-        <strong>💸 Toplam</strong><strong style="color:var(--danger)">${fmtMoney(totalExp)}</strong>
-      </div></div>`;
+  expenses.forEach(function(e) { const cat = cats.find(function(c) { return c.id === e.categoryId; }); const key = cat ? cat.name : 'Diger'; byCat[key] = (byCat[key] || 0) + e.amount; });
+  const catEntries = Object.entries(byCat).sort(function(a,b) { return b[1]-a[1]; });
+  if (!catEntries.length) { expEl.innerHTML = '<p style="color:var(--text3);text-align:center;padding:20px">Bu donemde gider kaydi yok.</p>'; }
+  else {
+    let html = '<div style="display:flex;flex-direction:column;gap:8px">';
+    catEntries.forEach(function(entry) {
+      const name = entry[0], amt = entry[1];
+      const pct = totalExp > 0 ? (amt / totalExp * 100) : 0;
+      html += '<div style="padding:12px;background:var(--bg2);border-radius:10px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>' + name + '</span><strong style="color:var(--danger)">' + fmtMoney(amt) + '</strong></div>';
+      html += '<div style="display:flex;align-items:center;gap:8px"><div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:' + pct + '%;background:linear-gradient(90deg,var(--accent2),var(--accent))"></div></div><span style="font-size:12px;color:var(--text2);width:40px">' + pct.toFixed(0) + '%</span></div></div>';
+    });
+    html += '<div style="display:flex;justify-content:space-between;padding:12px;background:linear-gradient(135deg,rgba(239,35,60,0.1),rgba(247,37,133,0.1));border-radius:10px;border:1px solid var(--border)"><strong>Toplam</strong><strong style="color:var(--danger)">' + fmtMoney(totalExp) + '</strong></div></div>';
+    expEl.innerHTML = html;
   }
 
-  // CHARTS
-  buildCharts(income, expenses, ts, personnel, cats, range);
+  buildCharts(income, expenses, ts, personnel, cats);
 }
 
-function buildCharts(income, expenses, ts, personnel, cats, range) {
-  const theme = currentTheme;
-  const gridColor = theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
-  const textColor = theme === 'dark' ? '#a7a3c2' : '#4a4870';
+function buildCharts(income, expenses, ts, personnel, cats) {
+  const gridColor = currentTheme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+  const textColor = currentTheme === 'dark' ? '#a7a3c2' : '#4a4870';
   Chart.defaults.color = textColor;
 
-  // Group by month
   const months = {};
-  income.forEach(i => {
-    const m = i.date.substr(0, 7);
-    if (!months[m]) months[m] = { income: 0, expense: 0, profit: 0 };
-    months[m].income += (i.cash || 0) + (i.card || 0);
-  });
-  expenses.forEach(e => {
-    const m = e.date.substr(0, 7);
-    if (!months[m]) months[m] = { income: 0, expense: 0, profit: 0 };
-    months[m].expense += e.amount || 0;
-  });
-  ts.forEach(t => {
-    const m = t.date.substr(0, 7);
-    const p = personnel.find(x => x.id === t.personnelId);
-    if (!months[m]) months[m] = { income: 0, expense: 0, profit: 0 };
-    months[m].expense += p ? p.wage * t.hours : 0;
-  });
+  income.forEach(function(i) { const m = i.date.substr(0,7); if (!months[m]) months[m] = { income:0, expense:0 }; months[m].income += i.cash + i.card; });
+  expenses.forEach(function(e) { const m = e.date.substr(0,7); if (!months[m]) months[m] = { income:0, expense:0 }; months[m].expense += e.amount; });
+  ts.forEach(function(t) { const m = t.date.substr(0,7); const p = personnel.find(function(x) { return x.id === t.personnelId; }); if (!months[m]) months[m] = { income:0, expense:0 }; months[m].expense += p ? p.wage * t.hours : 0; });
   const labels = Object.keys(months).sort();
-  labels.forEach(m => { months[m].profit = months[m].income - months[m].expense; });
 
-  // BAR CHART
   const barCtx = document.getElementById('barChart').getContext('2d');
   if (barChartInst) barChartInst.destroy();
-  barChartInst = new Chart(barCtx, {
-    type: 'bar',
-    data: {
-      labels: labels.map(l => { const [y, m] = l.split('-'); return m + '/' + y; }),
-      datasets: [
-        { label: 'Gelir', data: labels.map(l => months[l].income), backgroundColor: 'rgba(6,214,160,0.7)', borderColor: '#06d6a0', borderWidth: 2, borderRadius: 8 },
-        { label: 'Gider+Maaş', data: labels.map(l => months[l].expense), backgroundColor: 'rgba(247,37,133,0.7)', borderColor: '#f72585', borderWidth: 2, borderRadius: 8 }
-      ]
-    },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { x: { grid: { color: gridColor } }, y: { grid: { color: gridColor }, ticks: { callback: v => '₺' + v.toLocaleString('tr-TR') } } } }
-  });
+  barChartInst = new Chart(barCtx, { type:'bar', data: { labels: labels.map(function(l) { const s = l.split('-'); return s[1] + '/' + s[0]; }), datasets: [{ label:'Gelir', data: labels.map(function(l) { return months[l].income; }), backgroundColor:'rgba(6,214,160,0.7)', borderColor:'#06d6a0', borderWidth:2, borderRadius:8 }, { label:'Gider+Maas', data: labels.map(function(l) { return months[l].expense; }), backgroundColor:'rgba(247,37,133,0.7)', borderColor:'#f72585', borderWidth:2, borderRadius:8 }] }, options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'top' } }, scales:{ x:{ grid:{ color:gridColor } }, y:{ grid:{ color:gridColor }, ticks:{ callback: function(v) { return 'TL ' + v.toLocaleString('tr-TR'); } } } } } });
 
-  // PIE CHART
   const pieCtx = document.getElementById('pieChart').getContext('2d');
   if (pieChartInst) pieChartInst.destroy();
   const byCat = {};
-  expenses.forEach(e => {
-    const cat = cats.find(c => c.id === e.categoryId);
-    const key = cat ? cat.name : 'Diger';
-    byCat[key] = (byCat[key] || 0) + e.amount;
-  });
+  expenses.forEach(function(e) { const cat = cats.find(function(c) { return c.id === e.categoryId; }); const key = cat ? cat.name : 'Diger'; byCat[key] = (byCat[key] || 0) + e.amount; });
   const catKeys = Object.keys(byCat);
   const palette = ['#6c63ff','#f72585','#4cc9f0','#06d6a0','#ffd166','#ef233c','#7209b7','#3a0ca3','#4361ee','#4895ef'];
-  pieChartInst = new Chart(pieCtx, {
-    type: 'doughnut',
-    data: {
-      labels: catKeys.length ? catKeys : ['Veri yok'],
-      datasets: [{ data: catKeys.length ? catKeys.map(k => byCat[k]) : [1], backgroundColor: catKeys.length ? catKeys.map((_, i) => palette[i % palette.length]) : ['#333'], borderWidth: 2, borderColor: theme === 'dark' ? '#1e1c2e' : '#fff' }]
-    },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } }, cutout: '65%' }
-  });
+  pieChartInst = new Chart(pieCtx, { type:'doughnut', data: { labels: catKeys.length ? catKeys : ['Veri yok'], datasets: [{ data: catKeys.length ? catKeys.map(function(k) { return byCat[k]; }) : [1], backgroundColor: catKeys.length ? catKeys.map(function(_,i) { return palette[i % palette.length]; }) : ['#333'], borderWidth:2, borderColor: currentTheme === 'dark' ? '#1e1c2e' : '#fff' }] }, options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'right' } }, cutout:'65%' } });
 
-  // LINE CHART
   const lineCtx = document.getElementById('lineChart').getContext('2d');
   if (lineChartInst) lineChartInst.destroy();
-  lineChartInst = new Chart(lineCtx, {
-    type: 'line',
-    data: {
-      labels: labels.map(l => { const [y, m] = l.split('-'); return m + '/' + y; }),
-      datasets: [{
-        label: 'Net Kar',
-        data: labels.map(l => months[l].profit),
-        borderColor: '#6c63ff',
-        backgroundColor: 'rgba(108,99,255,0.15)',
-        fill: true,
-        tension: 0.4,
-        pointBackgroundColor: '#6c63ff',
-        pointRadius: 5,
-        borderWidth: 3
-      }]
-    },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { x: { grid: { color: gridColor } }, y: { grid: { color: gridColor }, ticks: { callback: v => '₺' + v.toLocaleString('tr-TR') } } } }
-  });
+  lineChartInst = new Chart(lineCtx, { type:'line', data: { labels: labels.map(function(l) { const s = l.split('-'); return s[1] + '/' + s[0]; }), datasets: [{ label:'Net Kar', data: labels.map(function(l) { return months[l].income - months[l].expense; }), borderColor:'#6c63ff', backgroundColor:'rgba(108,99,255,0.15)', fill:true, tension:0.4, pointBackgroundColor:'#6c63ff', pointRadius:5, borderWidth:3 }] }, options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'top' } }, scales:{ x:{ grid:{ color:gridColor } }, y:{ grid:{ color:gridColor }, ticks:{ callback: function(v) { return 'TL ' + v.toLocaleString('tr-TR'); } } } } } });
 }
 
-// ===================== PDF =====================
-function downloadPDF() {
+async function downloadPDF() {
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
   const range = getDateRange();
-  const income = getData('income').filter(i => inRange(i.date, range));
-  const expenses = getData('expenses').filter(e => inRange(e.date, range));
-  const ts = getData('timesheet').filter(t => inRange(t.date, range));
-  const personnel = getData('personnel');
-  const cats = getData('categories');
+  const allIncome = await getIncome();
+  const allExpenses = await getExpenses();
+  const allTs = await getTimesheet();
+  const personnel = await getPersonnel();
+  const cats = await getCategories();
 
-  const totalCash = income.reduce((s, i) => s + (i.cash || 0), 0);
-  const totalCard = income.reduce((s, i) => s + (i.card || 0), 0);
+  const income = allIncome.filter(function(i) { return inRange(i.date, range); });
+  const expenses = allExpenses.filter(function(e) { return inRange(e.date, range); });
+  const ts = allTs.filter(function(t) { return inRange(t.date, range); });
+
+  const totalCash = income.reduce(function(s,i) { return s + i.cash; }, 0);
+  const totalCard = income.reduce(function(s,i) { return s + i.card; }, 0);
   const totalIncome = totalCash + totalCard;
-  const totalExp = expenses.reduce((s, e) => s + (e.amount || 0), 0);
-  const totalWages = ts.reduce((s, t) => {
-    const p = personnel.find(x => x.id === t.personnelId);
-    return s + (p ? p.wage * t.hours : 0);
-  }, 0);
+  const totalExp = expenses.reduce(function(s,e) { return s + e.amount; }, 0);
+  const totalWages = ts.reduce(function(s,t) { const p = personnel.find(function(x) { return x.id === t.personnelId; }); return s + (p ? p.wage * t.hours : 0); }, 0);
   const netProfit = totalIncome - totalExp - totalWages;
-
   const bizName = getSetting('bizName', 'Isletme Paneli');
-  let y = 20;
 
-  // Header
-  doc.setFillColor(108, 99, 255);
-  doc.rect(0, 0, 210, 30, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(18);
-  doc.setFont('helvetica', 'bold');
+  doc.setFillColor(108,99,255);
+  doc.rect(0,0,210,30,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(18); doc.setFont('helvetica','bold');
   doc.text(bizName, 14, 20);
-  doc.setFontSize(9);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Ozet Raporu — ' + fmtDate(range.from) + ' / ' + fmtDate(range.to), 14, 27);
+  doc.setFontSize(9); doc.setFont('helvetica','normal');
+  doc.text('Ozet Raporu: ' + fmtDate(range.from) + ' / ' + fmtDate(range.to), 14, 27);
   doc.text('Olusturulma: ' + new Date().toLocaleDateString('tr-TR'), 150, 27);
 
-  y = 45;
-  doc.setTextColor(30, 30, 50);
+  let y = 45;
+  doc.setTextColor(30,30,50);
+  doc.setFontSize(13); doc.setFont('helvetica','bold');
+  doc.text('GENEL OZET', 14, y); y += 4;
+  doc.setDrawColor(108,99,255); doc.line(14,y,196,y); y += 6;
 
-  // KPI Summary
-  doc.setFontSize(13);
-  doc.setFont('helvetica', 'bold');
-  doc.text('GENEL OZET', 14, y);
-  y += 4;
-  doc.setDrawColor(108, 99, 255);
-  doc.line(14, y, 196, y);
-  y += 8;
-
-  const kpis = [
-    ['Toplam Gelir', 'TL ' + totalIncome.toLocaleString('tr-TR', { minimumFractionDigits:2 })],
-    ['  - Nakit', 'TL ' + totalCash.toLocaleString('tr-TR', { minimumFractionDigits:2 })],
-    ['  - Kredi Karti', 'TL ' + totalCard.toLocaleString('tr-TR', { minimumFractionDigits:2 })],
-    ['Toplam Gider', 'TL ' + totalExp.toLocaleString('tr-TR', { minimumFractionDigits:2 })],
-    ['Toplam Maaslar', 'TL ' + totalWages.toLocaleString('tr-TR', { minimumFractionDigits:2 })],
-    ['NET KAR / ZARAR', 'TL ' + netProfit.toLocaleString('tr-TR', { minimumFractionDigits:2 })]
-  ];
-
-  doc.autoTable({
-    startY: y,
-    head: [['Metrik', 'Tutar']],
-    body: kpis,
-    theme: 'grid',
-    headStyles: { fillColor: [108, 99, 255], textColor: 255, fontStyle: 'bold' },
-    styles: { fontSize: 10, cellPadding: 4 },
-    columnStyles: { 1: { halign: 'right', fontStyle: 'bold' } },
-    didParseCell: function(d) {
-      if (d.row.index === 5 && d.section === 'body') {
-        d.cell.styles.fillColor = netProfit >= 0 ? [6, 214, 160] : [239, 35, 60];
-        d.cell.styles.textColor = 255;
-        d.cell.styles.fontStyle = 'bold';
-      }
-    }
-  });
+  doc.autoTable({ startY:y, head:[['Metrik','Tutar']], body:[
+    ['Toplam Gelir','TL ' + totalIncome.toLocaleString('tr-TR',{minimumFractionDigits:2})],
+    ['  Nakit','TL ' + totalCash.toLocaleString('tr-TR',{minimumFractionDigits:2})],
+    ['  Kredi Karti','TL ' + totalCard.toLocaleString('tr-TR',{minimumFractionDigits:2})],
+    ['Toplam Gider','TL ' + totalExp.toLocaleString('tr-TR',{minimumFractionDigits:2})],
+    ['Toplam Maaslar','TL ' + totalWages.toLocaleString('tr-TR',{minimumFractionDigits:2})],
+    ['NET KAR / ZARAR','TL ' + netProfit.toLocaleString('tr-TR',{minimumFractionDigits:2})]
+  ], theme:'grid', headStyles:{ fillColor:[108,99,255], textColor:255, fontStyle:'bold' }, styles:{ fontSize:10, cellPadding:4 }, columnStyles:{ 1:{ halign:'right', fontStyle:'bold' } },
+  didParseCell: function(d) { if (d.row.index === 5 && d.section === 'body') { d.cell.styles.fillColor = netProfit >= 0 ? [6,214,160] : [239,35,60]; d.cell.styles.textColor = 255; } } });
 
   y = doc.lastAutoTable.finalY + 14;
-
-  // Personnel
   if (personnel.length) {
-    doc.setFontSize(13);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(30, 30, 50);
-    doc.text('PERSONEL OZETI', 14, y);
-    y += 4;
-    doc.line(14, y, 196, y);
-    y += 4;
-
-    const persRows = personnel.map(p => {
-      const pTs = ts.filter(t => t.personnelId === p.id);
-      const h = pTs.reduce((s, t) => s + t.hours, 0);
-      const earn = h * p.wage;
-      return [
-        p.name + ' ' + p.surname,
-        'TL ' + p.wage.toLocaleString('tr-TR'),
-        h + ' saat',
-        pTs.length.toString(),
-        'TL ' + earn.toLocaleString('tr-TR', { minimumFractionDigits:2 })
-      ];
-    });
-
-    doc.autoTable({
-      startY: y,
-      head: [['Ad Soyad', 'Saatlik Ucret', 'Toplam Saat', 'Kayit', 'Toplam Kazanc']],
-      body: persRows,
-      theme: 'striped',
-      headStyles: { fillColor: [76, 201, 240], textColor: 30, fontStyle: 'bold' },
-      styles: { fontSize: 9 },
-      columnStyles: { 4: { halign: 'right', fontStyle: 'bold' } }
-    });
-    y = doc.lastAutoTable.finalY + 14;
-  }
-
-  // Expense by category
-  const byCat = {};
-  expenses.forEach(e => {
-    const cat = cats.find(c => c.id === e.categoryId);
-    const key = cat ? cat.name : 'Diger';
-    byCat[key] = (byCat[key] || 0) + e.amount;
-  });
-  if (Object.keys(byCat).length) {
     if (y > 220) { doc.addPage(); y = 20; }
-    doc.setFontSize(13);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(30, 30, 50);
-    doc.text('GIDER KATEGORILERI', 14, y);
-    y += 4;
-    doc.line(14, y, 196, y);
-    y += 4;
-
-    doc.autoTable({
-      startY: y,
-      head: [['Kategori', 'Toplam', 'Oran (%)']],
-      body: Object.entries(byCat).sort((a, b) => b[1] - a[1]).map(([k, v]) => [k, 'TL ' + v.toLocaleString('tr-TR', { minimumFractionDigits:2 }), (totalExp > 0 ? (v / totalExp * 100).toFixed(1) : '0') + '%']),
-      theme: 'striped',
-      headStyles: { fillColor: [247, 37, 133], textColor: 255, fontStyle: 'bold' },
-      styles: { fontSize: 9 },
-      columnStyles: { 1: { halign: 'right' }, 2: { halign: 'right' } }
-    });
+    doc.setFontSize(13); doc.setFont('helvetica','bold'); doc.setTextColor(30,30,50);
+    doc.text('PERSONEL OZETI', 14, y); y += 4; doc.line(14,y,196,y); y += 4;
+    doc.autoTable({ startY:y, head:[['Ad Soyad','Saatlik Ucret','Toplam Saat','Kayit','Toplam Kazanc']], body: personnel.map(function(p) {
+      const pTs = ts.filter(function(t) { return t.personnelId === p.id; });
+      const h = pTs.reduce(function(s,t) { return s+t.hours; },0);
+      return [p.name+' '+p.surname, 'TL '+p.wage.toLocaleString('tr-TR'), h+' saat', pTs.length.toString(), 'TL '+(h*p.wage).toLocaleString('tr-TR',{minimumFractionDigits:2})];
+    }), theme:'striped', headStyles:{ fillColor:[76,201,240], textColor:30, fontStyle:'bold' }, styles:{ fontSize:9 }, columnStyles:{ 4:{ halign:'right', fontStyle:'bold' } } });
     y = doc.lastAutoTable.finalY + 14;
   }
 
-  // Income list
-  if (income.length) {
-    if (y > 200) { doc.addPage(); y = 20; }
-    doc.setFontSize(13);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(30, 30, 50);
-    doc.text('GELIR KAYITLARI', 14, y);
-    y += 4;
-    doc.line(14, y, 196, y);
-    y += 4;
-    doc.autoTable({
-      startY: y,
-      head: [['Tarih', 'Nakit', 'Kredi Karti', 'Toplam', 'Aciklama']],
-      body: income.sort((a, b) => b.date.localeCompare(a.date)).map(i => [
-        fmtDate(i.date),
-        'TL ' + (i.cash || 0).toLocaleString('tr-TR', { minimumFractionDigits:2 }),
-        'TL ' + (i.card || 0).toLocaleString('tr-TR', { minimumFractionDigits:2 }),
-        'TL ' + ((i.cash || 0) + (i.card || 0)).toLocaleString('tr-TR', { minimumFractionDigits:2 }),
-        i.note || ''
-      ]),
-      theme: 'striped',
-      headStyles: { fillColor: [6, 214, 160], textColor: 30, fontStyle: 'bold' },
-      styles: { fontSize: 8 }
-    });
+  const byCat2 = {};
+  expenses.forEach(function(e) { const cat = cats.find(function(c) { return c.id === e.categoryId; }); const key = cat ? cat.name : 'Diger'; byCat2[key] = (byCat2[key]||0) + e.amount; });
+  if (Object.keys(byCat2).length) {
+    if (y > 220) { doc.addPage(); y = 20; }
+    doc.setFontSize(13); doc.setFont('helvetica','bold'); doc.setTextColor(30,30,50);
+    doc.text('GIDER KATEGORILERI', 14, y); y += 4; doc.line(14,y,196,y); y += 4;
+    doc.autoTable({ startY:y, head:[['Kategori','Toplam','Oran']], body: Object.entries(byCat2).sort(function(a,b){return b[1]-a[1];}).map(function(entry) { return [entry[0], 'TL '+entry[1].toLocaleString('tr-TR',{minimumFractionDigits:2}), (totalExp>0?(entry[1]/totalExp*100).toFixed(1):'0')+'%']; }), theme:'striped', headStyles:{ fillColor:[247,37,133], textColor:255, fontStyle:'bold' }, styles:{ fontSize:9 }, columnStyles:{ 1:{ halign:'right' }, 2:{ halign:'right' } } });
   }
 
-  // Footer on all pages
   const pageCount = doc.internal.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
-    doc.setPage(i);
-    doc.setFontSize(8);
-    doc.setTextColor(150, 150, 150);
-    doc.text('Sayfa ' + i + ' / ' + pageCount, 196, 287, { align: 'right' });
-    doc.text(bizName + ' — Gizli Belge', 14, 287);
+    doc.setPage(i); doc.setFontSize(8); doc.setTextColor(150,150,150);
+    doc.text('Sayfa ' + i + ' / ' + pageCount, 196, 287, { align:'right' });
+    doc.text(bizName + ' - Gizli Belge', 14, 287);
   }
-
-  const fileName = 'ozet-raporu-' + range.from + '-' + range.to + '.pdf';
-  doc.save(fileName);
+  doc.save('ozet-raporu-' + range.from + '-' + range.to + '.pdf');
   showToast('PDF basariyla indirildi!');
 }
 
-// ===================== PERSONNEL DASHBOARD =====================
-function renderPersonnelDashboard() {
+async function renderPersonnelDashboard() {
   if (!currentUser || currentUser.role !== 'personnel') return;
-  const person = getData('personnel').find(x => x.id === currentUser.id);
+  const list = await getPersonnel();
+  const person = list.find(function(x) { return x.id === currentUser.id; });
   if (!person) return;
-
   const filterMonth = document.getElementById('persFilterMonth') ? document.getElementById('persFilterMonth').value : '';
-  let ts = getData('timesheet').filter(t => {
-    if (t.personnelId !== person.id) return false;
-    if (filterMonth && !t.date.startsWith(filterMonth)) return false;
-    return true;
-  });
-  ts.sort((a, b) => b.date.localeCompare(a.date));
-
-  const totalHours = ts.reduce((s, t) => s + t.hours, 0);
+  const allTs = await getTimesheet();
+  let ts = allTs.filter(function(t) { return t.personnelId === person.id && (!filterMonth || t.date.indexOf(filterMonth) === 0); });
+  ts.sort(function(a,b) { return b.date.localeCompare(a.date); });
+  const totalHours = ts.reduce(function(s,t) { return s+t.hours; },0);
   const totalEarning = totalHours * person.wage;
-  const workDays = ts.length;
 
-  document.getElementById('persStatCards').innerHTML = `
-    <div class="stat-card purple"><span class="stat-icon">📅</span><div class="stat-label">Calisma Gunu</div><div class="stat-value purple">${workDays}</div><div class="stat-sub">Toplam gun</div></div>
-    <div class="stat-card cyan"><span class="stat-icon">⏱️</span><div class="stat-label">Toplam Saat</div><div class="stat-value cyan">${totalHours}</div><div class="stat-sub">Saat</div></div>
-    <div class="stat-card green"><span class="stat-icon">💰</span><div class="stat-label">Toplam Kazanc</div><div class="stat-value green">${fmtMoney(totalEarning)}</div><div class="stat-sub">${fmtMoney(person.wage)} x ${totalHours} saat</div></div>
-  `;
+  document.getElementById('persStatCards').innerHTML =
+    '<div class="stat-card purple"><span class="stat-icon">\u{1F4C5}</span><div class="stat-label">Calisma Gunu</div><div class="stat-value purple">' + ts.length + '</div><div class="stat-sub">Toplam gun</div></div>' +
+    '<div class="stat-card cyan"><span class="stat-icon">\u23F1\uFE0F</span><div class="stat-label">Toplam Saat</div><div class="stat-value cyan">' + totalHours + '</div><div class="stat-sub">Saat</div></div>' +
+    '<div class="stat-card green"><span class="stat-icon">\u{1F4B0}</span><div class="stat-label">Toplam Kazanc</div><div class="stat-value green">' + fmtMoney(totalEarning) + '</div><div class="stat-sub">' + fmtMoney(person.wage) + ' x ' + totalHours + ' saat</div></div>';
 
   const wrap = document.getElementById('persTimesheetTable');
-  if (!ts.length) {
-    wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><h3>Kayit bulunamadi</h3><p>Bu donem icin calisma kaydiniz yok.</p></div>';
-    return;
-  }
-  wrap.innerHTML = '<div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Calisma Saati</th><th>Gunluk Kazanc</th><th>Not</th></tr></thead><tbody>' +
-    ts.map(t => `<tr>
-      <td>${fmtDate(t.date)}</td>
-      <td><span class="badge badge-purple">${t.hours} saat</span></td>
-      <td><strong style="color:var(--success)">${fmtMoney(t.hours * person.wage)}</strong></td>
-      <td style="color:var(--text2)">${t.note || '—'}</td>
-    </tr>`).join('') +
-    `<tr style="background:var(--bg2)">
-      <td><strong>TOPLAM</strong></td>
-      <td><strong>${totalHours} saat</strong></td>
-      <td><strong style="color:var(--success)">${fmtMoney(totalEarning)}</strong></td>
-      <td>—</td>
-    </tr>` +
-    '</tbody></table></div>';
+  if (!ts.length) { wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F4C5}</div><h3>Kayit bulunamadi</h3><p>Bu donem icin calisma kaydiniz yok.</p></div>'; return; }
+  let html = '<div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Calisma Saati</th><th>Gunluk Kazanc</th><th>Not</th></tr></thead><tbody>';
+  ts.forEach(function(t) {
+    html += '<tr><td>' + fmtDate(t.date) + '</td><td><span class="badge badge-purple">' + t.hours + ' saat</span></td><td><strong style="color:var(--success)">' + fmtMoney(t.hours * person.wage) + '</strong></td><td style="color:var(--text2)">' + (t.note || '-') + '</td></tr>';
+  });
+  html += '<tr style="background:var(--bg2)"><td><strong>TOPLAM</strong></td><td><strong>' + totalHours + ' saat</strong></td><td><strong style="color:var(--success)">' + fmtMoney(totalEarning) + '</strong></td><td>-</td></tr>';
+  html += '</tbody></table></div>';
+  wrap.innerHTML = html;
 }
 
-// ===================== SETTINGS =====================
 function changeAdminPassword() {
   const old = document.getElementById('oldPass').value;
   const n1 = document.getElementById('newPass').value;
@@ -1813,33 +1537,30 @@ function loadSettings() {
   document.getElementById('bizStartTime').value = getSetting('bizStartTime', '09:00');
 }
 
-function loadSettingsStats() {
-  const p = getData('personnel').length;
-  const ts = getData('timesheet').length;
-  const inc = getData('income').length;
-  const exp = getData('expenses').length;
-  const cats = getData('categories').length;
+async function loadSettingsStats() {
+  const p = (await getPersonnel()).length;
+  const ts = (await getTimesheet()).length;
+  const inc = (await getIncome()).length;
+  const exp = (await getExpenses()).length;
+  const cats = (await getCategories()).length;
   document.getElementById('setStatPersonnel').textContent = p;
   document.getElementById('setStatRecords').textContent = ts + inc + exp + cats;
   document.getElementById('setStatDate').textContent = new Date().toLocaleDateString('tr-TR');
 }
 
-function exportData() {
+async function exportData() {
   const data = {
-    personnel: getData('personnel'),
-    timesheet: getData('timesheet'),
-    income: getData('income'),
-    expenses: getData('expenses'),
-    categories: getData('categories'),
-    bizSettings: JSON.parse(localStorage.getItem('bizSettings') || '{}'),
+    personnel: await getPersonnel(),
+    timesheet: await getTimesheet(),
+    income: await getIncome(),
+    expenses: await getExpenses(),
+    categories: await getCategories(),
     exportDate: new Date().toISOString()
   };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = 'isletme-yedek-' + today() + '.json';
-  a.click();
+  a.href = url; a.download = 'yedek-' + today() + '.json'; a.click();
   URL.revokeObjectURL(url);
   showToast('Veriler disa aktarildi!');
 }
@@ -1848,29 +1569,25 @@ function importData(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => {
+  reader.onload = async function(ev) {
     try {
       const data = JSON.parse(ev.target.result);
-      if (data.personnel) setData('personnel', data.personnel);
-      if (data.timesheet) setData('timesheet', data.timesheet);
-      if (data.income) setData('income', data.income);
-      if (data.expenses) setData('expenses', data.expenses);
-      if (data.categories) setData('categories', data.categories);
-      if (data.bizSettings) localStorage.setItem('bizSettings', JSON.stringify(data.bizSettings));
-      showToast('Veriler basariyla iceri aktarildi!');
-      initAdmin();
-    } catch(err) {
-      showToast('Gecersiz JSON dosyasi.', 'error');
-    }
+      showToast('Iceri aktarma su an desteklenmiyor. Supabase uzerinden yapiniz.', 'warning');
+    } catch(err) { showToast('Gecersiz JSON dosyasi.', 'error'); }
   };
   reader.readAsText(file);
   e.target.value = '';
 }
 
 function resetAllData() {
-  showConfirm('TUM VERILERI SIL', 'Bu islem geri alinamaz! Tum personel, puantaj, gelir ve gider verileri silinecek.', () => {
-    ['personnel','timesheet','income','expenses','categories'].forEach(k => localStorage.removeItem(k));
-    initAdmin();
+  showConfirm('TUM VERILERI SIL', 'Bu islem geri alinamaz! Tum veriler silinecek.', async function() {
+    await sb.from('timesheet').delete().neq('id','');
+    await sb.from('expenses').delete().neq('id','');
+    await sb.from('income').delete().neq('id','');
+    await sb.from('categories').delete().neq('id','');
+    await sb.from('personnel').delete().neq('id','');
+    _cache = {};
+    await initAdmin();
     showToast('Tum veriler silindi.', 'warning');
   });
 }
