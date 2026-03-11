@@ -323,6 +323,7 @@ select option{background:var(–bg2);color:var(–text)}
     <button class="tab-btn" onclick="switchTab('income')" data-tab="income">💰 Gelir</button>
     <button class="tab-btn" onclick="switchTab('expense')" data-tab="expense">💸 Gider</button>
     <button class="tab-btn" onclick="switchTab('summary')" data-tab="summary">📊 Özet</button>
+    <button class="tab-btn" onclick="switchTab('salary')" data-tab="salary">💳 Maas</button>
     <button class="tab-btn" onclick="switchTab('settings')" data-tab="settings">⚙️ Ayarlar</button>
   </div>
   <div class="content">
@@ -474,6 +475,40 @@ select option{background:var(–bg2);color:var(–text)}
 </div>
 
 <!-- TAB 6: SETTINGS -->
+<!-- TAB: MAAS -->
+<div class="tab-panel" id="tab-salary">
+  <div class="section-title"><span>💳</span> Maas Odemesi</div>
+  <p class="section-sub">Personel maas odemelerini hesaba ve elden olarak ayri kaydedin.</p>
+  <div class="card">
+    <div class="card-title"><span class="icon icon-purple">➕</span> Yeni Odeme Ekle</div>
+    <div class="form-row form-row-2">
+      <div class="form-group"><label>Personel</label>
+        <select class="form-control" id="salPersonnel"><option value="">Personel Secin</option></select>
+      </div>
+      <div class="form-group"><label>Tarih</label><input type="date" class="form-control" id="salDate" /></div>
+    </div>
+    <div class="form-row form-row-2">
+      <div class="form-group"><label>Hesaba Yatirilan (TL)</label><input type="number" class="form-control" id="salBank" placeholder="0.00" min="0" step="0.01" /></div>
+      <div class="form-group"><label>Elden Verilen (TL)</label><input type="number" class="form-control" id="salCash" placeholder="0.00" min="0" step="0.01" /></div>
+    </div>
+    <div class="form-group"><label>Not (Istege Bagli)</label><input type="text" class="form-control" id="salNote" placeholder="Odeme notu..." /></div>
+    <button class="btn btn-primary" onclick="addSalaryPayment()">✅ Odemeyi Kaydet</button>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon icon-cyan">👥</span> Personel Maas Durumu</div>
+    <div class="filter-bar">
+      <input type="month" class="form-control" id="salFilterMonth" style="width:180px" onchange="renderSalary()" />
+      <select class="form-control" id="salFilterPersonnel" style="width:180px" onchange="renderSalary()"><option value="">Tum Personel</option></select>
+      <button class="btn btn-ghost btn-sm" onclick="clearSalFilter()">Temizle</button>
+    </div>
+    <div id="salaryStatusWrap"></div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon icon-green">📋</span> Odeme Gecmisi</div>
+    <div id="salaryHistoryWrap"></div>
+  </div>
+</div>
+
 <div class="tab-panel" id="tab-settings">
   <div class="section-title"><span>⚙️</span> Ayarlar</div>
   <p class="section-sub">Sistem tercihlerini ve güvenlik ayarlarını yönetin.</p>
@@ -647,6 +682,26 @@ select option{background:var(–bg2);color:var(–text)}
     <div style="display:flex;gap:12px;margin-top:8px">
       <button class="btn btn-ghost" onclick="closeModal('editCategoryModal')" style="flex:1">İptal</button>
       <button class="btn btn-primary" onclick="saveEditCategory()" style="flex:1">💾 Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="editSalaryModal">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">✏️ Odeme Duzenle</span><button class="modal-close" onclick="closeModal('editSalaryModal')">✕</button></div>
+    <input type="hidden" id="editSalId" />
+    <div class="form-group"><label>Personel</label>
+      <select class="form-control" id="editSalPersonnel"></select>
+    </div>
+    <div class="form-group"><label>Tarih</label><input type="date" class="form-control" id="editSalDate" /></div>
+    <div class="form-row form-row-2">
+      <div class="form-group"><label>Hesaba Yatirilan (TL)</label><input type="number" class="form-control" id="editSalBank" min="0" step="0.01" /></div>
+      <div class="form-group"><label>Elden Verilen (TL)</label><input type="number" class="form-control" id="editSalCash" min="0" step="0.01" /></div>
+    </div>
+    <div class="form-group"><label>Not</label><input type="text" class="form-control" id="editSalNote" /></div>
+    <div style="display:flex;gap:12px;margin-top:8px">
+      <button class="btn btn-ghost" onclick="closeModal('editSalaryModal')" style="flex:1">Iptal</button>
+      <button class="btn btn-primary" onclick="saveEditSalary()" style="flex:1">💾 Kaydet</button>
     </div>
   </div>
 </div>
@@ -869,6 +924,7 @@ async function switchTab(tab) {
   else if (tab === 'expense') { await renderCategories(); await renderExpenses(); }
   else if (tab === 'income') await renderIncome();
   else if (tab === 'personnel') await renderPersonnel();
+  else if (tab === 'salary') { await populateSalaryDropdowns(); document.getElementById('salDate').value = today(); await renderSalary(); }
 }
 
 async function addPersonnel() {
@@ -1590,6 +1646,150 @@ function resetAllData() {
     await initAdmin();
     showToast('Tum veriler silindi.', 'warning');
   });
+}
+
+// ===================== SALARY =====================
+async function getSalaryPayments() {
+  return (await dbGet('salary_payments')).map(function(r) {
+    return { id: r.id, personnelId: r.personnel_id, date: r.date, bank: Number(r.bank || 0), cash: Number(r.cash || 0), note: r.note || '', createdAt: r.created_at };
+  });
+}
+
+async function populateSalaryDropdowns() {
+  const list = await getPersonnel();
+  ['salPersonnel','editSalPersonnel','salFilterPersonnel'].forEach(function(did) {
+    const el = document.getElementById(did);
+    if (!el) return;
+    const cur = el.value;
+    const prefix = did === 'salFilterPersonnel' ? '<option value="">Tum Personel</option>' : '<option value="">Personel Secin</option>';
+    el.innerHTML = prefix + list.map(function(p) { return '<option value="' + p.id + '">' + p.name + ' ' + p.surname + '</option>'; }).join('');
+    if (cur) el.value = cur;
+  });
+}
+
+async function addSalaryPayment() {
+  const personnelId = document.getElementById('salPersonnel').value;
+  const date = document.getElementById('salDate').value;
+  const bank = parseFloat(document.getElementById('salBank').value) || 0;
+  const cash = parseFloat(document.getElementById('salCash').value) || 0;
+  const note = document.getElementById('salNote').value.trim();
+  if (!personnelId || !date || (bank === 0 && cash === 0)) { showToast('Lutfen personel, tarih ve en az bir odeme tutari girin.', 'error'); return; }
+  const ok = await dbInsert('salary_payments', { id: genId(), personnel_id: personnelId, date: date, bank: bank, cash: cash, note: note || null, created_at: today() });
+  if (!ok) return;
+  document.getElementById('salBank').value = '';
+  document.getElementById('salCash').value = '';
+  document.getElementById('salNote').value = '';
+  await renderSalary();
+  showToast('Odeme kaydedildi!');
+}
+
+async function renderSalary() {
+  showLoading('salaryStatusWrap');
+  showLoading('salaryHistoryWrap');
+  const filterMonth = document.getElementById('salFilterMonth') ? document.getElementById('salFilterMonth').value : '';
+  const filterPers = document.getElementById('salFilterPersonnel') ? document.getElementById('salFilterPersonnel').value : '';
+  const personnel = await getPersonnel();
+  const allTs = await getTimesheet();
+  const payments = await getSalaryPayments();
+
+  const filteredPayments = payments.filter(function(p) {
+    if (filterMonth && p.date.indexOf(filterMonth) !== 0) return false;
+    if (filterPers && p.personnelId !== filterPers) return false;
+    return true;
+  });
+  const filteredTs = allTs.filter(function(t) {
+    if (filterMonth && t.date.indexOf(filterMonth) !== 0) return false;
+    if (filterPers && t.personnelId !== filterPers) return false;
+    return true;
+  });
+
+  const statusWrap = document.getElementById('salaryStatusWrap');
+  if (!personnel.length) { statusWrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F465}</div><h3>Personel yok</h3></div>'; }
+  else {
+    let html = '<div class="table-wrap"><table><thead><tr><th>Personel</th><th>Kazanilan</th><th>Hesaba</th><th>Elden</th><th>Toplam Odenen</th><th>Kalan Borc</th><th>Durum</th></tr></thead><tbody>';
+    personnel.forEach(function(p) {
+      if (filterPers && p.id !== filterPers) return;
+      const pTs = filteredTs.filter(function(t) { return t.personnelId === p.id; });
+      const earned = pTs.reduce(function(s,t) { return s + t.hours * p.wage; }, 0);
+      const pPayments = filteredPayments.filter(function(pay) { return pay.personnelId === p.id; });
+      const totalBank = pPayments.reduce(function(s,pay) { return s + pay.bank; }, 0);
+      const totalCash = pPayments.reduce(function(s,pay) { return s + pay.cash; }, 0);
+      const totalPaid = totalBank + totalCash;
+      const remaining = earned - totalPaid;
+      const statusBadge = remaining <= 0 ? '<span class="badge badge-green">Odendi</span>' : '<span class="badge badge-red">Bekliyor</span>';
+      html += '<tr>';
+      html += '<td><strong>' + p.name + ' ' + p.surname + '</strong></td>';
+      html += '<td><strong style="color:var(--accent)">' + fmtMoney(earned) + '</strong></td>';
+      html += '<td style="color:var(--accent3)">' + fmtMoney(totalBank) + '</td>';
+      html += '<td style="color:var(--success)">' + fmtMoney(totalCash) + '</td>';
+      html += '<td><strong>' + fmtMoney(totalPaid) + '</strong></td>';
+      html += '<td><strong style="color:' + (remaining > 0 ? 'var(--danger)' : 'var(--success)') + '">' + fmtMoney(remaining > 0 ? remaining : 0) + '</strong></td>';
+      html += '<td>' + statusBadge + '</td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+    statusWrap.innerHTML = html;
+  }
+
+  const histWrap = document.getElementById('salaryHistoryWrap');
+  const sorted = filteredPayments.sort(function(a,b) { return b.date.localeCompare(a.date); });
+  if (!sorted.length) { histWrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F4B3}</div><h3>Odeme gecmisi yok</h3><p>Henuz odeme yapilmamis.</p></div>'; return; }
+  let html2 = '<div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Personel</th><th>Hesaba</th><th>Elden</th><th>Toplam</th><th>Not</th><th>Islemler</th></tr></thead><tbody>';
+  sorted.forEach(function(pay) {
+    const p = personnel.find(function(x) { return x.id === pay.personnelId; });
+    const total = pay.bank + pay.cash;
+    html2 += '<tr><td>' + fmtDate(pay.date) + '</td>';
+    html2 += '<td><strong>' + (p ? p.name + ' ' + p.surname : '-') + '</strong></td>';
+    html2 += '<td style="color:var(--accent3)">' + fmtMoney(pay.bank) + '</td>';
+    html2 += '<td style="color:var(--success)">' + fmtMoney(pay.cash) + '</td>';
+    html2 += '<td><strong>' + fmtMoney(total) + '</strong></td>';
+    html2 += '<td style="color:var(--text2)">' + (pay.note || '-') + '</td>';
+    html2 += '<td><div class="actions">';
+    html2 += '<button class="btn btn-warning btn-sm btn-icon" onclick="openEditSalary(\'' + pay.id + '\')">\u270F\uFE0F</button>';
+    html2 += '<button class="btn btn-danger btn-sm btn-icon" onclick="deleteSalary(\'' + pay.id + '\')">\u{1F5D1}\uFE0F</button>';
+    html2 += '</div></td></tr>';
+  });
+  html2 += '</tbody></table></div>';
+  histWrap.innerHTML = html2;
+}
+
+async function openEditSalary(id) {
+  const payments = await getSalaryPayments();
+  const pay = payments.find(function(x) { return x.id === id; });
+  if (!pay) return;
+  await populateSalaryDropdowns();
+  document.getElementById('editSalId').value = id;
+  document.getElementById('editSalPersonnel').value = pay.personnelId;
+  document.getElementById('editSalDate').value = pay.date;
+  document.getElementById('editSalBank').value = pay.bank;
+  document.getElementById('editSalCash').value = pay.cash;
+  document.getElementById('editSalNote').value = pay.note || '';
+  openModal('editSalaryModal');
+}
+
+async function saveEditSalary() {
+  const id = document.getElementById('editSalId').value;
+  const row = { personnel_id: document.getElementById('editSalPersonnel').value, date: document.getElementById('editSalDate').value, bank: parseFloat(document.getElementById('editSalBank').value) || 0, cash: parseFloat(document.getElementById('editSalCash').value) || 0, note: document.getElementById('editSalNote').value || null };
+  const ok = await dbUpdate('salary_payments', id, row);
+  if (!ok) return;
+  closeModal('editSalaryModal');
+  await renderSalary();
+  showToast('Odeme guncellendi!');
+}
+
+async function deleteSalary(id) {
+  showConfirm('Odemeyi Sil', 'Bu odeme kaydini silmek istediginize emin misiniz?', async function() {
+    const ok = await dbDelete('salary_payments', id);
+    if (!ok) return;
+    await renderSalary();
+    showToast('Odeme silindi.', 'warning');
+  });
+}
+
+function clearSalFilter() {
+  document.getElementById('salFilterMonth').value = '';
+  document.getElementById('salFilterPersonnel').value = '';
+  renderSalary();
 }
 </script>
 
