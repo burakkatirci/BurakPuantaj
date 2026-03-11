@@ -2228,12 +2228,18 @@ document.getElementById(“incDate”).value=todayISO();
 document.getElementById(“tsDate”).value=todayISO();
 document.getElementById(“expDate”).value=todayISO();
 
+// Loading overlay max 1.5 saniyede kapanir, Firebase arka planda calisir
+setTimeout(function(){ showLoadingOverlay(false); }, 1500);
+
 loadFromFirebase().then(function(){
+showLoadingOverlay(false);
 updateDropdowns();
 renderAnnouncementList();
 renderMsgContacts();
 updateAnnNotif();
 updateMsgNotif();
+}).catch(function(){
+showLoadingOverlay(false);
 });
 </script>
 
