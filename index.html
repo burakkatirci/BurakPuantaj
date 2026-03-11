@@ -801,10 +801,15 @@ var activeChatPid = null;
 var isDark = true;
 
 async function loadFromFirebase() {
+  // Her durumda 10 saniye sonra loading'i kapat
+  var safetyTimer = setTimeout(function(){
+    showLoadingOverlay(false);
+  }, 10000);
+
   try {
     showLoadingOverlay(true);
     var timeoutPromise = new Promise(function(_,reject){
-      setTimeout(function(){ reject(new Error("timeout")); }, 8000);
+      setTimeout(function(){ reject(new Error("timeout")); }, 6000);
     });
     var loadPromise = Promise.all([
       fbLoad("personnel",[]),
@@ -833,17 +838,18 @@ async function loadFromFirebase() {
     setLocalData("bp_admin", adminCreds);
     setLocalData("bp_announcements", announcementList);
     setLocalData("bp_messages", messageStore);
-    showLoadingOverlay(false);
   } catch(e) {
     console.error("Firebase load error:", e);
     announcementList = getData("bp_announcements",[]);
     messageStore     = getData("bp_messages",{});
-    showLoadingOverlay(false);
     if(e.message === "timeout"){
       toast("Firebase zaman asimi - yerel veriler kullaniliyor.", "error");
     } else {
       toast("Firebase baglantisi kurulamadi - yerel veriler kullaniliyor.", "error");
     }
+  } finally {
+    clearTimeout(safetyTimer);
+    showLoadingOverlay(false);
   }
 }
 
