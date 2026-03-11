@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
@@ -140,7 +141,6 @@ tbody td{padding:13px 16px;font-size:14px}
 .detail-stat{text-align:center}
 .detail-stat-val{font-family:"Syne",sans-serif;font-size:16px;font-weight:700;color:var(--accent)}
 .detail-stat-label{font-size:11px;color:var(--text2);margin-top:2px}
-/* SETTINGS */
 .settings-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px}
 .settings-section-title{font-family:"Syne",sans-serif;font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;padding-bottom:12px;border-bottom:1px solid var(--border)}
 .setting-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
@@ -153,7 +153,6 @@ tbody td{padding:13px 16px;font-size:14px}
 .toggle.on::after{transform:translateX(20px)}
 .danger-zone{background:rgba(255,101,132,0.05);border:1px solid rgba(255,101,132,0.2);border-radius:var(--radius);padding:24px;margin-bottom:20px}
 .danger-zone-title{font-family:"Syne",sans-serif;font-size:15px;font-weight:700;color:var(--accent2);margin-bottom:16px;display:flex;align-items:center;gap:8px;padding-bottom:12px;border-bottom:1px solid rgba(255,101,132,0.2)}
-/* PDF loading */
 .pdf-loading{display:none;align-items:center;gap:8px;color:var(--text2);font-size:13px}
 .spinner{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -195,7 +194,6 @@ tbody td{padding:13px 16px;font-size:14px}
 .header-left{display:flex;align-items:center;gap:16px}
 .header-user{display:flex;align-items:center;gap:10px}
 .header-right{display:flex;align-items:center;gap:10px}
-/* ANNOUNCEMENT */
 .ann-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px;position:relative;transition:var(--tr)}
 .ann-card:hover{border-color:var(--accent)}
 .ann-card.pinned{border-color:var(--accent4);background:rgba(247,151,30,0.05)}
@@ -208,7 +206,6 @@ tbody td{padding:13px 16px;font-size:14px}
 .ann-type-warn{background:rgba(247,151,30,0.15);color:var(--accent4)}
 .ann-type-urgent{background:rgba(255,101,132,0.15);color:var(--accent2)}
 .ann-type-good{background:rgba(67,233,123,0.15);color:var(--accent3)}
-/* BANNER */
 .ann-banner{background:linear-gradient(135deg,rgba(108,99,255,0.15),rgba(168,85,247,0.1));border:1px solid rgba(108,99,255,0.3);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:flex-start;gap:12px;animation:fadeIn 0.4s ease}
 .ann-banner.warn{background:linear-gradient(135deg,rgba(247,151,30,0.12),rgba(255,101,132,0.08));border-color:rgba(247,151,30,0.3)}
 .ann-banner.urgent{background:linear-gradient(135deg,rgba(255,101,132,0.12),rgba(247,151,30,0.08));border-color:rgba(255,101,132,0.3)}
@@ -219,7 +216,6 @@ tbody td{padding:13px 16px;font-size:14px}
 .ann-banner-body{font-size:13px;color:var(--text2)}
 .ann-banner-close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:0 4px;flex-shrink:0}
 .ann-banner-close:hover{color:var(--text)}
-/* MESSAGING */
 .msg-layout{display:grid;grid-template-columns:280px 1fr;gap:0;height:600px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
 .msg-sidebar{border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
 .msg-sidebar-header{padding:16px;border-bottom:1px solid var(--border);font-family:"Syne",sans-serif;font-weight:700;font-size:14px;background:var(--bg2)}
@@ -248,7 +244,6 @@ tbody td{padding:13px 16px;font-size:14px}
 .msg-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text3);gap:8px}
 .msg-empty-icon{font-size:40px;opacity:0.3}
 .msg-date-sep{text-align:center;font-size:11px;color:var(--text3);padding:4px 12px;background:var(--bg2);border-radius:20px;align-self:center}
-/* NOTIF DOT on tab */
 .tab-notif{display:inline-flex;background:var(--accent2);color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:800;align-items:center;justify-content:center;margin-left:2px}
 @media(max-width:768px){
   .msg-layout{grid-template-columns:1fr;height:auto}
@@ -260,7 +255,6 @@ tbody td{padding:13px 16px;font-size:14px}
 <body>
 <div id="toastContainer"></div>
 
-<!-- LOADING OVERLAY -->
 <div id="loadingOverlay" style="position:fixed;inset:0;background:var(--bg);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px">
   <div style="width:48px;height:48px;border-radius:14px;background:var(--grad1);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 8px 24px rgba(108,99,255,0.4)">&#127970;</div>
   <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800"><span style="background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Biz</span>Panel</div>
@@ -271,6 +265,7 @@ tbody td{padding:13px 16px;font-size:14px}
 </div>
 
 <!-- LOGIN -->
+
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-logo">
@@ -279,8 +274,8 @@ tbody td{padding:13px 16px;font-size:14px}
       <p>Isletme Yonetim Sistemi</p>
     </div>
     <div class="login-tabs">
-      <button class="login-tab active" onclick="switchLoginTab('admin',this)">&#128081; Admin</button>
-      <button class="login-tab" onclick="switchLoginTab('personnel',this)">&#128100; Personel</button>
+      <button class="login-tab active" onclick="window.switchLoginTab('admin',this)">&#128081; Admin</button>
+      <button class="login-tab" onclick="window.switchLoginTab('personnel',this)">&#128100; Personel</button>
     </div>
     <div id="adminLoginForm">
       <div class="form-group">
@@ -291,7 +286,7 @@ tbody td{padding:13px 16px;font-size:14px}
         <label>Sifre</label>
         <input type="password" id="adminPass" placeholder="sifre" value="admin123">
       </div>
-      <button class="btn btn-primary btn-full" onclick="loginAdmin()">Giris Yap</button>
+      <button class="btn btn-primary btn-full" onclick="window.loginAdmin()">Giris Yap</button>
     </div>
     <div id="personnelLoginForm" style="display:none">
       <div class="form-group">
@@ -302,13 +297,14 @@ tbody td{padding:13px 16px;font-size:14px}
         <label>Sifre</label>
         <input type="password" id="persPass" placeholder="sifre">
       </div>
-      <button class="btn btn-primary btn-full" onclick="loginPersonnel()">Giris Yap</button>
+      <button class="btn btn-primary btn-full" onclick="window.loginPersonnel()">Giris Yap</button>
     </div>
     <p class="login-error" id="loginError">Kullanici adi veya sifre hatali!</p>
   </div>
 </div>
 
 <!-- ADMIN APP -->
+
 <div id="appShell">
   <header class="header">
     <div class="header-left">
@@ -322,22 +318,23 @@ tbody td{padding:13px 16px;font-size:14px}
       </div>
     </div>
     <div class="header-right">
-      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">&#127769;</button>
-      <button class="btn btn-danger btn-sm" onclick="logout()">Cikis</button>
+      <button class="theme-btn" id="themeBtn" onclick="window.toggleTheme()">&#127769;</button>
+      <button class="btn btn-danger btn-sm" onclick="window.logout()">Cikis</button>
     </div>
   </header>
   <nav class="tabs-nav">
-    <button class="tab-btn active" id="navPersonnel" onclick="showTab('personnel',this)">&#128101; Personel</button>
-    <button class="tab-btn" id="navTimesheet" onclick="showTab('timesheet',this)">&#128197; Puantaj</button>
-    <button class="tab-btn" id="navIncome" onclick="showTab('income',this)">&#128176; Gelir</button>
-    <button class="tab-btn" id="navExpense" onclick="showTab('expense',this)">&#128184; Gider</button>
-    <button class="tab-btn" id="navSummary" onclick="showTab('summary',this)">&#128202; Ozet</button>
-    <button class="tab-btn" id="navSettings" onclick="showTab('settings',this)">&#9881; Ayarlar</button>
-    <button class="tab-btn" id="navAnnounce" onclick="showTab('announce',this)">&#128226; Duyurular <span class="tab-notif" id="annNotifDot" style="display:none">!</span></button>
-    <button class="tab-btn" id="navMessages" onclick="showTab('messages',this)">&#128172; Mesajlar <span class="tab-notif" id="msgNotifDot" style="display:none">0</span></button>
+    <button class="tab-btn active" id="navPersonnel" onclick="window.showTab('personnel',this)">&#128101; Personel</button>
+    <button class="tab-btn" id="navTimesheet" onclick="window.showTab('timesheet',this)">&#128197; Puantaj</button>
+    <button class="tab-btn" id="navIncome" onclick="window.showTab('income',this)">&#128176; Gelir</button>
+    <button class="tab-btn" id="navExpense" onclick="window.showTab('expense',this)">&#128184; Gider</button>
+    <button class="tab-btn" id="navSummary" onclick="window.showTab('summary',this)">&#128202; Ozet</button>
+    <button class="tab-btn" id="navSettings" onclick="window.showTab('settings',this)">&#9881; Ayarlar</button>
+    <button class="tab-btn" id="navAnnounce" onclick="window.showTab('announce',this)">&#128226; Duyurular <span class="tab-notif" id="annNotifDot" style="display:none">!</span></button>
+    <button class="tab-btn" id="navMessages" onclick="window.showTab('messages',this)">&#128172; Mesajlar <span class="tab-notif" id="msgNotifDot" style="display:none">0</span></button>
   </nav>
 
   <!-- TAB PERSONNEL -->
+
   <div class="tab-content active" id="tab-personnel">
     <div class="card gap-section">
       <div class="card-title">Yeni Personel Ekle</div>
@@ -351,7 +348,7 @@ tbody td{padding:13px 16px;font-size:14px}
       </div>
       <div class="form-row">
         <div class="form-group"><label>Sifre</label><input type="password" id="pPassword" placeholder="sifre"></div>
-        <div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="addPersonnel()" style="width:100%">Personel Ekle</button></div>
+        <div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="window.addPersonnel()" style="width:100%">Personel Ekle</button></div>
       </div>
     </div>
     <div class="card">
@@ -370,6 +367,7 @@ tbody td{padding:13px 16px;font-size:14px}
   </div>
 
   <!-- TAB TIMESHEET -->
+
   <div class="tab-content" id="tab-timesheet">
     <div class="card gap-section">
       <div class="card-title">Puantaj Girisi</div>
@@ -379,7 +377,7 @@ tbody td{padding:13px 16px;font-size:14px}
       </div>
       <div class="form-row">
         <div class="form-group"><label>Calisma Saati</label><input type="number" id="tsHours" placeholder="0" step="0.5" min="0" max="24"></div>
-        <div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="addTimesheet()" style="width:100%">Kaydet</button></div>
+        <div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="window.addTimesheet()" style="width:100%">Kaydet</button></div>
       </div>
     </div>
     <div class="card">
@@ -398,6 +396,7 @@ tbody td{padding:13px 16px;font-size:14px}
   </div>
 
   <!-- TAB INCOME -->
+
   <div class="tab-content" id="tab-income">
     <div class="card gap-section">
       <div class="card-title">Gelir Girisi</div>
@@ -407,7 +406,7 @@ tbody td{padding:13px 16px;font-size:14px}
       </div>
       <div class="form-row">
         <div class="form-group"><label>Kredi Karti Geliri (TL)</label><input type="number" id="incCard" placeholder="0.00" step="0.01" min="0"></div>
-        <div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="addIncome()" style="width:100%">Kaydet</button></div>
+        <div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="window.addIncome()" style="width:100%">Kaydet</button></div>
       </div>
     </div>
     <div class="card">
@@ -426,13 +425,14 @@ tbody td{padding:13px 16px;font-size:14px}
   </div>
 
   <!-- TAB EXPENSE -->
+
   <div class="tab-content" id="tab-expense">
     <div class="grid-2 gap-section">
       <div class="card">
         <div class="card-title">Gider Kategorileri</div>
         <div class="flex-gap" style="margin-bottom:16px">
           <input type="text" id="catName" placeholder="Kategori adi..." style="flex:1;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;outline:none;transition:var(--tr)" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-          <button class="btn btn-primary" onclick="addCategory()">Ekle</button>
+          <button class="btn btn-primary" onclick="window.addCategory()">Ekle</button>
         </div>
         <div id="categoryList"></div>
         <div id="categoryEmpty" class="empty-state" style="display:none"><div class="empty-icon">&#127991;</div><h3>Kategori yok</h3><p>Kategori ekleyin.</p></div>
@@ -445,7 +445,7 @@ tbody td{padding:13px 16px;font-size:14px}
           <div class="form-group"><label>Tarih</label><input type="date" id="expDate"></div>
         </div>
         <div class="form-group"><label>Aciklama (istege bagli)</label><input type="text" id="expNote" placeholder="Aciklama..."></div>
-        <button class="btn btn-primary" onclick="addExpense()" style="width:100%">Gider Kaydet</button>
+        <button class="btn btn-primary" onclick="window.addExpense()" style="width:100%">Gider Kaydet</button>
       </div>
     </div>
     <div class="card">
@@ -464,22 +464,23 @@ tbody td{padding:13px 16px;font-size:14px}
   </div>
 
   <!-- TAB SUMMARY -->
+
   <div class="tab-content" id="tab-summary">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
       <div class="period-filter" style="margin-bottom:0">
-        <button class="period-btn" id="pbWeek" onclick="setPeriod('week')">Bu Hafta</button>
-        <button class="period-btn active" id="pbMonth" onclick="setPeriod('month')">Bu Ay</button>
-        <button class="period-btn" id="pbAll" onclick="setPeriod('all')">Tumu</button>
+        <button class="period-btn" id="pbWeek" onclick="window.setPeriod('week')">Bu Hafta</button>
+        <button class="period-btn active" id="pbMonth" onclick="window.setPeriod('month')">Bu Ay</button>
+        <button class="period-btn" id="pbAll" onclick="window.setPeriod('all')">Tumu</button>
         <div class="period-custom">
           <input type="date" id="filterStart">
           <span style="color:var(--text2);font-size:13px">-</span>
           <input type="date" id="filterEnd">
-          <button class="period-btn" onclick="setPeriod('custom')">Uygula</button>
+          <button class="period-btn" onclick="window.setPeriod('custom')">Uygula</button>
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <div class="pdf-loading" id="pdfLoading"><div class="spinner"></div><span>PDF hazirlaniyor...</span></div>
-        <button class="btn btn-success" onclick="exportPDF()" id="pdfBtn">PDF Indir</button>
+        <button class="btn btn-success" onclick="window.exportPDF()" id="pdfBtn">PDF Indir</button>
       </div>
     </div>
     <div class="grid-4 gap-section" id="summaryStats"></div>
@@ -508,8 +509,8 @@ tbody td{padding:13px 16px;font-size:14px}
   </div>
 
   <!-- TAB SETTINGS -->
+
   <div class="tab-content" id="tab-settings">
-    <!-- Admin Password -->
     <div class="settings-section gap-section">
       <div class="settings-section-title">&#128274; Admin Sifre Guncelleme</div>
       <div class="form-row">
@@ -518,40 +519,34 @@ tbody td{padding:13px 16px;font-size:14px}
       </div>
       <div class="form-row">
         <div class="form-group"><label>Yeni Sifre (Tekrar)</label><input type="password" id="settNewPass2" placeholder="Yeni sifreyi tekrar girin"></div>
-        <div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="updateAdminPassword()" style="width:100%">Sifreyi Guncelle</button></div>
+        <div class="form-group" style="display:flex;align-items:flex-end"><button class="btn btn-primary" onclick="window.updateAdminPassword()" style="width:100%">Sifreyi Guncelle</button></div>
       </div>
     </div>
-
-    <!-- Appearance -->
     <div class="settings-section gap-section">
       <div class="settings-section-title">&#127752; Gorunum</div>
       <div class="setting-row">
         <div><div class="setting-label">Karanlik Tema</div><div class="setting-desc">Arayuz renk temasini degistir</div></div>
-        <button class="toggle" id="themeToggle" onclick="toggleTheme()"></button>
+        <button class="toggle" id="themeToggle" onclick="window.toggleTheme()"></button>
       </div>
     </div>
-
-    <!-- Data Management -->
     <div class="settings-section gap-section">
       <div class="settings-section-title">&#128202; Veri Yonetimi</div>
       <div class="setting-row">
         <div><div class="setting-label">Verileri Yedekle</div><div class="setting-desc">Tum verileri JSON dosyasi olarak indir</div></div>
-        <button class="btn btn-ghost btn-sm" onclick="exportData()">JSON Indir</button>
+        <button class="btn btn-ghost btn-sm" onclick="window.exportData()">JSON Indir</button>
       </div>
       <div class="setting-row">
         <div><div class="setting-label">Veri Yukle</div><div class="setting-desc">Daha once indirilen JSON dosyasini yukle</div></div>
         <div>
-          <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
+          <input type="file" id="importFile" accept=".json" style="display:none" onchange="window.importData(this)">
           <button class="btn btn-ghost btn-sm" onclick="document.getElementById('importFile').click()">JSON Yukle</button>
         </div>
       </div>
       <div class="setting-row">
         <div><div class="setting-label">Ozet PDF</div><div class="setting-desc">Ozet sekmesindeki verileri PDF olarak indir</div></div>
-        <button class="btn btn-success btn-sm" onclick="showTab('summary',document.getElementById('navSummary'));setTimeout(function(){exportPDF();},300)">PDF Olustur</button>
+        <button class="btn btn-success btn-sm" onclick="window.showTab('summary',document.getElementById('navSummary'));setTimeout(function(){window.exportPDF();},300)">PDF Olustur</button>
       </div>
     </div>
-
-    <!-- App Info -->
     <div class="settings-section gap-section">
       <div class="settings-section-title">&#128221; Uygulama Bilgisi</div>
       <div class="setting-row">
@@ -567,20 +562,18 @@ tbody td{padding:13px 16px;font-size:14px}
         <span class="badge badge-green" id="settTotalRecords">0</span>
       </div>
     </div>
-
-    <!-- Danger Zone -->
     <div class="danger-zone">
       <div class="danger-zone-title">Tehlikeli Bolge</div>
       <div class="setting-row" style="border-color:rgba(255,101,132,0.15)">
         <div><div class="setting-label" style="color:var(--accent2)">Tum Verileri Sil</div><div class="setting-desc">Bu islem geri alinamaz! Tum veriler silinir.</div></div>
-        <button class="btn btn-danger btn-sm" onclick="clearAllData()">Tum Verileri Sil</button>
+        <button class="btn btn-danger btn-sm" onclick="window.clearAllData()">Tum Verileri Sil</button>
       </div>
     </div>
   </div>
 
   <!-- TAB ANNOUNCEMENTS -->
+
   <div class="tab-content" id="tab-announce">
-    <!-- New announcement form -->
     <div class="card gap-section">
       <div class="card-title">&#128226; Yeni Duyuru Yayinla</div>
       <div class="form-row">
@@ -600,11 +593,9 @@ tbody td{padding:13px 16px;font-size:14px}
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:var(--text2)">
           <input type="checkbox" id="annPinned" style="width:16px;height:16px;accent-color:var(--accent)"> Sabitle (en ustte goster)
         </label>
-        <button class="btn btn-primary" onclick="addAnnouncement()">Duyuruyu Yayinla</button>
+        <button class="btn btn-primary" onclick="window.addAnnouncement()">Duyuruyu Yayinla</button>
       </div>
     </div>
-
-    <!-- Active announcements -->
     <div class="card">
       <div class="section-header">
         <div class="section-title">Aktif Duyurular</div>
@@ -620,17 +611,16 @@ tbody td{padding:13px 16px;font-size:14px}
   </div>
 
   <!-- TAB MESSAGES -->
+
   <div class="tab-content" id="tab-messages">
     <div class="card" style="padding:0;overflow:hidden">
       <div class="msg-layout">
-        <!-- Sidebar: contact list -->
         <div class="msg-sidebar">
           <div class="msg-sidebar-header">Konusmalar</div>
           <div id="msgContactList">
             <div style="padding:24px 16px;text-align:center;color:var(--text3);font-size:13px">Personel eklenince burada gorunur.</div>
           </div>
         </div>
-        <!-- Main chat area -->
         <div class="msg-main" id="msgMain">
           <div class="msg-empty">
             <div class="msg-empty-icon">&#128172;</div>
@@ -644,6 +634,7 @@ tbody td{padding:13px 16px;font-size:14px}
 </div>
 
 <!-- PERSONNEL PANEL -->
+
 <div id="personnelPanel">
   <div class="personnel-header">
     <div>
@@ -651,8 +642,8 @@ tbody td{padding:13px 16px;font-size:14px}
       <div style="font-size:13px;color:var(--text2)" id="persFullName"></div>
     </div>
     <div style="display:flex;align-items:center;gap:10px">
-      <button class="theme-btn" id="persThemeBtn" onclick="toggleTheme()">&#127769;</button>
-      <button class="btn btn-danger btn-sm" onclick="logout()">Cikis</button>
+      <button class="theme-btn" id="persThemeBtn" onclick="window.toggleTheme()">&#127769;</button>
+      <button class="btn btn-danger btn-sm" onclick="window.logout()">Cikis</button>
     </div>
   </div>
   <div class="personnel-content">
@@ -667,9 +658,10 @@ tbody td{padding:13px 16px;font-size:14px}
 </div>
 
 <!-- MODALS -->
+
 <div class="modal-overlay" id="editPersonnelModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">Personel Duzenle</div><button class="modal-close" onclick="closeModal('editPersonnelModal')">X</button></div>
+    <div class="modal-header"><div class="modal-title">Personel Duzenle</div><button class="modal-close" onclick="window.closeModal('editPersonnelModal')">X</button></div>
     <input type="hidden" id="editPersId">
     <div class="form-row">
       <div class="form-group"><label>Ad</label><input type="text" id="editPFirstName"></div>
@@ -681,15 +673,15 @@ tbody td{padding:13px 16px;font-size:14px}
     </div>
     <div class="form-group"><label>Sifre</label><input type="password" id="editPPassword"></div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('editPersonnelModal')">Iptal</button>
-      <button class="btn btn-primary" onclick="savePersonnel()">Kaydet</button>
+      <button class="btn btn-ghost" onclick="window.closeModal('editPersonnelModal')">Iptal</button>
+      <button class="btn btn-primary" onclick="window.savePersonnel()">Kaydet</button>
     </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="editTimesheetModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">Puantaj Duzenle</div><button class="modal-close" onclick="closeModal('editTimesheetModal')">X</button></div>
+    <div class="modal-header"><div class="modal-title">Puantaj Duzenle</div><button class="modal-close" onclick="window.closeModal('editTimesheetModal')">X</button></div>
     <input type="hidden" id="editTsId">
     <div class="form-group"><label>Personel</label><select id="editTsPersonnel"></select></div>
     <div class="form-row">
@@ -697,15 +689,15 @@ tbody td{padding:13px 16px;font-size:14px}
       <div class="form-group"><label>Calisma Saati</label><input type="number" id="editTsHours" step="0.5" min="0" max="24"></div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('editTimesheetModal')">Iptal</button>
-      <button class="btn btn-primary" onclick="saveTimesheet()">Kaydet</button>
+      <button class="btn btn-ghost" onclick="window.closeModal('editTimesheetModal')">Iptal</button>
+      <button class="btn btn-primary" onclick="window.saveTimesheet()">Kaydet</button>
     </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="editIncomeModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">Gelir Duzenle</div><button class="modal-close" onclick="closeModal('editIncomeModal')">X</button></div>
+    <div class="modal-header"><div class="modal-title">Gelir Duzenle</div><button class="modal-close" onclick="window.closeModal('editIncomeModal')">X</button></div>
     <input type="hidden" id="editIncId">
     <div class="form-group"><label>Tarih</label><input type="date" id="editIncDate"></div>
     <div class="form-row">
@@ -713,15 +705,15 @@ tbody td{padding:13px 16px;font-size:14px}
       <div class="form-group"><label>Kredi Karti (TL)</label><input type="number" id="editIncCard" step="0.01"></div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('editIncomeModal')">Iptal</button>
-      <button class="btn btn-primary" onclick="saveIncome()">Kaydet</button>
+      <button class="btn btn-ghost" onclick="window.closeModal('editIncomeModal')">Iptal</button>
+      <button class="btn btn-primary" onclick="window.saveIncome()">Kaydet</button>
     </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="editExpenseModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">Gider Duzenle</div><button class="modal-close" onclick="closeModal('editExpenseModal')">X</button></div>
+    <div class="modal-header"><div class="modal-title">Gider Duzenle</div><button class="modal-close" onclick="window.closeModal('editExpenseModal')">X</button></div>
     <input type="hidden" id="editExpId">
     <div class="form-group"><label>Kategori</label><select id="editExpCategory"></select></div>
     <div class="form-row">
@@ -730,20 +722,20 @@ tbody td{padding:13px 16px;font-size:14px}
     </div>
     <div class="form-group"><label>Aciklama</label><input type="text" id="editExpNote"></div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('editExpenseModal')">Iptal</button>
-      <button class="btn btn-primary" onclick="saveExpense()">Kaydet</button>
+      <button class="btn btn-ghost" onclick="window.closeModal('editExpenseModal')">Iptal</button>
+      <button class="btn btn-primary" onclick="window.saveExpense()">Kaydet</button>
     </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="editCategoryModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">Kategori Duzenle</div><button class="modal-close" onclick="closeModal('editCategoryModal')">X</button></div>
+    <div class="modal-header"><div class="modal-title">Kategori Duzenle</div><button class="modal-close" onclick="window.closeModal('editCategoryModal')">X</button></div>
     <input type="hidden" id="editCatId">
     <div class="form-group"><label>Kategori Adi</label><input type="text" id="editCatName"></div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('editCategoryModal')">Iptal</button>
-      <button class="btn btn-primary" onclick="saveCategory()">Kaydet</button>
+      <button class="btn btn-ghost" onclick="window.closeModal('editCategoryModal')">Iptal</button>
+      <button class="btn btn-primary" onclick="window.saveCategory()">Kaydet</button>
     </div>
   </div>
 </div>
@@ -753,16 +745,15 @@ tbody td{padding:13px 16px;font-size:14px}
     <div class="modal-header"><div class="modal-title" id="confirmTitle">Emin misiniz?</div></div>
     <p id="confirmMsg" style="color:var(--text2);font-size:14px;margin-bottom:8px"></p>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('confirmModal')">Iptal</button>
+      <button class="btn btn-ghost" onclick="window.closeModal('confirmModal')">Iptal</button>
       <button class="btn btn-danger" id="confirmOkBtn">Sil</button>
     </div>
   </div>
 </div>
 
 <script type="module">
-// ===== FIREBASE =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDuIXnRkGx67059263YDo8zyauNBQemZnc",
@@ -776,7 +767,6 @@ const firebaseConfig = {
 const fbApp = initializeApp(firebaseConfig);
 const db = getFirestore(fbApp);
 
-// Tum veriyi tek bir dokumanda sakliyoruz — basit ve hizli
 async function fbLoad(key, def) {
   try {
     var snap = await getDoc(doc(db, "bizpanel", key));
@@ -791,7 +781,6 @@ async function fbSave(key, value) {
   } catch(e) { console.error("Firebase save error:", e); }
 }
 
-// localStorage yedek olarak kaliyor (offline icin)
 function getData(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function setLocalData(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 
@@ -801,36 +790,33 @@ var incomeList    = getData("bp_income",[]);
 var expenseList   = getData("bp_expense",[]);
 var categoryList  = getData("bp_categories",[]);
 var adminCreds    = getData("bp_admin",{user:"admin",pass:"admin123"});
+var announcementList = getData("bp_announcements",[]);
+var messageStore  = getData("bp_messages",{});
 var currentUser   = null;
 var filterStartVal = "";
 var filterEndVal   = "";
 var chartBar=null, chartPie=null, chartLine=null;
 var pendingConfirmFn = null;
-var fbReady = false;
+var activeChatPid = null;
+var isDark = true;
 
-// Firebase'den tum veriyi yukle
 async function loadFromFirebase() {
   try {
     showLoadingOverlay(true);
-
-    // 8 saniye timeout ekle
-    var timeoutPromise = new Promise(function(_, reject){
+    var timeoutPromise = new Promise(function(_,reject){
       setTimeout(function(){ reject(new Error("timeout")); }, 8000);
     });
-
     var loadPromise = Promise.all([
-      fbLoad("personnel", []),
-      fbLoad("timesheet", []),
-      fbLoad("income", []),
-      fbLoad("expense", []),
-      fbLoad("categories", []),
-      fbLoad("admin", {user:"admin",pass:"admin123"}),
-      fbLoad("announcements", []),
-      fbLoad("messages", {})
+      fbLoad("personnel",[]),
+      fbLoad("timesheet",[]),
+      fbLoad("income",[]),
+      fbLoad("expense",[]),
+      fbLoad("categories",[]),
+      fbLoad("admin",{user:"admin",pass:"admin123"}),
+      fbLoad("announcements",[]),
+      fbLoad("messages",{})
     ]);
-
     var results = await Promise.race([loadPromise, timeoutPromise]);
-
     personnelList    = results[0];
     timesheetList    = results[1];
     incomeList       = results[2];
@@ -839,7 +825,6 @@ async function loadFromFirebase() {
     adminCreds       = results[5];
     announcementList = results[6];
     messageStore     = results[7];
-
     setLocalData("bp_personnel", personnelList);
     setLocalData("bp_timesheet", timesheetList);
     setLocalData("bp_income", incomeList);
@@ -848,19 +833,16 @@ async function loadFromFirebase() {
     setLocalData("bp_admin", adminCreds);
     setLocalData("bp_announcements", announcementList);
     setLocalData("bp_messages", messageStore);
-
-    fbReady = true;
     showLoadingOverlay(false);
   } catch(e) {
     console.error("Firebase load error:", e);
-    // Yerel verilerle devam et
     announcementList = getData("bp_announcements",[]);
     messageStore     = getData("bp_messages",{});
     showLoadingOverlay(false);
     if(e.message === "timeout"){
-      toast("Firebase zaman asimi — yerel veriler kullaniliyor.", "error");
+      toast("Firebase zaman asimi - yerel veriler kullaniliyor.", "error");
     } else {
-      toast("Firebase baglantisi kurulamadi — yerel veriler kullaniliyor.", "error");
+      toast("Firebase baglantisi kurulamadi - yerel veriler kullaniliyor.", "error");
     }
   }
 }
@@ -870,15 +852,13 @@ function showLoadingOverlay(show) {
   if(ov) ov.style.display = show ? "flex" : "none";
 }
 
-async function save() {
-  // Once localStorage
+function save() {
   setLocalData("bp_personnel", personnelList);
   setLocalData("bp_timesheet", timesheetList);
   setLocalData("bp_income", incomeList);
   setLocalData("bp_expense", expenseList);
   setLocalData("bp_categories", categoryList);
   setLocalData("bp_admin", adminCreds);
-  // Sonra Firebase (arka planda)
   fbSave("personnel", personnelList);
   fbSave("timesheet", timesheetList);
   fbSave("income", incomeList);
@@ -887,14 +867,23 @@ async function save() {
   fbSave("admin", adminCreds);
 }
 
-// ===== UTILS =====
+function saveAnn(){
+  setLocalData("bp_announcements",announcementList);
+  fbSave("announcements", announcementList);
+}
+
+function saveMsgs(){
+  setLocalData("bp_messages",messageStore);
+  fbSave("messages", messageStore);
+}
+
 function uid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,5);}
 function fmtMoney(v){return parseFloat(v||0).toLocaleString("tr-TR",{minimumFractionDigits:2,maximumFractionDigits:2});}
 function fmtDate(d){if(!d)return"-";var p=d.split("-");if(p.length===3)return p[2]+"."+p[1]+"."+p[0];return d;}
 function todayISO(){var d=new Date();var m=("0"+(d.getMonth()+1)).slice(-2);var day=("0"+d.getDate()).slice(-2);return d.getFullYear()+"-"+m+"-"+day;}
+function escHtml(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 
-// ===== THEME =====
-var isDark = true;
+// THEME
 function applyTheme(){
   document.body.classList.toggle("light",!isDark);
   var icon = isDark ? "&#127769;" : "&#9728;";
@@ -905,18 +894,20 @@ function applyTheme(){
   if(tg){ if(isDark) tg.classList.add("on"); else tg.classList.remove("on"); }
   setLocalData("bp_theme", isDark ? "dark" : "light");
 }
-function toggleTheme(){
+
+window.toggleTheme = function(){
   isDark = !isDark;
   applyTheme();
   if(document.getElementById("tab-summary").classList.contains("active")) updateSummary();
-}
+};
+
 (function(){
   var t=getData("bp_theme","dark");
   if(t==="light") isDark=false;
   applyTheme();
 })();
 
-// ===== TOAST =====
+// TOAST
 function toast(msg,type){
   type = type||"info";
   var el = document.createElement("div");
@@ -930,7 +921,7 @@ function toast(msg,type){
   },3000);
 }
 
-// ===== CONFIRM MODAL =====
+// CONFIRM MODAL
 function confirmAction(title,msg,fn){
   document.getElementById("confirmTitle").textContent = title;
   document.getElementById("confirmMsg").textContent = msg;
@@ -942,23 +933,25 @@ function confirmAction(title,msg,fn){
   openModal("confirmModal");
 }
 
-// ===== LOGIN =====
-function switchLoginTab(role,btn){
+// LOGIN
+window.switchLoginTab = function(role,btn){
   document.querySelectorAll(".login-tab").forEach(function(t){t.classList.remove("active");});
   btn.classList.add("active");
   document.getElementById("adminLoginForm").style.display = role==="admin"?"block":"none";
   document.getElementById("personnelLoginForm").style.display = role==="personnel"?"block":"none";
   document.getElementById("loginError").style.display = "none";
-}
-function loginAdmin(){
+};
+
+window.loginAdmin = function(){
   var u = document.getElementById("adminUser").value.trim();
   var p = document.getElementById("adminPass").value.trim();
   if(u===adminCreds.user && p===adminCreds.pass){
     currentUser = {role:"admin",name:"Admin"};
     showApp();
   } else { showLoginErr(); }
-}
-function loginPersonnel(){
+};
+
+window.loginPersonnel = function(){
   var u = document.getElementById("persUser").value.trim();
   var p = document.getElementById("persPass").value.trim();
   var found = null;
@@ -967,12 +960,14 @@ function loginPersonnel(){
   }
   if(found){ currentUser={role:"personnel",id:found.id}; showPersonnelPanel(found); }
   else { showLoginErr(); }
-}
+};
+
 function showLoginErr(){
   var e=document.getElementById("loginError");
   e.style.display="block";
   setTimeout(function(){e.style.display="none";},3000);
 }
+
 function showApp(){
   document.getElementById("loginScreen").style.display="none";
   document.getElementById("personnelPanel").style.display="none";
@@ -980,25 +975,33 @@ function showApp(){
   renderAll();
   showTab("personnel",document.getElementById("navPersonnel"));
   updateSettingsInfo();
+  renderAnnouncementList();
+  renderMsgContacts();
+  updateAnnNotif();
+  updateMsgNotif();
 }
+
 function showPersonnelPanel(p){
   document.getElementById("loginScreen").style.display="none";
   document.getElementById("appShell").style.display="none";
   document.getElementById("personnelPanel").style.display="block";
   document.getElementById("persFullName").textContent=p.firstName+" "+p.lastName;
   renderPersonnelView(p);
+  renderPersBanners(p.id);
+  renderPersonnelMsgArea(p);
 }
-function logout(){
+
+window.logout = function(){
   currentUser=null;
   document.getElementById("appShell").style.display="none";
   document.getElementById("personnelPanel").style.display="none";
   document.getElementById("loginScreen").style.display="flex";
   document.getElementById("persUser").value="";
   document.getElementById("persPass").value="";
-}
+};
 
-// ===== TABS =====
-function showTab(name,btn){
+// TABS
+window.showTab = function(name,btn){
   document.querySelectorAll(".tab-content").forEach(function(t){t.classList.remove("active");});
   document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});
   var tc = document.getElementById("tab-"+name);
@@ -1006,7 +1009,11 @@ function showTab(name,btn){
   if(btn) btn.classList.add("active");
   if(name==="summary") updateSummary();
   if(name==="settings") updateSettingsInfo();
-}
+  if(name==="messages"){renderMsgContacts();if(activeChatPid)openChat(activeChatPid);}
+  if(name==="announce"){markAllAnnRead("admin");updateAnnNotif();}
+};
+
+function showTab(name,btn){ window.showTab(name,btn); }
 
 function renderAll(){
   renderPersonnelTable();
@@ -1017,8 +1024,8 @@ function renderAll(){
   updateDropdowns();
 }
 
-// ===== PERSONNEL =====
-function addPersonnel(){
+// PERSONNEL
+window.addPersonnel = function(){
   var fn=document.getElementById("pFirstName").value.trim();
   var ln=document.getElementById("pLastName").value.trim();
   var wage=parseFloat(document.getElementById("pWage").value);
@@ -1038,7 +1045,7 @@ function addPersonnel(){
   document.getElementById("pUsername").value="";
   document.getElementById("pPassword").value="";
   toast("Personel eklendi!","success");
-}
+};
 
 function renderPersonnelTable(){
   var tb=document.getElementById("personnelTable");
@@ -1055,14 +1062,14 @@ function renderPersonnelTable(){
     rows+="<td><span class='badge badge-purple'>&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;</span></td>";
     rows+="<td><strong class='text-green'>TL "+fmtMoney(p.wage)+"</strong></td>";
     rows+="<td><div class='flex-gap'>";
-    rows+="<button class='btn btn-warning btn-sm btn-icon' onclick='openEditPersonnel(\""+p.id+"\")'>Edit</button>";
-    rows+="<button class='btn btn-danger btn-sm btn-icon' onclick='askDelPersonnel(\""+p.id+"\")'>Sil</button>";
+    rows+="<button class='btn btn-warning btn-sm btn-icon' onclick=\"window.openEditPersonnel('"+p.id+"')\">Edit</button>";
+    rows+="<button class='btn btn-danger btn-sm btn-icon' onclick=\"window.askDelPersonnel('"+p.id+"')\">Sil</button>";
     rows+="</div></td></tr>";
   }
   tb.innerHTML=rows;
 }
 
-function openEditPersonnel(id){
+window.openEditPersonnel = function(id){
   var p=null;
   for(var i=0;i<personnelList.length;i++){if(personnelList[i].id===id){p=personnelList[i];break;}}
   if(!p)return;
@@ -1073,9 +1080,9 @@ function openEditPersonnel(id){
   document.getElementById("editPUsername").value=p.username;
   document.getElementById("editPPassword").value=p.password;
   openModal("editPersonnelModal");
-}
+};
 
-function savePersonnel(){
+window.savePersonnel = function(){
   var id=document.getElementById("editPersId").value;
   var fn=document.getElementById("editPFirstName").value.trim();
   var ln=document.getElementById("editPLastName").value.trim();
@@ -1093,13 +1100,13 @@ function savePersonnel(){
     save();renderPersonnelTable();updateDropdowns();
     closeModal("editPersonnelModal");toast("Guncellendi!","success");
   }
-}
+};
 
-function askDelPersonnel(id){
+window.askDelPersonnel = function(id){
   var p=null;
   for(var i=0;i<personnelList.length;i++){if(personnelList[i].id===id){p=personnelList[i];break;}}
   var name=p?p.firstName+" "+p.lastName:"bu personel";
-  confirmAction("Personeli Sil","\""+name+"\" adli personeli silmek istiyor musunuz? Puantaj kayitlari da silinecek.",function(){
+  confirmAction("Personeli Sil",name+" adli personeli silmek istiyor musunuz? Puantaj kayitlari da silinecek.",function(){
     var newP=[],newT=[];
     for(var i=0;i<personnelList.length;i++){if(personnelList[i].id!==id)newP.push(personnelList[i]);}
     for(var i=0;i<timesheetList.length;i++){if(timesheetList[i].personnelId!==id)newT.push(timesheetList[i]);}
@@ -1107,10 +1114,10 @@ function askDelPersonnel(id){
     save();renderPersonnelTable();renderTimesheetTable();updateDropdowns();
     toast("Personel silindi.","info");
   });
-}
+};
 
-// ===== TIMESHEET =====
-function addTimesheet(){
+// TIMESHEET
+window.addTimesheet = function(){
   var pId=document.getElementById("tsPersonnel").value;
   var date=document.getElementById("tsDate").value;
   var hours=parseFloat(document.getElementById("tsHours").value);
@@ -1121,7 +1128,7 @@ function addTimesheet(){
   document.getElementById("tsDate").value="";
   document.getElementById("tsHours").value="";
   toast("Puantaj kaydedildi!","success");
-}
+};
 
 function renderTimesheetTable(){
   var tb=document.getElementById("timesheetTable");
@@ -1143,14 +1150,14 @@ function renderTimesheetTable(){
     rows+="<td><span class='badge badge-blue'>"+t.hours+" saat</span></td>";
     rows+="<td><strong class='text-green'>TL "+fmtMoney(earn)+"</strong></td>";
     rows+="<td><div class='flex-gap'>";
-    rows+="<button class='btn btn-warning btn-sm btn-icon' onclick='openEditTS(\""+t.id+"\")'>Edit</button>";
-    rows+="<button class='btn btn-danger btn-sm btn-icon' onclick='askDelTS(\""+t.id+"\")'>Sil</button>";
+    rows+="<button class='btn btn-warning btn-sm btn-icon' onclick=\"window.openEditTS('"+t.id+"')\">Edit</button>";
+    rows+="<button class='btn btn-danger btn-sm btn-icon' onclick=\"window.askDelTS('"+t.id+"')\">Sil</button>";
     rows+="</div></td></tr>";
   }
   tb.innerHTML=rows;
 }
 
-function openEditTS(id){
+window.openEditTS = function(id){
   var t=null;
   for(var i=0;i<timesheetList.length;i++){if(timesheetList[i].id===id){t=timesheetList[i];break;}}
   if(!t)return;
@@ -1164,9 +1171,9 @@ function openEditTS(id){
   document.getElementById("editTsDate").value=t.date;
   document.getElementById("editTsHours").value=t.hours;
   openModal("editTimesheetModal");
-}
+};
 
-function saveTimesheet(){
+window.saveTimesheet = function(){
   var id=document.getElementById("editTsId").value;
   var pId=document.getElementById("editTsPersonnel").value;
   var date=document.getElementById("editTsDate").value;
@@ -1179,19 +1186,19 @@ function saveTimesheet(){
     save();renderTimesheetTable();
     closeModal("editTimesheetModal");toast("Guncellendi!","success");
   }
-}
+};
 
-function askDelTS(id){
+window.askDelTS = function(id){
   confirmAction("Puantaj Sil","Bu puantaj kaydini silmek istiyor musunuz?",function(){
     var newT=[];
     for(var i=0;i<timesheetList.length;i++){if(timesheetList[i].id!==id)newT.push(timesheetList[i]);}
     timesheetList=newT;
     save();renderTimesheetTable();toast("Silindi.","info");
   });
-}
+};
 
-// ===== INCOME =====
-function addIncome(){
+// INCOME
+window.addIncome = function(){
   var date=document.getElementById("incDate").value;
   var cash=parseFloat(document.getElementById("incCash").value)||0;
   var card=parseFloat(document.getElementById("incCard").value)||0;
@@ -1202,7 +1209,7 @@ function addIncome(){
   document.getElementById("incCash").value="";
   document.getElementById("incCard").value="";
   toast("Gelir kaydedildi!","success");
-}
+};
 
 function renderIncomeTable(){
   var tb=document.getElementById("incomeTable");
@@ -1221,14 +1228,14 @@ function renderIncomeTable(){
     rows+="<td class='text-accent'>TL "+fmtMoney(inc.card)+"</td>";
     rows+="<td><strong class='text-green'>TL "+fmtMoney(tot)+"</strong></td>";
     rows+="<td><div class='flex-gap'>";
-    rows+="<button class='btn btn-warning btn-sm btn-icon' onclick='openEditInc(\""+inc.id+"\")'>Edit</button>";
-    rows+="<button class='btn btn-danger btn-sm btn-icon' onclick='askDelInc(\""+inc.id+"\")'>Sil</button>";
+    rows+="<button class='btn btn-warning btn-sm btn-icon' onclick=\"window.openEditInc('"+inc.id+"')\">Edit</button>";
+    rows+="<button class='btn btn-danger btn-sm btn-icon' onclick=\"window.askDelInc('"+inc.id+"')\">Sil</button>";
     rows+="</div></td></tr>";
   }
   tb.innerHTML=rows;
 }
 
-function openEditInc(id){
+window.openEditInc = function(id){
   var inc=null;
   for(var i=0;i<incomeList.length;i++){if(incomeList[i].id===id){inc=incomeList[i];break;}}
   if(!inc)return;
@@ -1237,9 +1244,9 @@ function openEditInc(id){
   document.getElementById("editIncCash").value=inc.cash;
   document.getElementById("editIncCard").value=inc.card;
   openModal("editIncomeModal");
-}
+};
 
-function saveIncome(){
+window.saveIncome = function(){
   var id=document.getElementById("editIncId").value;
   var date=document.getElementById("editIncDate").value;
   var cash=parseFloat(document.getElementById("editIncCash").value)||0;
@@ -1252,19 +1259,19 @@ function saveIncome(){
     save();renderIncomeTable();
     closeModal("editIncomeModal");toast("Guncellendi!","success");
   }
-}
+};
 
-function askDelInc(id){
+window.askDelInc = function(id){
   confirmAction("Gelir Sil","Bu gelir kaydini silmek istiyor musunuz?",function(){
     var newL=[];
     for(var i=0;i<incomeList.length;i++){if(incomeList[i].id!==id)newL.push(incomeList[i]);}
     incomeList=newL;
     save();renderIncomeTable();toast("Silindi.","info");
   });
-}
+};
 
-// ===== CATEGORY =====
-function addCategory(){
+// CATEGORY
+window.addCategory = function(){
   var name=document.getElementById("catName").value.trim();
   if(!name){toast("Kategori adi girin!","error");return;}
   for(var i=0;i<categoryList.length;i++){
@@ -1274,7 +1281,7 @@ function addCategory(){
   save();renderCategoryList();updateExpCatDD();
   document.getElementById("catName").value="";
   toast("Kategori eklendi!","success");
-}
+};
 
 function renderCategoryList(){
   var el=document.getElementById("categoryList");
@@ -1287,23 +1294,23 @@ function renderCategoryList(){
     html+="<div class='flex-between' style='padding:10px 0;border-bottom:1px solid var(--border)'>";
     html+="<span style='font-weight:500'>"+c.name+"</span>";
     html+="<div class='flex-gap'>";
-    html+="<button class='btn btn-warning btn-sm btn-icon' onclick='openEditCat(\""+c.id+"\")'>Edit</button>";
-    html+="<button class='btn btn-danger btn-sm btn-icon' onclick='askDelCat(\""+c.id+"\")'>Sil</button>";
+    html+="<button class='btn btn-warning btn-sm btn-icon' onclick=\"window.openEditCat('"+c.id+"')\">Edit</button>";
+    html+="<button class='btn btn-danger btn-sm btn-icon' onclick=\"window.askDelCat('"+c.id+"')\">Sil</button>";
     html+="</div></div>";
   }
   el.innerHTML=html;
 }
 
-function openEditCat(id){
+window.openEditCat = function(id){
   var c=null;
   for(var i=0;i<categoryList.length;i++){if(categoryList[i].id===id){c=categoryList[i];break;}}
   if(!c)return;
   document.getElementById("editCatId").value=id;
   document.getElementById("editCatName").value=c.name;
   openModal("editCategoryModal");
-}
+};
 
-function saveCategory(){
+window.saveCategory = function(){
   var id=document.getElementById("editCatId").value;
   var name=document.getElementById("editCatName").value.trim();
   if(!name){toast("Kategori adi girin!","error");return;}
@@ -1314,13 +1321,13 @@ function saveCategory(){
     save();renderCategoryList();updateExpCatDD();
     closeModal("editCategoryModal");toast("Guncellendi!","success");
   }
-}
+};
 
-function askDelCat(id){
+window.askDelCat = function(id){
   var c=null;
   for(var i=0;i<categoryList.length;i++){if(categoryList[i].id===id){c=categoryList[i];break;}}
   var name=c?c.name:"bu kategori";
-  confirmAction("Kategori Sil","\""+name+"\" kategorisini ve bu kategoriye ait giderleri silmek istiyor musunuz?",function(){
+  confirmAction("Kategori Sil",name+" kategorisini ve bu kategoriye ait giderleri silmek istiyor musunuz?",function(){
     var newC=[],newE=[];
     for(var i=0;i<categoryList.length;i++){if(categoryList[i].id!==id)newC.push(categoryList[i]);}
     for(var i=0;i<expenseList.length;i++){if(expenseList[i].categoryId!==id)newE.push(expenseList[i]);}
@@ -1328,10 +1335,10 @@ function askDelCat(id){
     save();renderCategoryList();renderExpenseTable();updateExpCatDD();
     toast("Silindi.","info");
   });
-}
+};
 
-// ===== EXPENSE =====
-function addExpense(){
+// EXPENSE
+window.addExpense = function(){
   var catId=document.getElementById("expCategory").value;
   var amount=parseFloat(document.getElementById("expAmount").value);
   var date=document.getElementById("expDate").value;
@@ -1344,7 +1351,7 @@ function addExpense(){
   document.getElementById("expDate").value="";
   document.getElementById("expNote").value="";
   toast("Gider kaydedildi!","success");
-}
+};
 
 function renderExpenseTable(){
   var tb=document.getElementById("expenseTable");
@@ -1365,14 +1372,14 @@ function renderExpenseTable(){
     rows+="<td><strong class='text-red'>TL "+fmtMoney(e.amount)+"</strong></td>";
     rows+="<td class='text-muted'>"+(e.note||"-")+"</td>";
     rows+="<td><div class='flex-gap'>";
-    rows+="<button class='btn btn-warning btn-sm btn-icon' onclick='openEditExp(\""+e.id+"\")'>Edit</button>";
-    rows+="<button class='btn btn-danger btn-sm btn-icon' onclick='askDelExp(\""+e.id+"\")'>Sil</button>";
+    rows+="<button class='btn btn-warning btn-sm btn-icon' onclick=\"window.openEditExp('"+e.id+"')\">Edit</button>";
+    rows+="<button class='btn btn-danger btn-sm btn-icon' onclick=\"window.askDelExp('"+e.id+"')\">Sil</button>";
     rows+="</div></td></tr>";
   }
   tb.innerHTML=rows;
 }
 
-function openEditExp(id){
+window.openEditExp = function(id){
   var e=null;
   for(var i=0;i<expenseList.length;i++){if(expenseList[i].id===id){e=expenseList[i];break;}}
   if(!e)return;
@@ -1387,9 +1394,9 @@ function openEditExp(id){
   document.getElementById("editExpDate").value=e.date;
   document.getElementById("editExpNote").value=e.note||"";
   openModal("editExpenseModal");
-}
+};
 
-function saveExpense(){
+window.saveExpense = function(){
   var id=document.getElementById("editExpId").value;
   var catId=document.getElementById("editExpCategory").value;
   var amount=parseFloat(document.getElementById("editExpAmount").value);
@@ -1403,18 +1410,18 @@ function saveExpense(){
     save();renderExpenseTable();
     closeModal("editExpenseModal");toast("Guncellendi!","success");
   }
-}
+};
 
-function askDelExp(id){
+window.askDelExp = function(id){
   confirmAction("Gider Sil","Bu gider kaydini silmek istiyor musunuz?",function(){
     var newL=[];
     for(var i=0;i<expenseList.length;i++){if(expenseList[i].id!==id)newL.push(expenseList[i]);}
     expenseList=newL;
     save();renderExpenseTable();toast("Silindi.","info");
   });
-}
+};
 
-// ===== DROPDOWNS =====
+// DROPDOWNS
 function updateDropdowns(){
   var persOpts="<option value=''>Personel secin...</option>";
   for(var i=0;i<personnelList.length;i++){
@@ -1432,9 +1439,11 @@ function updateExpCatDD(){
   document.getElementById("expCategory").innerHTML=opts;
 }
 
-// ===== MODALS =====
+// MODALS
 function openModal(id){document.getElementById(id).classList.add("open");}
 function closeModal(id){document.getElementById(id).classList.remove("open");}
+window.closeModal = closeModal;
+
 var overlays=document.querySelectorAll(".modal-overlay");
 for(var oi=0;oi<overlays.length;oi++){
   (function(m){
@@ -1442,8 +1451,8 @@ for(var oi=0;oi<overlays.length;oi++){
   })(overlays[oi]);
 }
 
-// ===== PERIOD =====
-function setPeriod(p){
+// PERIOD
+window.setPeriod = function(p){
   var now=new Date();
   var ids=["pbWeek","pbMonth","pbAll"];
   for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el)el.classList.remove("active");}
@@ -1452,20 +1461,20 @@ function setPeriod(p){
     var mon=new Date(now);mon.setDate(now.getDate()-day+1);
     filterStartVal=mon.toISOString().slice(0,10);
     filterEndVal=now.toISOString().slice(0,10);
-    var el=document.getElementById("pbWeek");if(el)el.classList.add("active");
+    var elw=document.getElementById("pbWeek");if(elw)elw.classList.add("active");
   } else if(p==="month"){
     filterStartVal=now.getFullYear()+"-"+("0"+(now.getMonth()+1)).slice(-2)+"-01";
     filterEndVal=now.toISOString().slice(0,10);
-    var el=document.getElementById("pbMonth");if(el)el.classList.add("active");
+    var elm=document.getElementById("pbMonth");if(elm)elm.classList.add("active");
   } else if(p==="all"){
     filterStartVal="1900-01-01";filterEndVal="2999-12-31";
-    var el=document.getElementById("pbAll");if(el)el.classList.add("active");
+    var ela=document.getElementById("pbAll");if(ela)ela.classList.add("active");
   } else if(p==="custom"){
     filterStartVal=document.getElementById("filterStart").value||"1900-01-01";
     filterEndVal=document.getElementById("filterEnd").value||"2999-12-31";
   }
   updateSummary();
-}
+};
 
 function inPeriod(d){return d>=filterStartVal&&d<=filterEndVal;}
 
@@ -1475,7 +1484,7 @@ function inPeriod(d){return d>=filterStartVal&&d<=filterEndVal;}
   filterEndVal=now.toISOString().slice(0,10);
 })();
 
-// ===== SUMMARY =====
+// SUMMARY
 function updateSummary(){
   var fInc=[],fExp=[],fTS=[];
   for(var i=0;i<incomeList.length;i++){if(inPeriod(incomeList[i].date))fInc.push(incomeList[i]);}
@@ -1551,10 +1560,7 @@ function renderExpSummary(fExp,totalExp){
   if(!fExp.length){el.innerHTML="";em.style.display="block";return;}
   em.style.display="none";
   var byCat={};
-  for(var i=0;i<fExp.length;i++){
-    var cid=fExp[i].categoryId;
-    byCat[cid]=(byCat[cid]||0)+fExp[i].amount;
-  }
+  for(var i=0;i<fExp.length;i++){var cid=fExp[i].categoryId;byCat[cid]=(byCat[cid]||0)+fExp[i].amount;}
   var keys=Object.keys(byCat).sort(function(a,b){return byCat[b]-byCat[a];});
   var html="";
   for(var i=0;i<keys.length;i++){
@@ -1597,7 +1603,7 @@ function renderIncSummary(fInc,totalCash,totalCard,totalInc){
   el.innerHTML=html;
 }
 
-// ===== CHARTS =====
+// CHARTS
 function renderCharts(fInc,fExp,fTS){
   var gc=isDark?"rgba(255,255,255,0.05)":"rgba(0,0,0,0.05)";
   var tc=isDark?"#9090a8":"#50506a";
@@ -1640,7 +1646,7 @@ function renderCharts(fInc,fExp,fTS){
   chartLine=new Chart(lCtx,{type:"line",data:{labels:labels.length?labels:["Veri Yok"],datasets:[{label:"Net Kar (TL)",data:nData.length?nData:[0],borderColor:"#6c63ff",backgroundColor:"rgba(108,99,255,0.1)",fill:true,tension:0.4,pointBackgroundColor:"#6c63ff",pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc}}},scales:{x:{ticks:{color:tc,maxRotation:45},grid:{color:gc}},y:{ticks:{color:tc},grid:{color:gc}}}}});
 }
 
-// ===== PERSONNEL VIEW =====
+// PERSONNEL VIEW
 function renderPersonnelView(p){
   var shifts=[];
   for(var i=0;i<timesheetList.length;i++){if(timesheetList[i].personnelId===p.id)shifts.push(timesheetList[i]);}
@@ -1663,15 +1669,15 @@ function renderPersonnelView(p){
     var earn=t.hours*p.wage;
     html+="<div class='shift-card'>";
     html+="<div><div class='shift-date'>"+fmtDate(t.date)+"</div>";
-    html+="<div class='shift-hours'>"+t.hours+" saat calisiDdi</div></div>";
+    html+="<div class='shift-hours'>"+t.hours+" saat calisti</div></div>";
     html+="<div class='shift-earn'>TL "+fmtMoney(earn)+"</div>";
     html+="</div>";
   }
   list.innerHTML=html;
 }
 
-// ===== SETTINGS =====
-function updateAdminPassword(){
+// SETTINGS
+window.updateAdminPassword = function(){
   var cur=document.getElementById("settCurrentPass").value;
   var nw=document.getElementById("settNewPass").value;
   var nw2=document.getElementById("settNewPass2").value;
@@ -1685,7 +1691,7 @@ function updateAdminPassword(){
   document.getElementById("settNewPass").value="";
   document.getElementById("settNewPass2").value="";
   toast("Sifre basariyla guncellendi!","success");
-}
+};
 
 function updateSettingsInfo(){
   var sc1=document.getElementById("settPersonnelCount");
@@ -1696,7 +1702,7 @@ function updateSettingsInfo(){
   if(tg){ if(isDark)tg.classList.add("on"); else tg.classList.remove("on"); }
 }
 
-function exportData(){
+window.exportData = function(){
   var data={
     personnel:personnelList,
     timesheet:timesheetList,
@@ -1715,9 +1721,9 @@ function exportData(){
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
   toast("Veriler indirildi!","success");
-}
+};
 
-function importData(input){
+window.importData = function(input){
   var file=input.files[0];
   if(!file)return;
   var reader=new FileReader();
@@ -1737,24 +1743,23 @@ function importData(input){
   };
   reader.readAsText(file);
   input.value="";
-}
+};
 
-function clearAllData(){
+window.clearAllData = function(){
   confirmAction("Tum Verileri Sil","Bu islem GERI ALINAMAZ. Tum personel, puantaj, gelir ve gider verileri silinecek. Emin misiniz?",function(){
     personnelList=[];timesheetList=[];incomeList=[];expenseList=[];categoryList=[];
     save();renderAll();updateSettingsInfo();
     toast("Tum veriler silindi.","info");
   });
-}
+};
 
-// ===== PDF EXPORT =====
-function exportPDF(){
+// PDF EXPORT
+window.exportPDF = function(){
   var btn=document.getElementById("pdfBtn");
   var loading=document.getElementById("pdfLoading");
   if(btn)btn.style.display="none";
   if(loading)loading.style.display="flex";
 
-  // Calculate data
   var fInc=[],fExp=[],fTS=[];
   for(var i=0;i<incomeList.length;i++){if(inPeriod(incomeList[i].date))fInc.push(incomeList[i]);}
   for(var i=0;i<expenseList.length;i++){if(inPeriod(expenseList[i].date))fExp.push(expenseList[i]);}
@@ -1775,7 +1780,6 @@ function exportPDF(){
   if(filterStartVal==="1900-01-01"&&filterEndVal==="2999-12-31") periodStr="Tum Zamanlar";
   else periodStr=fmtDate(filterStartVal)+" - "+fmtDate(filterEndVal);
 
-  // Build personnel table rows
   var persRows="";
   for(var i=0;i<personnelList.length;i++){
     var p=personnelList[i];
@@ -1787,7 +1791,6 @@ function exportPDF(){
     persRows+="<tr><td>"+p.firstName+" "+p.lastName+"</td><td>"+shifts.length+"</td><td>"+tH+"</td><td>TL "+fmtMoney(p.wage)+"</td><td>TL "+fmtMoney(tE)+"</td></tr>";
   }
 
-  // Build expense breakdown
   var expRows="";
   var byCat={};
   for(var i=0;i<fExp.length;i++)byCat[fExp[i].categoryId]=(byCat[fExp[i].categoryId]||0)+fExp[i].amount;
@@ -1800,7 +1803,6 @@ function exportPDF(){
     expRows+="<tr><td>"+cname+"</td><td>TL "+fmtMoney(byCat[catKeys[i]])+"</td><td>"+pct.toFixed(1)+"%</td></tr>";
   }
 
-  // Build income rows (last 10)
   var incRows="";
   var sortedInc=fInc.slice().sort(function(a,b){return b.date.localeCompare(a.date);});
   var maxInc=Math.min(sortedInc.length,20);
@@ -1836,465 +1838,398 @@ function exportPDF(){
   html+=".nodata{color:#aaa;font-style:italic;font-size:12px;padding:10px 0}";
   html+="@media print{body{padding:0}.header{border-radius:0}}";
   html+="</style></head><body>";
-  html+="<div class='header'><h1>BizPanel - Ozet Raporu</h1><p>Donem: "+periodStr+" | Olusturulma: "+fmtDate(todayISO())+"</p></div>";
-  html+="<div class='stats'>";
-  html+="<div class='stat stat-inc'><div class='stat-label'>Toplam Gelir</div><div class='stat-val'>TL "+fmtMoney(totalInc)+"</div></div>";
-  html+="<div class='stat stat-exp'><div class='stat-label'>Toplam Gider</div><div class='stat-val'>TL "+fmtMoney(totalExp)+"</div></div>";
-  html+="<div class='stat stat-wg'><div class='stat-label'>Toplam Maas</div><div class='stat-val'>TL "+fmtMoney(totalWages)+"</div></div>";
-  html+="<div class='stat stat-net'><div class='stat-label'>Net Kar</div><div class='stat-val'>TL "+fmtMoney(net)+"</div></div>";
-  html+="</div>";
-  html+="<div class='net-box'><div><div class='net-label'>Hesaplama: Gelir - Gider - Maaslar</div><div class='net-label'>TL "+fmtMoney(totalInc)+" - TL "+fmtMoney(totalExp)+" - TL "+fmtMoney(totalWages)+"</div></div>";
-  html+="<div><div class='net-label'>NET KAR</div><div class='net-val'>TL "+fmtMoney(net)+"</div></div></div>";
 
-  html+="<div class='section'><h2>Gelir Ozeti</h2>";
-  if(!fInc.length){html+="<p class='nodata'>Bu donemde gelir kaydi bulunmuyor.</p>";}
-  else{
-    html+="<table><thead><tr><th>Tarih</th><th>Nakit</th><th>Kredi Karti</th><th>Toplam</th></tr></thead><tbody>";
-    html+=incRows;
-    if(sortedInc.length>20)html+="<tr><td colspan='4' style='text-align:center;color:#888;font-style:italic'>... ve "+(sortedInc.length-20)+" kayit daha</td></tr>";
-    html+="<tr style='background:#f5f3ff'><td><strong>TOPLAM</strong></td><td><strong>TL "+fmtMoney(totalCash)+"</strong></td><td><strong>TL "+fmtMoney(totalCard)+"</strong></td><td><strong>TL "+fmtMoney(totalInc)+"</strong></td></tr>";
-    html+="</tbody></table>";
-  }
-  html+="</div>";
-
-  html+="<div class='section'><h2>Gider Dagilimi</h2>";
-  if(!fExp.length){html+="<p class='nodata'>Bu donemde gider kaydi bulunmuyor.</p>";}
-  else{
-    html+="<table><thead><tr><th>Kategori</th><th>Tutar</th><th>Oran</th></tr></thead><tbody>";
-    html+=expRows;
-    html+="<tr style='background:#fff0f3'><td><strong>TOPLAM</strong></td><td><strong>TL "+fmtMoney(totalExp)+"</strong></td><td><strong>100%</strong></td></tr>";
-    html+="</tbody></table>";
-  }
-  html+="</div>";
-
-  html+="<div class='section'><h2>Personel Detaylari</h2>";
-  if(!persRows){html+="<p class='nodata'>Bu donemde puantaj kaydi bulunmuyor.</p>";}
-  else{
-    html+="<table><thead><tr><th>Personel</th><th>Calisma Gunu</th><th>Toplam Saat</th><th>Saatlik Ucret</th><th>Toplam Kazanc</th></tr></thead><tbody>";
-    html+=persRows;
-    html+="<tr style='background:#f0f4ff'><td><strong>TOPLAM</strong></td><td></td><td></td><td></td><td><strong>TL "+fmtMoney(totalWages)+"</strong></td></tr>";
-    html+="</tbody></table>";
-  }
-  html+="</div>";
-
-  html+="<div class='footer'>BizPanel Isletme Yonetim Sistemi | Rapor: "+new Date().toLocaleString("tr-TR")+"</div>";
-  html+="</body></html>";
-
-  // Create blob and trigger print
-  var blob=new Blob([html],{type:"text/html;charset=utf-8"});
-  var url=URL.createObjectURL(blob);
-  var printWin=window.open(url,"_blank","width=900,height=700");
-  if(!printWin){
-    // Fallback: direct download
-    var a=document.createElement("a");
-    a.href=url;
-    a.download="bizpanel-ozet-"+todayISO()+".html";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    toast("Rapor indirildi! Tarayicinizda acip yazdiriniz.","success");
-  } else {
-    printWin.onload=function(){
-      setTimeout(function(){
-        printWin.print();
-      },500);
-    };
-    toast("Rapor olusturuldu! Yazdir penceresini kullanarak PDF olarak kaydedebilirsiniz.","success");
-  }
-
-  setTimeout(function(){
-    URL.revokeObjectURL(url);
-    if(btn)btn.style.display="";
-    if(loading)loading.style.display="none";
-  },2000);
+html+=”<div class='header'><h1>BizPanel - Ozet Raporu</h1><p>Donem: “+periodStr+” | Olusturulma: “+fmtDate(todayISO())+”</p></div>”;
+html+=”<div class='stats'>”;
+html+=”<div class='stat stat-inc'><div class='stat-label'>Toplam Gelir</div><div class='stat-val'>TL “+fmtMoney(totalInc)+”</div></div>”;
+html+=”<div class='stat stat-exp'><div class='stat-label'>Toplam Gider</div><div class='stat-val'>TL “+fmtMoney(totalExp)+”</div></div>”;
+html+=”<div class='stat stat-wg'><div class='stat-label'>Toplam Maas</div><div class='stat-val'>TL “+fmtMoney(totalWages)+”</div></div>”;
+html+=”<div class='stat stat-net'><div class='stat-label'>Net Kar</div><div class='stat-val'>TL “+fmtMoney(net)+”</div></div>”;
+html+=”</div>”;
+html+=”<div class='net-box'><div><div class='net-label'>Hesaplama: Gelir - Gider - Maaslar</div><div class='net-label'>TL “+fmtMoney(totalInc)+” - TL “+fmtMoney(totalExp)+” - TL “+fmtMoney(totalWages)+”</div></div>”;
+html+=”<div><div class='net-label'>NET KAR</div><div class='net-val'>TL “+fmtMoney(net)+”</div></div></div>”;
+html+=”<div class='section'><h2>Gelir Ozeti</h2>”;
+if(!fInc.length){html+=”<p class='nodata'>Bu donemde gelir kaydi bulunmuyor.</p>”;}
+else{
+html+=”<table><thead><tr><th>Tarih</th><th>Nakit</th><th>Kredi Karti</th><th>Toplam</th></tr></thead><tbody>”;
+html+=incRows;
+if(sortedInc.length>20)html+=”<tr><td colspan='4' style='text-align:center;color:#888;font-style:italic'>… ve “+(sortedInc.length-20)+” kayit daha</td></tr>”;
+html+=”<tr style='background:#f5f3ff'><td><strong>TOPLAM</strong></td><td><strong>TL “+fmtMoney(totalCash)+”</strong></td><td><strong>TL “+fmtMoney(totalCard)+”</strong></td><td><strong>TL “+fmtMoney(totalInc)+”</strong></td></tr>”;
+html+=”</tbody></table>”;
 }
-
-// ===== ANNOUNCEMENTS DATA =====
-var announcementList = getData("bp_announcements",[]);
-
-// ===== INIT =====
-document.getElementById("incDate").value=todayISO();
-document.getElementById("tsDate").value=todayISO();
-document.getElementById("expDate").value=todayISO();
-
-// Firebase'den yukle, sonra UI'yi hazirla
-loadFromFirebase().then(function(){
-  updateDropdowns();
-  renderAnnouncementList();
-  renderMsgContacts();
-  updateAnnNotif();
-  updateMsgNotif();
-});
-
-function saveAnn(){
-  setLocalData("bp_announcements",announcementList);
-  fbSave("announcements", announcementList);
+html+=”</div>”;
+html+=”<div class='section'><h2>Gider Dagilimi</h2>”;
+if(!fExp.length){html+=”<p class='nodata'>Bu donemde gider kaydi bulunmuyor.</p>”;}
+else{
+html+=”<table><thead><tr><th>Kategori</th><th>Tutar</th><th>Oran</th></tr></thead><tbody>”;
+html+=expRows;
+html+=”<tr style='background:#fff0f3'><td><strong>TOPLAM</strong></td><td><strong>TL “+fmtMoney(totalExp)+”</strong></td><td><strong>100%</strong></td></tr>”;
+html+=”</tbody></table>”;
 }
-
-function addAnnouncement(){
-  var title = document.getElementById("annTitle").value.trim();
-  var body  = document.getElementById("annBody").value.trim();
-  var type  = document.getElementById("annType").value;
-  var pinned= document.getElementById("annPinned").checked;
-  if(!title||!body){toast("Baslik ve mesaj zorunlu!","error");return;}
-  announcementList.unshift({id:uid(),title:title,body:body,type:type,pinned:pinned,date:todayISO(),readBy:[]});
-  saveAnn();
-  renderAnnouncementList();
-  updateAnnNotif();
-  document.getElementById("annTitle").value="";
-  document.getElementById("annBody").value="";
-  document.getElementById("annPinned").checked=false;
-  toast("Duyuru yayinlandi!","success");
+html+=”</div>”;
+html+=”<div class='section'><h2>Personel Detaylari</h2>”;
+if(!persRows){html+=”<p class='nodata'>Bu donemde puantaj kaydi bulunmuyor.</p>”;}
+else{
+html+=”<table><thead><tr><th>Personel</th><th>Calisma Gunu</th><th>Toplam Saat</th><th>Saatlik Ucret</th><th>Toplam Kazanc</th></tr></thead><tbody>”;
+html+=persRows;
+html+=”<tr style='background:#f0f4ff'><td><strong>TOPLAM</strong></td><td></td><td></td><td></td><td><strong>TL “+fmtMoney(totalWages)+”</strong></td></tr>”;
+html+=”</tbody></table>”;
 }
+html+=”</div>”;
+html+=”<div class='footer'>BizPanel Isletme Yonetim Sistemi | Rapor: “+new Date().toLocaleString(“tr-TR”)+”</div>”;
+html+=”</body></html>”;
+
+var blob=new Blob([html],{type:“text/html;charset=utf-8”});
+var url=URL.createObjectURL(blob);
+var printWin=window.open(url,”_blank”,“width=900,height=700”);
+if(!printWin){
+var a=document.createElement(“a”);
+a.href=url;
+a.download=“bizpanel-ozet-”+todayISO()+”.html”;
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+toast(“Rapor indirildi! Tarayicinizda acip yazdiriniz.”,“success”);
+} else {
+printWin.onload=function(){
+setTimeout(function(){printWin.print();},500);
+};
+toast(“Rapor olusturuldu!”,“success”);
+}
+setTimeout(function(){
+URL.revokeObjectURL(url);
+if(btn)btn.style.display=””;
+if(loading)loading.style.display=“none”;
+},2000);
+};
+
+// ANNOUNCEMENTS
+window.addAnnouncement = function(){
+var title=document.getElementById(“annTitle”).value.trim();
+var body=document.getElementById(“annBody”).value.trim();
+var type=document.getElementById(“annType”).value;
+var pinned=document.getElementById(“annPinned”).checked;
+if(!title||!body){toast(“Baslik ve mesaj zorunlu!”,“error”);return;}
+announcementList.unshift({id:uid(),title:title,body:body,type:type,pinned:pinned,date:todayISO(),readBy:[]});
+saveAnn();
+renderAnnouncementList();
+updateAnnNotif();
+document.getElementById(“annTitle”).value=””;
+document.getElementById(“annBody”).value=””;
+document.getElementById(“annPinned”).checked=false;
+toast(“Duyuru yayinlandi!”,“success”);
+};
 
 function renderAnnouncementList(){
-  var el=document.getElementById("annList");
-  var em=document.getElementById("annEmpty");
-  var cnt=document.getElementById("annCount");
-  if(!announcementList.length){el.innerHTML="";em.style.display="block";cnt.textContent="0 duyuru";return;}
-  em.style.display="none";
-  cnt.textContent=announcementList.length+" duyuru";
-  // pinned first
-  var sorted=announcementList.slice().sort(function(a,b){return (b.pinned?1:0)-(a.pinned?1:0);});
-  var typeIcons={info:"&#128161;",warn:"&#9888;",urgent:"&#128680;",good:"&#127881;"};
-  var typeLabels={info:"Bilgi",warn:"Uyari",urgent:"Acil",good:"Iyi Haber"};
-  var html="";
-  for(var i=0;i<sorted.length;i++){
-    var a=sorted[i];
-    html+="<div class='ann-card"+(a.pinned?" pinned":"")+"'>";
-    if(a.pinned)html+="<span class='ann-pin-badge'>Sabitlendi</span>";
-    html+="<div style='display:flex;align-items:center;gap:8px;margin-bottom:8px'>";
-    html+="<span class='ann-type-badge ann-type-"+a.type+"'>"+typeLabels[a.type]+"</span>";
-    html+="</div>";
-    html+="<div class='ann-title'>"+typeIcons[a.type]+" "+escHtml(a.title)+"</div>";
-    html+="<div class='ann-body'>"+escHtml(a.body)+"</div>";
-    html+="<div class='ann-footer'>";
-    html+="<span>"+fmtDate(a.date)+"</span>";
-    html+="<div class='flex-gap'>";
-    html+="<span style='font-size:11px;color:var(--text3)'>"+a.readBy.length+" kisi okudu</span>";
-    html+="<button class='btn btn-warning btn-sm btn-icon' onclick='toggleAnnPin(\""+a.id+"\")' title='"+(a.pinned?"Sabitlemeyi kaldir":"Sabitle")+"'>"+(a.pinned?"Sabitleme":"Sabitle")+"</button>";
-    html+="<button class='btn btn-danger btn-sm btn-icon' onclick='deleteAnn(\""+a.id+"\")'>Sil</button>";
-    html+="</div></div></div>";
-  }
-  el.innerHTML=html;
+var el=document.getElementById(“annList”);
+var em=document.getElementById(“annEmpty”);
+var cnt=document.getElementById(“annCount”);
+if(!announcementList.length){el.innerHTML=””;em.style.display=“block”;cnt.textContent=“0 duyuru”;return;}
+em.style.display=“none”;
+cnt.textContent=announcementList.length+” duyuru”;
+var sorted=announcementList.slice().sort(function(a,b){return (b.pinned?1:0)-(a.pinned?1:0);});
+var typeIcons={info:”💡”,warn:”⚠”,urgent:”🚨”,good:”🎉”};
+var typeLabels={info:“Bilgi”,warn:“Uyari”,urgent:“Acil”,good:“Iyi Haber”};
+var html=””;
+for(var i=0;i<sorted.length;i++){
+var a=sorted[i];
+html+=”<div class='ann-card"+(a.pinned?" pinned":"")+"'>”;
+if(a.pinned)html+=”<span class='ann-pin-badge'>Sabitlendi</span>”;
+html+=”<div style='display:flex;align-items:center;gap:8px;margin-bottom:8px'>”;
+html+=”<span class='ann-type-badge ann-type-"+a.type+"'>”+typeLabels[a.type]+”</span>”;
+html+=”</div>”;
+html+=”<div class='ann-title'>”+typeIcons[a.type]+” “+escHtml(a.title)+”</div>”;
+html+=”<div class='ann-body'>”+escHtml(a.body)+”</div>”;
+html+=”<div class='ann-footer'>”;
+html+=”<span>”+fmtDate(a.date)+”</span>”;
+html+=”<div class='flex-gap'>”;
+html+=”<span style='font-size:11px;color:var(--text3)'>”+a.readBy.length+” kisi okudu</span>”;
+html+=”<button class=‘btn btn-warning btn-sm btn-icon’ onclick="window.toggleAnnPin(’”+a.id+”’)">”+(a.pinned?“Sabitleme”:“Sabitle”)+”</button>”;
+html+=”<button class=‘btn btn-danger btn-sm btn-icon’ onclick="window.deleteAnn(’”+a.id+”’)">Sil</button>”;
+html+=”</div></div></div>”;
+}
+el.innerHTML=html;
 }
 
-function toggleAnnPin(id){
-  for(var i=0;i<announcementList.length;i++){
-    if(announcementList[i].id===id){announcementList[i].pinned=!announcementList[i].pinned;break;}
-  }
-  saveAnn();renderAnnouncementList();
+window.toggleAnnPin = function(id){
+for(var i=0;i<announcementList.length;i++){
+if(announcementList[i].id===id){announcementList[i].pinned=!announcementList[i].pinned;break;}
 }
+saveAnn();renderAnnouncementList();
+};
 
-function deleteAnn(id){
-  confirmAction("Duyuru Sil","Bu duyuruyu silmek istiyor musunuz?",function(){
-    var newL=[];
-    for(var i=0;i<announcementList.length;i++){if(announcementList[i].id!==id)newL.push(announcementList[i]);}
-    announcementList=newL;
-    saveAnn();renderAnnouncementList();updateAnnNotif();
-    toast("Duyuru silindi.","info");
-  });
-}
+window.deleteAnn = function(id){
+confirmAction(“Duyuru Sil”,“Bu duyuruyu silmek istiyor musunuz?”,function(){
+var newL=[];
+for(var i=0;i<announcementList.length;i++){if(announcementList[i].id!==id)newL.push(announcementList[i]);}
+announcementList=newL;
+saveAnn();renderAnnouncementList();updateAnnNotif();
+toast(“Duyuru silindi.”,“info”);
+});
+};
 
 function updateAnnNotif(){
-  var dot=document.getElementById("annNotifDot");
-  if(!dot)return;
-  var unread=0;
-  for(var i=0;i<announcementList.length;i++){
-    if(announcementList[i].readBy.indexOf("admin")===-1)unread++;
-  }
-  if(unread>0){dot.style.display="inline-flex";dot.textContent=unread;}
-  else{dot.style.display="none";}
+var dot=document.getElementById(“annNotifDot”);
+if(!dot)return;
+var unread=0;
+for(var i=0;i<announcementList.length;i++){
+if(announcementList[i].readBy.indexOf(“admin”)===-1)unread++;
+}
+if(unread>0){dot.style.display=“inline-flex”;dot.textContent=unread;}
+else{dot.style.display=“none”;}
 }
 
 function markAllAnnRead(userId){
-  for(var i=0;i<announcementList.length;i++){
-    if(announcementList[i].readBy.indexOf(userId)===-1)announcementList[i].readBy.push(userId);
-  }
-  saveAnn();
+for(var i=0;i<announcementList.length;i++){
+if(announcementList[i].readBy.indexOf(userId)===-1)announcementList[i].readBy.push(userId);
+}
+saveAnn();
 }
 
 function renderPersBanners(personnelId){
-  var area=document.getElementById("persBannerArea");
-  if(!area)return;
-  var unread=[];
-  for(var i=0;i<announcementList.length;i++){
-    if(announcementList[i].readBy.indexOf(personnelId)===-1)unread.push(announcementList[i]);
-  }
-  if(!unread.length){area.innerHTML="";return;}
-  var typeColors={info:"",warn:" warn",urgent:" urgent",good:" good"};
-  var typeIcons={info:"&#128161;",warn:"&#9888;",urgent:"&#128680;",good:"&#127881;"};
-  var html="";
-  for(var i=0;i<unread.length;i++){
-    var a=unread[i];
-    html+="<div class='ann-banner"+typeColors[a.type]+"' id='banner-"+a.id+"'>";
-    html+="<div class='ann-banner-icon'>"+typeIcons[a.type]+"</div>";
-    html+="<div class='ann-banner-content'>";
-    html+="<div class='ann-banner-title'>"+escHtml(a.title)+"</div>";
-    html+="<div class='ann-banner-body'>"+escHtml(a.body)+"</div>";
-    html+="</div>";
-    html+="<button class='ann-banner-close' onclick='dismissBanner(\""+a.id+"\",\""+personnelId+"\")'>&#10005;</button>";
-    html+="</div>";
-  }
-  area.innerHTML=html;
+var area=document.getElementById(“persBannerArea”);
+if(!area)return;
+var unread=[];
+for(var i=0;i<announcementList.length;i++){
+if(announcementList[i].readBy.indexOf(personnelId)===-1)unread.push(announcementList[i]);
+}
+if(!unread.length){area.innerHTML=””;return;}
+var typeColors={info:””,warn:” warn”,urgent:” urgent”,good:” good”};
+var typeIcons={info:”💡”,warn:”⚠”,urgent:”🚨”,good:”🎉”};
+var html=””;
+for(var i=0;i<unread.length;i++){
+var a=unread[i];
+html+=”<div class='ann-banner"+typeColors[a.type]+"' id='banner-"+a.id+"'>”;
+html+=”<div class='ann-banner-icon'>”+typeIcons[a.type]+”</div>”;
+html+=”<div class='ann-banner-content'>”;
+html+=”<div class='ann-banner-title'>”+escHtml(a.title)+”</div>”;
+html+=”<div class='ann-banner-body'>”+escHtml(a.body)+”</div>”;
+html+=”</div>”;
+html+=”<button class=‘ann-banner-close’ onclick="window.dismissBanner(’”+a.id+”’,’”+personnelId+”’)">✕</button>”;
+html+=”</div>”;
+}
+area.innerHTML=html;
 }
 
-function dismissBanner(annId,personnelId){
-  for(var i=0;i<announcementList.length;i++){
-    if(announcementList[i].id===annId&&announcementList[i].readBy.indexOf(personnelId)===-1){
-      announcementList[i].readBy.push(personnelId);break;
-    }
-  }
-  saveAnn();
-  var el=document.getElementById("banner-"+annId);
-  if(el)el.style.display="none";
+window.dismissBanner = function(annId,personnelId){
+for(var i=0;i<announcementList.length;i++){
+if(announcementList[i].id===annId&&announcementList[i].readBy.indexOf(personnelId)===-1){
+announcementList[i].readBy.push(personnelId);break;
 }
-
-function escHtml(s){
-  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
+saveAnn();
+var el=document.getElementById(“banner-”+annId);
+if(el)el.style.display=“none”;
+};
 
-// ===== MESSAGING =====
-var messageStore = getData("bp_messages",{});
-
-function saveMsgs(){
-  setLocalData("bp_messages",messageStore);
-  fbSave("messages", messageStore);
-}
-
+// MESSAGING
 function getMsgKey(aId,bId){
-  // always same key regardless of order
-  return aId<bId?aId+"_"+bId:bId+"_"+aId;
+return aId<bId?aId+”*”+bId:bId+”*”+aId;
 }
 
 function getConversation(pid){
-  var key=getMsgKey("admin",pid);
-  if(!messageStore[key])messageStore[key]=[];
-  return messageStore[key];
+var key=getMsgKey(“admin”,pid);
+if(!messageStore[key])messageStore[key]=[];
+return messageStore[key];
 }
 
 function renderMsgContacts(){
-  var el=document.getElementById("msgContactList");
-  if(!personnelList.length){
-    el.innerHTML="<div style='padding:24px 16px;text-align:center;color:var(--text3);font-size:13px'>Henuz personel yok.</div>";
-    return;
-  }
-  var html="";
-  for(var i=0;i<personnelList.length;i++){
-    var p=personnelList[i];
-    var conv=getConversation(p.id);
-    var last=conv.length?conv[conv.length-1]:null;
-    var preview=last?(last.from==="admin"?"Siz: ":"")+last.text:"Henuz mesaj yok";
-    if(preview.length>30)preview=preview.slice(0,30)+"...";
-    var unread=0;
-    for(var j=0;j<conv.length;j++){if(conv[j].from===p.id&&!conv[j].readByAdmin)unread++;}
-    html+="<div class='msg-contact' id='contact-"+p.id+"' onclick='openChat(\""+p.id+"\")'>";
-    html+="<div class='user-avatar' style='width:36px;height:36px;flex-shrink:0'>"+p.firstName.charAt(0)+"</div>";
-    html+="<div style='flex:1;min-width:0'>";
-    html+="<div class='msg-contact-name'>"+escHtml(p.firstName+" "+p.lastName)+"</div>";
-    html+="<div class='msg-contact-preview'>"+escHtml(preview)+"</div>";
-    html+="</div>";
-    if(unread>0)html+="<div class='msg-unread'>"+unread+"</div>";
-    html+="</div>";
-  }
-  el.innerHTML=html;
-  updateMsgNotif();
+var el=document.getElementById(“msgContactList”);
+if(!personnelList.length){
+el.innerHTML=”<div style='padding:24px 16px;text-align:center;color:var(--text3);font-size:13px'>Henuz personel yok.</div>”;
+return;
+}
+var html=””;
+for(var i=0;i<personnelList.length;i++){
+var p=personnelList[i];
+var conv=getConversation(p.id);
+var last=conv.length?conv[conv.length-1]:null;
+var preview=last?(last.from===“admin”?“Siz: “:””)+last.text:“Henuz mesaj yok”;
+if(preview.length>30)preview=preview.slice(0,30)+”…”;
+var unread=0;
+for(var j=0;j<conv.length;j++){if(conv[j].from===p.id&&!conv[j].readByAdmin)unread++;}
+html+=”<div class=‘msg-contact’ id=‘contact-”+p.id+”’ onclick="window.openChat(’”+p.id+”’)">”;
+html+=”<div class='user-avatar' style='width:36px;height:36px;flex-shrink:0'>”+p.firstName.charAt(0)+”</div>”;
+html+=”<div style='flex:1;min-width:0'>”;
+html+=”<div class='msg-contact-name'>”+escHtml(p.firstName+” “+p.lastName)+”</div>”;
+html+=”<div class='msg-contact-preview'>”+escHtml(preview)+”</div>”;
+html+=”</div>”;
+if(unread>0)html+=”<div class='msg-unread'>”+unread+”</div>”;
+html+=”</div>”;
+}
+el.innerHTML=html;
+updateMsgNotif();
 }
 
-var activeChatPid=null;
-
-function openChat(pid){
-  activeChatPid=pid;
-  // mark all msgs from this person as read
-  var conv=getConversation(pid);
-  for(var i=0;i<conv.length;i++){if(conv[i].from===pid)conv[i].readByAdmin=true;}
-  saveMsgs();
-  renderMsgContacts();
-
-  var p=null;
-  for(var i=0;i<personnelList.length;i++){if(personnelList[i].id===pid){p=personnelList[i];break;}}
-  if(!p)return;
-
-  // highlight active contact
-  document.querySelectorAll(".msg-contact").forEach(function(c){c.classList.remove("active");});
-  var ct=document.getElementById("contact-"+pid);
-  if(ct)ct.classList.add("active");
-
-  var main=document.getElementById("msgMain");
-  main.innerHTML=
-    "<div class='msg-main-header'>"+
-      "<div class='user-avatar'>"+p.firstName.charAt(0)+"</div>"+
-      "<div><div class='msg-main-name'>"+escHtml(p.firstName+" "+p.lastName)+"</div>"+
-      "<div class='msg-main-role'>Personel</div></div>"+
-    "</div>"+
-    "<div class='msg-body' id='msgBody'></div>"+
-    "<div class='msg-input-area'>"+
-      "<textarea class='msg-input' id='msgInput' placeholder='Mesaj yazin...' rows='1' onkeydown='msgKeydown(event,\""+pid+"\")'></textarea>"+
-      "<button class='msg-send-btn' onclick='sendMsg(\""+pid+"\")'>&#10148;</button>"+
-    "</div>";
-
-  renderMessages(pid);
-}
+window.openChat = function(pid){
+activeChatPid=pid;
+var conv=getConversation(pid);
+for(var i=0;i<conv.length;i++){if(conv[i].from===pid)conv[i].readByAdmin=true;}
+saveMsgs();
+renderMsgContacts();
+var p=null;
+for(var i=0;i<personnelList.length;i++){if(personnelList[i].id===pid){p=personnelList[i];break;}}
+if(!p)return;
+document.querySelectorAll(”.msg-contact”).forEach(function(c){c.classList.remove(“active”);});
+var ct=document.getElementById(“contact-”+pid);
+if(ct)ct.classList.add(“active”);
+var main=document.getElementById(“msgMain”);
+main.innerHTML=
+“<div class='msg-main-header'>”+
+“<div class='user-avatar'>”+p.firstName.charAt(0)+”</div>”+
+“<div><div class='msg-main-name'>”+escHtml(p.firstName+” “+p.lastName)+”</div>”+
+“<div class='msg-main-role'>Personel</div></div>”+
+“</div>”+
+“<div class='msg-body' id='msgBody'></div>”+
+“<div class='msg-input-area'>”+
+“<textarea class=‘msg-input’ id=‘msgInput’ placeholder=‘Mesaj yazin…’ rows=‘1’ onkeydown="window.msgKeydown(event,’”+pid+”’)"></textarea>”+
+“<button class=‘msg-send-btn’ onclick="window.sendMsg(’”+pid+”’)">➤</button>”+
+“</div>”;
+renderMessages(pid);
+};
 
 function renderMessages(pid){
-  var body=document.getElementById("msgBody");
-  if(!body)return;
-  var conv=getConversation(pid);
-  if(!conv.length){
-    body.innerHTML="<div class='msg-empty'><div class='msg-empty-icon'>&#128172;</div><div style='font-size:13px'>Henuz mesaj yok. Ilk mesaji siz gonderin!</div></div>";
-    return;
-  }
-  var html="";
-  var lastDate="";
-  for(var i=0;i<conv.length;i++){
-    var m=conv[i];
-    var isAdmin=(m.from==="admin");
-    if(m.date!==lastDate){
-      html+="<div class='msg-date-sep'>"+fmtDate(m.date)+"</div>";
-      lastDate=m.date;
-    }
-    html+="<div class='msg-bubble-wrap"+(isAdmin?" mine":"")+"'>";
-    if(!isAdmin){html+="<div class='user-avatar' style='width:28px;height:28px;font-size:12px'>P</div>";}
-    html+="<div class='msg-bubble"+(isAdmin?" mine":" theirs")+"'>"+escHtml(m.text)+"</div>";
-    html+="<div class='msg-time'>"+m.time+"</div>";
-    html+="</div>";
-  }
-  body.innerHTML=html;
-  body.scrollTop=body.scrollHeight;
+var body=document.getElementById(“msgBody”);
+if(!body)return;
+var conv=getConversation(pid);
+if(!conv.length){
+body.innerHTML=”<div class='msg-empty'><div class='msg-empty-icon'>💬</div><div style='font-size:13px'>Henuz mesaj yok. Ilk mesaji siz gonderin!</div></div>”;
+return;
+}
+var html=””;
+var lastDate=””;
+for(var i=0;i<conv.length;i++){
+var m=conv[i];
+var isAdmin=(m.from===“admin”);
+if(m.date!==lastDate){
+html+=”<div class='msg-date-sep'>”+fmtDate(m.date)+”</div>”;
+lastDate=m.date;
+}
+html+=”<div class='msg-bubble-wrap"+(isAdmin?" mine":"")+"'>”;
+if(!isAdmin){html+=”<div class='user-avatar' style='width:28px;height:28px;font-size:12px'>P</div>”;}
+html+=”<div class='msg-bubble"+(isAdmin?" mine":" theirs")+"'>”+escHtml(m.text)+”</div>”;
+html+=”<div class='msg-time'>”+m.time+”</div>”;
+html+=”</div>”;
+}
+body.innerHTML=html;
+body.scrollTop=body.scrollHeight;
 }
 
-function sendMsg(pid){
-  var inp=document.getElementById("msgInput");
-  if(!inp)return;
-  var text=inp.value.trim();
-  if(!text)return;
-  var now=new Date();
-  var h=("0"+now.getHours()).slice(-2);
-  var mn=("0"+now.getMinutes()).slice(-2);
-  var conv=getConversation(pid);
-  conv.push({id:uid(),from:"admin",to:pid,text:text,date:todayISO(),time:h+":"+mn,readByAdmin:true});
-  saveMsgs();
-  inp.value="";
-  inp.style.height="auto";
-  renderMessages(pid);
-  renderMsgContacts();
-}
+window.sendMsg = function(pid){
+var inp=document.getElementById(“msgInput”);
+if(!inp)return;
+var text=inp.value.trim();
+if(!text)return;
+var now=new Date();
+var h=(“0”+now.getHours()).slice(-2);
+var mn=(“0”+now.getMinutes()).slice(-2);
+var conv=getConversation(pid);
+conv.push({id:uid(),from:“admin”,to:pid,text:text,date:todayISO(),time:h+”:”+mn,readByAdmin:true});
+saveMsgs();
+inp.value=””;
+renderMessages(pid);
+renderMsgContacts();
+};
 
-function msgKeydown(e,pid){
-  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMsg(pid);}
-}
+window.msgKeydown = function(e,pid){
+if(e.key===“Enter”&&!e.shiftKey){e.preventDefault();window.sendMsg(pid);}
+};
 
 function updateMsgNotif(){
-  var dot=document.getElementById("msgNotifDot");
-  if(!dot)return;
-  var total=0;
-  for(var i=0;i<personnelList.length;i++){
-    var conv=getConversation(personnelList[i].id);
-    for(var j=0;j<conv.length;j++){if(conv[j].from===personnelList[i].id&&!conv[j].readByAdmin)total++;}
-  }
-  if(total>0){dot.style.display="inline-flex";dot.textContent=total;}
-  else{dot.style.display="none";}
+var dot=document.getElementById(“msgNotifDot”);
+if(!dot)return;
+var total=0;
+for(var i=0;i<personnelList.length;i++){
+var conv=getConversation(personnelList[i].id);
+for(var j=0;j<conv.length;j++){if(conv[j].from===personnelList[i].id&&!conv[j].readByAdmin)total++;}
+}
+if(total>0){dot.style.display=“inline-flex”;dot.textContent=total;}
+else{dot.style.display=“none”;}
 }
 
-// Personnel messaging view
 function renderPersonnelMsgArea(p){
-  // Add message tab to personnel panel
-  var pc=document.getElementById("persShiftList").parentNode;
-  // Create msg card if not exists
-  var existingMsgCard=document.getElementById("persMsgCard");
-  if(existingMsgCard)existingMsgCard.parentNode.removeChild(existingMsgCard);
-  var msgCard=document.createElement("div");
-  msgCard.id="persMsgCard";
-  msgCard.className="card";
-  msgCard.style.marginTop="20px";
-  msgCard.style.padding="0";
-  msgCard.style.overflow="hidden";
-  msgCard.innerHTML=
-    "<div style='padding:16px 20px;border-bottom:1px solid var(--border);background:var(--bg2);font-family:Syne,sans-serif;font-weight:700;font-size:15px'>&#128172; Admin ile Mesajlasma</div>"+
-    "<div class='msg-body' id='persMsgBody' style='height:300px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px'></div>"+
-    "<div class='msg-input-area'>"+
-      "<textarea class='msg-input' id='persMsgInput' placeholder='Mesaj yazin...' rows='1' onkeydown='persMsgKeydown(event,\""+p.id+"\")'></textarea>"+
-      "<button class='msg-send-btn' onclick='sendPersMsg(\""+p.id+"\")'>&#10148;</button>"+
-    "</div>";
-  pc.appendChild(msgCard);
-  renderPersMessages(p.id);
+var pc=document.getElementById(“persShiftList”).parentNode;
+var existingMsgCard=document.getElementById(“persMsgCard”);
+if(existingMsgCard)existingMsgCard.parentNode.removeChild(existingMsgCard);
+var msgCard=document.createElement(“div”);
+msgCard.id=“persMsgCard”;
+msgCard.className=“card”;
+msgCard.style.marginTop=“20px”;
+msgCard.style.padding=“0”;
+msgCard.style.overflow=“hidden”;
+msgCard.innerHTML=
+“<div style='padding:16px 20px;border-bottom:1px solid var(--border);background:var(--bg2);font-family:Syne,sans-serif;font-weight:700;font-size:15px'>💬 Admin ile Mesajlasma</div>”+
+“<div class='msg-body' id='persMsgBody' style='height:300px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px'></div>”+
+“<div class='msg-input-area'>”+
+“<textarea class=‘msg-input’ id=‘persMsgInput’ placeholder=‘Mesaj yazin…’ rows=‘1’ onkeydown="window.persMsgKeydown(event,’”+p.id+”’)"></textarea>”+
+“<button class=‘msg-send-btn’ onclick="window.sendPersMsg(’”+p.id+”’)">➤</button>”+
+“</div>”;
+pc.appendChild(msgCard);
+renderPersMessages(p.id);
 }
 
 function renderPersMessages(pid){
-  var body=document.getElementById("persMsgBody");
-  if(!body)return;
-  var conv=getConversation(pid);
-  // mark admin messages as read by personnel
-  for(var i=0;i<conv.length;i++){if(conv[i].from==="admin")conv[i].readByPers=true;}
-  saveMsgs();
-  if(!conv.length){
-    body.innerHTML="<div class='msg-empty'><div class='msg-empty-icon'>&#128172;</div><div style='font-size:13px'>Henuz mesaj yok.</div></div>";
-    return;
-  }
-  var html="";
-  var lastDate="";
-  for(var i=0;i<conv.length;i++){
-    var m=conv[i];
-    var isMine=(m.from===pid);
-    if(m.date!==lastDate){
-      html+="<div class='msg-date-sep'>"+fmtDate(m.date)+"</div>";
-      lastDate=m.date;
-    }
-    html+="<div class='msg-bubble-wrap"+(isMine?" mine":"")+"'>";
-    if(!isMine){html+="<div class='user-avatar' style='width:28px;height:28px;font-size:12px'>A</div>";}
-    html+="<div class='msg-bubble"+(isMine?" mine":" theirs")+"'>"+escHtml(m.text)+"</div>";
-    html+="<div class='msg-time'>"+m.time+"</div>";
-    html+="</div>";
-  }
-  body.innerHTML=html;
-  body.scrollTop=body.scrollHeight;
+var body=document.getElementById(“persMsgBody”);
+if(!body)return;
+var conv=getConversation(pid);
+for(var i=0;i<conv.length;i++){if(conv[i].from===“admin”)conv[i].readByPers=true;}
+saveMsgs();
+if(!conv.length){
+body.innerHTML=”<div class='msg-empty'><div class='msg-empty-icon'>💬</div><div style='font-size:13px'>Henuz mesaj yok.</div></div>”;
+return;
+}
+var html=””;
+var lastDate=””;
+for(var i=0;i<conv.length;i++){
+var m=conv[i];
+var isMine=(m.from===pid);
+if(m.date!==lastDate){
+html+=”<div class='msg-date-sep'>”+fmtDate(m.date)+”</div>”;
+lastDate=m.date;
+}
+html+=”<div class='msg-bubble-wrap"+(isMine?" mine":"")+"'>”;
+if(!isMine){html+=”<div class='user-avatar' style='width:28px;height:28px;font-size:12px'>A</div>”;}
+html+=”<div class='msg-bubble"+(isMine?" mine":" theirs")+"'>”+escHtml(m.text)+”</div>”;
+html+=”<div class='msg-time'>”+m.time+”</div>”;
+html+=”</div>”;
+}
+body.innerHTML=html;
+body.scrollTop=body.scrollHeight;
 }
 
-function sendPersMsg(pid){
-  var inp=document.getElementById("persMsgInput");
-  if(!inp)return;
-  var text=inp.value.trim();
-  if(!text)return;
-  var now=new Date();
-  var h=("0"+now.getHours()).slice(-2);
-  var mn=("0"+now.getMinutes()).slice(-2);
-  var conv=getConversation(pid);
-  conv.push({id:uid(),from:pid,to:"admin",text:text,date:todayISO(),time:h+":"+mn,readByAdmin:false,readByPers:true});
-  saveMsgs();
-  inp.value="";
-  renderPersMessages(pid);
-  updateMsgNotif();
-}
-
-function persMsgKeydown(e,pid){
-  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendPersMsg(pid);}
-}
-
-// Patch showPersonnelPanel to also show banners and messages
-var _origShowPersonnelPanel=showPersonnelPanel;
-showPersonnelPanel=function(p){
-  _origShowPersonnelPanel(p);
-  renderPersBanners(p.id);
-  renderPersonnelMsgArea(p);
+window.sendPersMsg = function(pid){
+var inp=document.getElementById(“persMsgInput”);
+if(!inp)return;
+var text=inp.value.trim();
+if(!text)return;
+var now=new Date();
+var h=(“0”+now.getHours()).slice(-2);
+var mn=(“0”+now.getMinutes()).slice(-2);
+var conv=getConversation(pid);
+conv.push({id:uid(),from:pid,to:“admin”,text:text,date:todayISO(),time:h+”:”+mn,readByAdmin:false,readByPers:true});
+saveMsgs();
+inp.value=””;
+renderPersMessages(pid);
+updateMsgNotif();
 };
 
-// Patch showApp to init announce/message views
-var _origShowApp=showApp;
-showApp=function(){
-  _origShowApp();
-  renderAnnouncementList();
-  renderMsgContacts();
-  updateAnnNotif();
-  updateMsgNotif();
+window.persMsgKeydown = function(e,pid){
+if(e.key===“Enter”&&!e.shiftKey){e.preventDefault();window.sendPersMsg(pid);}
 };
 
-// Patch showTab to refresh msg contacts when opening messages
-var _origShowTab=showTab;
-showTab=function(name,btn){
-  _origShowTab(name,btn);
-  if(name==="messages"){renderMsgContacts();if(activeChatPid)openChat(activeChatPid);}
-  if(name==="announce"){markAllAnnRead("admin");updateAnnNotif();}
-};
+// INIT
+document.getElementById(“incDate”).value=todayISO();
+document.getElementById(“tsDate”).value=todayISO();
+document.getElementById(“expDate”).value=todayISO();
+
+loadFromFirebase().then(function(){
+updateDropdowns();
+renderAnnouncementList();
+renderMsgContacts();
+updateAnnNotif();
+updateMsgNotif();
+});
 </script>
+
 </body>
 </html>
