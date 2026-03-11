@@ -195,10 +195,80 @@ tbody td{padding:13px 16px;font-size:14px}
 .header-left{display:flex;align-items:center;gap:16px}
 .header-user{display:flex;align-items:center;gap:10px}
 .header-right{display:flex;align-items:center;gap:10px}
+/* ANNOUNCEMENT */
+.ann-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:12px;position:relative;transition:var(--tr)}
+.ann-card:hover{border-color:var(--accent)}
+.ann-card.pinned{border-color:var(--accent4);background:rgba(247,151,30,0.05)}
+.ann-pin-badge{position:absolute;top:12px;right:12px;background:rgba(247,151,30,0.2);color:var(--accent4);font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px}
+.ann-title{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;margin-bottom:6px}
+.ann-body{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:10px}
+.ann-footer{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text3)}
+.ann-type-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.ann-type-info{background:rgba(108,99,255,0.15);color:var(--accent)}
+.ann-type-warn{background:rgba(247,151,30,0.15);color:var(--accent4)}
+.ann-type-urgent{background:rgba(255,101,132,0.15);color:var(--accent2)}
+.ann-type-good{background:rgba(67,233,123,0.15);color:var(--accent3)}
+/* BANNER */
+.ann-banner{background:linear-gradient(135deg,rgba(108,99,255,0.15),rgba(168,85,247,0.1));border:1px solid rgba(108,99,255,0.3);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:flex-start;gap:12px;animation:fadeIn 0.4s ease}
+.ann-banner.warn{background:linear-gradient(135deg,rgba(247,151,30,0.12),rgba(255,101,132,0.08));border-color:rgba(247,151,30,0.3)}
+.ann-banner.urgent{background:linear-gradient(135deg,rgba(255,101,132,0.12),rgba(247,151,30,0.08));border-color:rgba(255,101,132,0.3)}
+.ann-banner.good{background:linear-gradient(135deg,rgba(67,233,123,0.12),rgba(56,249,215,0.08));border-color:rgba(67,233,123,0.3)}
+.ann-banner-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.ann-banner-content{flex:1}
+.ann-banner-title{font-weight:700;font-size:14px;margin-bottom:3px}
+.ann-banner-body{font-size:13px;color:var(--text2)}
+.ann-banner-close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:0 4px;flex-shrink:0}
+.ann-banner-close:hover{color:var(--text)}
+/* MESSAGING */
+.msg-layout{display:grid;grid-template-columns:280px 1fr;gap:0;height:600px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.msg-sidebar{border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.msg-sidebar-header{padding:16px;border-bottom:1px solid var(--border);font-family:"Syne",sans-serif;font-weight:700;font-size:14px;background:var(--bg2)}
+.msg-contact{padding:14px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:var(--tr);display:flex;align-items:center;gap:12px;position:relative}
+.msg-contact:hover{background:var(--bg2)}
+.msg-contact.active{background:rgba(108,99,255,0.1);border-left:3px solid var(--accent)}
+.msg-contact-name{font-weight:600;font-size:14px}
+.msg-contact-preview{font-size:12px;color:var(--text2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
+.msg-unread{position:absolute;top:12px;right:12px;background:var(--accent2);color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.msg-main{display:flex;flex-direction:column}
+.msg-main-header{padding:16px 20px;border-bottom:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;gap:12px}
+.msg-main-name{font-family:"Syne",sans-serif;font-weight:700;font-size:15px}
+.msg-main-role{font-size:12px;color:var(--text2)}
+.msg-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.msg-bubble-wrap{display:flex;gap:8px;align-items:flex-end}
+.msg-bubble-wrap.mine{flex-direction:row-reverse}
+.msg-bubble{max-width:70%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.5;word-break:break-word}
+.msg-bubble.theirs{background:var(--card2);border:1px solid var(--border);border-bottom-left-radius:4px}
+.msg-bubble.mine{background:var(--grad1);color:#fff;border-bottom-right-radius:4px}
+.msg-time{font-size:11px;color:var(--text3);white-space:nowrap;padding-bottom:4px}
+.msg-input-area{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:flex-end;background:var(--bg2)}
+.msg-input{flex:1;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:"DM Sans",sans-serif;font-size:14px;outline:none;resize:none;max-height:100px;transition:var(--tr)}
+.msg-input:focus{border-color:var(--accent)}
+.msg-send-btn{width:40px;height:40px;border-radius:12px;background:var(--grad1);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:var(--tr);flex-shrink:0}
+.msg-send-btn:hover{transform:scale(1.05)}
+.msg-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text3);gap:8px}
+.msg-empty-icon{font-size:40px;opacity:0.3}
+.msg-date-sep{text-align:center;font-size:11px;color:var(--text3);padding:4px 12px;background:var(--bg2);border-radius:20px;align-self:center}
+/* NOTIF DOT on tab */
+.tab-notif{display:inline-flex;background:var(--accent2);color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:800;align-items:center;justify-content:center;margin-left:2px}
+@media(max-width:768px){
+  .msg-layout{grid-template-columns:1fr;height:auto}
+  .msg-sidebar{height:200px;border-right:none;border-bottom:1px solid var(--border)}
+  .msg-main{height:400px}
+}
 </style>
 </head>
 <body>
 <div id="toastContainer"></div>
+
+<!-- LOADING OVERLAY -->
+<div id="loadingOverlay" style="position:fixed;inset:0;background:var(--bg);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px">
+  <div style="width:48px;height:48px;border-radius:14px;background:var(--grad1);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 8px 24px rgba(108,99,255,0.4)">&#127970;</div>
+  <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800"><span style="background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Biz</span>Panel</div>
+  <div style="display:flex;align-items:center;gap:8px;color:var(--text2);font-size:13px">
+    <div style="width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite"></div>
+    <span>Veriler yukleniyor...</span>
+  </div>
+</div>
 
 <!-- LOGIN -->
 <div id="loginScreen">
@@ -263,6 +333,8 @@ tbody td{padding:13px 16px;font-size:14px}
     <button class="tab-btn" id="navExpense" onclick="showTab('expense',this)">&#128184; Gider</button>
     <button class="tab-btn" id="navSummary" onclick="showTab('summary',this)">&#128202; Ozet</button>
     <button class="tab-btn" id="navSettings" onclick="showTab('settings',this)">&#9881; Ayarlar</button>
+    <button class="tab-btn" id="navAnnounce" onclick="showTab('announce',this)">&#128226; Duyurular <span class="tab-notif" id="annNotifDot" style="display:none">!</span></button>
+    <button class="tab-btn" id="navMessages" onclick="showTab('messages',this)">&#128172; Mesajlar <span class="tab-notif" id="msgNotifDot" style="display:none">0</span></button>
   </nav>
 
   <!-- TAB PERSONNEL -->
@@ -505,6 +577,70 @@ tbody td{padding:13px 16px;font-size:14px}
       </div>
     </div>
   </div>
+
+  <!-- TAB ANNOUNCEMENTS -->
+  <div class="tab-content" id="tab-announce">
+    <!-- New announcement form -->
+    <div class="card gap-section">
+      <div class="card-title">&#128226; Yeni Duyuru Yayinla</div>
+      <div class="form-row">
+        <div class="form-group"><label>Baslik</label><input type="text" id="annTitle" placeholder="Duyuru basligi..."></div>
+        <div class="form-group">
+          <label>Tur</label>
+          <select id="annType">
+            <option value="info">Bilgi</option>
+            <option value="warn">Uyari</option>
+            <option value="urgent">Acil</option>
+            <option value="good">Olumlu Haber</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label>Mesaj</label><textarea id="annBody" placeholder="Duyuru metni..." style="width:100%;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;resize:vertical;min-height:80px;transition:var(--tr)" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:var(--text2)">
+          <input type="checkbox" id="annPinned" style="width:16px;height:16px;accent-color:var(--accent)"> Sabitle (en ustte goster)
+        </label>
+        <button class="btn btn-primary" onclick="addAnnouncement()">Duyuruyu Yayinla</button>
+      </div>
+    </div>
+
+    <!-- Active announcements -->
+    <div class="card">
+      <div class="section-header">
+        <div class="section-title">Aktif Duyurular</div>
+        <span class="badge badge-purple" id="annCount">0 duyuru</span>
+      </div>
+      <div id="annList"></div>
+      <div id="annEmpty" class="empty-state" style="display:none">
+        <div class="empty-icon">&#128226;</div>
+        <h3>Henuz duyuru yok</h3>
+        <p>Yukaridaki formu kullanarak duyuru yayin.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB MESSAGES -->
+  <div class="tab-content" id="tab-messages">
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="msg-layout">
+        <!-- Sidebar: contact list -->
+        <div class="msg-sidebar">
+          <div class="msg-sidebar-header">Konusmalar</div>
+          <div id="msgContactList">
+            <div style="padding:24px 16px;text-align:center;color:var(--text3);font-size:13px">Personel eklenince burada gorunur.</div>
+          </div>
+        </div>
+        <!-- Main chat area -->
+        <div class="msg-main" id="msgMain">
+          <div class="msg-empty">
+            <div class="msg-empty-icon">&#128172;</div>
+            <div style="font-size:14px;font-weight:600">Bir konusma secin</div>
+            <div style="font-size:12px">Sol taraftan personel secin</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- PERSONNEL PANEL -->
@@ -520,6 +656,7 @@ tbody td{padding:13px 16px;font-size:14px}
     </div>
   </div>
   <div class="personnel-content">
+    <div id="persBannerArea" style="margin-bottom:8px"></div>
     <div class="grid-3 gap-section" id="persStats"></div>
     <div class="card">
       <div class="card-title">Vardiya Gecmisim</div>
@@ -622,10 +759,41 @@ tbody td{padding:13px 16px;font-size:14px}
   </div>
 </div>
 
-<script>
-// ===== DATA =====
+<script type="module">
+// ===== FIREBASE =====
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDuIXnRkGx67059263YDo8zyauNBQemZnc",
+  authDomain: "bizpanel-4e8ff.firebaseapp.com",
+  projectId: "bizpanel-4e8ff",
+  storageBucket: "bizpanel-4e8ff.firebasestorage.app",
+  messagingSenderId: "484514199647",
+  appId: "1:484514199647:web:3da7cf88a311947fd083ea"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+
+// Tum veriyi tek bir dokumanda sakliyoruz — basit ve hizli
+async function fbLoad(key, def) {
+  try {
+    var snap = await getDoc(doc(db, "bizpanel", key));
+    if (snap.exists()) return snap.data().value;
+    return def;
+  } catch(e) { return def; }
+}
+
+async function fbSave(key, value) {
+  try {
+    await setDoc(doc(db, "bizpanel", key), { value: value });
+  } catch(e) { console.error("Firebase save error:", e); }
+}
+
+// localStorage yedek olarak kaliyor (offline icin)
 function getData(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
-function setData(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function setLocalData(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 
 var personnelList = getData("bp_personnel",[]);
 var timesheetList = getData("bp_timesheet",[]);
@@ -638,14 +806,85 @@ var filterStartVal = "";
 var filterEndVal   = "";
 var chartBar=null, chartPie=null, chartLine=null;
 var pendingConfirmFn = null;
+var fbReady = false;
 
-function save(){
-  setData("bp_personnel",personnelList);
-  setData("bp_timesheet",timesheetList);
-  setData("bp_income",incomeList);
-  setData("bp_expense",expenseList);
-  setData("bp_categories",categoryList);
-  setData("bp_admin",adminCreds);
+// Firebase'den tum veriyi yukle
+async function loadFromFirebase() {
+  try {
+    showLoadingOverlay(true);
+
+    // 8 saniye timeout ekle
+    var timeoutPromise = new Promise(function(_, reject){
+      setTimeout(function(){ reject(new Error("timeout")); }, 8000);
+    });
+
+    var loadPromise = Promise.all([
+      fbLoad("personnel", []),
+      fbLoad("timesheet", []),
+      fbLoad("income", []),
+      fbLoad("expense", []),
+      fbLoad("categories", []),
+      fbLoad("admin", {user:"admin",pass:"admin123"}),
+      fbLoad("announcements", []),
+      fbLoad("messages", {})
+    ]);
+
+    var results = await Promise.race([loadPromise, timeoutPromise]);
+
+    personnelList    = results[0];
+    timesheetList    = results[1];
+    incomeList       = results[2];
+    expenseList      = results[3];
+    categoryList     = results[4];
+    adminCreds       = results[5];
+    announcementList = results[6];
+    messageStore     = results[7];
+
+    setLocalData("bp_personnel", personnelList);
+    setLocalData("bp_timesheet", timesheetList);
+    setLocalData("bp_income", incomeList);
+    setLocalData("bp_expense", expenseList);
+    setLocalData("bp_categories", categoryList);
+    setLocalData("bp_admin", adminCreds);
+    setLocalData("bp_announcements", announcementList);
+    setLocalData("bp_messages", messageStore);
+
+    fbReady = true;
+    showLoadingOverlay(false);
+  } catch(e) {
+    console.error("Firebase load error:", e);
+    // Yerel verilerle devam et
+    announcementList = getData("bp_announcements",[]);
+    messageStore     = getData("bp_messages",{});
+    showLoadingOverlay(false);
+    if(e.message === "timeout"){
+      toast("Firebase zaman asimi — yerel veriler kullaniliyor.", "error");
+    } else {
+      toast("Firebase baglantisi kurulamadi — yerel veriler kullaniliyor.", "error");
+    }
+  }
+}
+
+function showLoadingOverlay(show) {
+  var ov = document.getElementById("loadingOverlay");
+  if(ov) ov.style.display = show ? "flex" : "none";
+}
+
+async function save() {
+  // Once localStorage
+  setLocalData("bp_personnel", personnelList);
+  setLocalData("bp_timesheet", timesheetList);
+  setLocalData("bp_income", incomeList);
+  setLocalData("bp_expense", expenseList);
+  setLocalData("bp_categories", categoryList);
+  setLocalData("bp_admin", adminCreds);
+  // Sonra Firebase (arka planda)
+  fbSave("personnel", personnelList);
+  fbSave("timesheet", timesheetList);
+  fbSave("income", incomeList);
+  fbSave("expense", expenseList);
+  fbSave("categories", categoryList);
+  fbSave("admin", adminCreds);
 }
 
 // ===== UTILS =====
@@ -664,7 +903,7 @@ function applyTheme(){
   if(pb) pb.innerHTML = icon;
   var tg = document.getElementById("themeToggle");
   if(tg){ if(isDark) tg.classList.add("on"); else tg.classList.remove("on"); }
-  setData("bp_theme", isDark ? "dark" : "light");
+  setLocalData("bp_theme", isDark ? "dark" : "light");
 }
 function toggleTheme(){
   isDark = !isDark;
@@ -1670,11 +1909,392 @@ function exportPDF(){
   },2000);
 }
 
+// ===== ANNOUNCEMENTS DATA =====
+var announcementList = getData("bp_announcements",[]);
+
 // ===== INIT =====
 document.getElementById("incDate").value=todayISO();
 document.getElementById("tsDate").value=todayISO();
 document.getElementById("expDate").value=todayISO();
-updateDropdowns();
+
+// Firebase'den yukle, sonra UI'yi hazirla
+loadFromFirebase().then(function(){
+  updateDropdowns();
+  renderAnnouncementList();
+  renderMsgContacts();
+  updateAnnNotif();
+  updateMsgNotif();
+});
+
+function saveAnn(){
+  setLocalData("bp_announcements",announcementList);
+  fbSave("announcements", announcementList);
+}
+
+function addAnnouncement(){
+  var title = document.getElementById("annTitle").value.trim();
+  var body  = document.getElementById("annBody").value.trim();
+  var type  = document.getElementById("annType").value;
+  var pinned= document.getElementById("annPinned").checked;
+  if(!title||!body){toast("Baslik ve mesaj zorunlu!","error");return;}
+  announcementList.unshift({id:uid(),title:title,body:body,type:type,pinned:pinned,date:todayISO(),readBy:[]});
+  saveAnn();
+  renderAnnouncementList();
+  updateAnnNotif();
+  document.getElementById("annTitle").value="";
+  document.getElementById("annBody").value="";
+  document.getElementById("annPinned").checked=false;
+  toast("Duyuru yayinlandi!","success");
+}
+
+function renderAnnouncementList(){
+  var el=document.getElementById("annList");
+  var em=document.getElementById("annEmpty");
+  var cnt=document.getElementById("annCount");
+  if(!announcementList.length){el.innerHTML="";em.style.display="block";cnt.textContent="0 duyuru";return;}
+  em.style.display="none";
+  cnt.textContent=announcementList.length+" duyuru";
+  // pinned first
+  var sorted=announcementList.slice().sort(function(a,b){return (b.pinned?1:0)-(a.pinned?1:0);});
+  var typeIcons={info:"&#128161;",warn:"&#9888;",urgent:"&#128680;",good:"&#127881;"};
+  var typeLabels={info:"Bilgi",warn:"Uyari",urgent:"Acil",good:"Iyi Haber"};
+  var html="";
+  for(var i=0;i<sorted.length;i++){
+    var a=sorted[i];
+    html+="<div class='ann-card"+(a.pinned?" pinned":"")+"'>";
+    if(a.pinned)html+="<span class='ann-pin-badge'>Sabitlendi</span>";
+    html+="<div style='display:flex;align-items:center;gap:8px;margin-bottom:8px'>";
+    html+="<span class='ann-type-badge ann-type-"+a.type+"'>"+typeLabels[a.type]+"</span>";
+    html+="</div>";
+    html+="<div class='ann-title'>"+typeIcons[a.type]+" "+escHtml(a.title)+"</div>";
+    html+="<div class='ann-body'>"+escHtml(a.body)+"</div>";
+    html+="<div class='ann-footer'>";
+    html+="<span>"+fmtDate(a.date)+"</span>";
+    html+="<div class='flex-gap'>";
+    html+="<span style='font-size:11px;color:var(--text3)'>"+a.readBy.length+" kisi okudu</span>";
+    html+="<button class='btn btn-warning btn-sm btn-icon' onclick='toggleAnnPin(\""+a.id+"\")' title='"+(a.pinned?"Sabitlemeyi kaldir":"Sabitle")+"'>"+(a.pinned?"Sabitleme":"Sabitle")+"</button>";
+    html+="<button class='btn btn-danger btn-sm btn-icon' onclick='deleteAnn(\""+a.id+"\")'>Sil</button>";
+    html+="</div></div></div>";
+  }
+  el.innerHTML=html;
+}
+
+function toggleAnnPin(id){
+  for(var i=0;i<announcementList.length;i++){
+    if(announcementList[i].id===id){announcementList[i].pinned=!announcementList[i].pinned;break;}
+  }
+  saveAnn();renderAnnouncementList();
+}
+
+function deleteAnn(id){
+  confirmAction("Duyuru Sil","Bu duyuruyu silmek istiyor musunuz?",function(){
+    var newL=[];
+    for(var i=0;i<announcementList.length;i++){if(announcementList[i].id!==id)newL.push(announcementList[i]);}
+    announcementList=newL;
+    saveAnn();renderAnnouncementList();updateAnnNotif();
+    toast("Duyuru silindi.","info");
+  });
+}
+
+function updateAnnNotif(){
+  var dot=document.getElementById("annNotifDot");
+  if(!dot)return;
+  var unread=0;
+  for(var i=0;i<announcementList.length;i++){
+    if(announcementList[i].readBy.indexOf("admin")===-1)unread++;
+  }
+  if(unread>0){dot.style.display="inline-flex";dot.textContent=unread;}
+  else{dot.style.display="none";}
+}
+
+function markAllAnnRead(userId){
+  for(var i=0;i<announcementList.length;i++){
+    if(announcementList[i].readBy.indexOf(userId)===-1)announcementList[i].readBy.push(userId);
+  }
+  saveAnn();
+}
+
+function renderPersBanners(personnelId){
+  var area=document.getElementById("persBannerArea");
+  if(!area)return;
+  var unread=[];
+  for(var i=0;i<announcementList.length;i++){
+    if(announcementList[i].readBy.indexOf(personnelId)===-1)unread.push(announcementList[i]);
+  }
+  if(!unread.length){area.innerHTML="";return;}
+  var typeColors={info:"",warn:" warn",urgent:" urgent",good:" good"};
+  var typeIcons={info:"&#128161;",warn:"&#9888;",urgent:"&#128680;",good:"&#127881;"};
+  var html="";
+  for(var i=0;i<unread.length;i++){
+    var a=unread[i];
+    html+="<div class='ann-banner"+typeColors[a.type]+"' id='banner-"+a.id+"'>";
+    html+="<div class='ann-banner-icon'>"+typeIcons[a.type]+"</div>";
+    html+="<div class='ann-banner-content'>";
+    html+="<div class='ann-banner-title'>"+escHtml(a.title)+"</div>";
+    html+="<div class='ann-banner-body'>"+escHtml(a.body)+"</div>";
+    html+="</div>";
+    html+="<button class='ann-banner-close' onclick='dismissBanner(\""+a.id+"\",\""+personnelId+"\")'>&#10005;</button>";
+    html+="</div>";
+  }
+  area.innerHTML=html;
+}
+
+function dismissBanner(annId,personnelId){
+  for(var i=0;i<announcementList.length;i++){
+    if(announcementList[i].id===annId&&announcementList[i].readBy.indexOf(personnelId)===-1){
+      announcementList[i].readBy.push(personnelId);break;
+    }
+  }
+  saveAnn();
+  var el=document.getElementById("banner-"+annId);
+  if(el)el.style.display="none";
+}
+
+function escHtml(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+// ===== MESSAGING =====
+var messageStore = getData("bp_messages",{});
+
+function saveMsgs(){
+  setLocalData("bp_messages",messageStore);
+  fbSave("messages", messageStore);
+}
+
+function getMsgKey(aId,bId){
+  // always same key regardless of order
+  return aId<bId?aId+"_"+bId:bId+"_"+aId;
+}
+
+function getConversation(pid){
+  var key=getMsgKey("admin",pid);
+  if(!messageStore[key])messageStore[key]=[];
+  return messageStore[key];
+}
+
+function renderMsgContacts(){
+  var el=document.getElementById("msgContactList");
+  if(!personnelList.length){
+    el.innerHTML="<div style='padding:24px 16px;text-align:center;color:var(--text3);font-size:13px'>Henuz personel yok.</div>";
+    return;
+  }
+  var html="";
+  for(var i=0;i<personnelList.length;i++){
+    var p=personnelList[i];
+    var conv=getConversation(p.id);
+    var last=conv.length?conv[conv.length-1]:null;
+    var preview=last?(last.from==="admin"?"Siz: ":"")+last.text:"Henuz mesaj yok";
+    if(preview.length>30)preview=preview.slice(0,30)+"...";
+    var unread=0;
+    for(var j=0;j<conv.length;j++){if(conv[j].from===p.id&&!conv[j].readByAdmin)unread++;}
+    html+="<div class='msg-contact' id='contact-"+p.id+"' onclick='openChat(\""+p.id+"\")'>";
+    html+="<div class='user-avatar' style='width:36px;height:36px;flex-shrink:0'>"+p.firstName.charAt(0)+"</div>";
+    html+="<div style='flex:1;min-width:0'>";
+    html+="<div class='msg-contact-name'>"+escHtml(p.firstName+" "+p.lastName)+"</div>";
+    html+="<div class='msg-contact-preview'>"+escHtml(preview)+"</div>";
+    html+="</div>";
+    if(unread>0)html+="<div class='msg-unread'>"+unread+"</div>";
+    html+="</div>";
+  }
+  el.innerHTML=html;
+  updateMsgNotif();
+}
+
+var activeChatPid=null;
+
+function openChat(pid){
+  activeChatPid=pid;
+  // mark all msgs from this person as read
+  var conv=getConversation(pid);
+  for(var i=0;i<conv.length;i++){if(conv[i].from===pid)conv[i].readByAdmin=true;}
+  saveMsgs();
+  renderMsgContacts();
+
+  var p=null;
+  for(var i=0;i<personnelList.length;i++){if(personnelList[i].id===pid){p=personnelList[i];break;}}
+  if(!p)return;
+
+  // highlight active contact
+  document.querySelectorAll(".msg-contact").forEach(function(c){c.classList.remove("active");});
+  var ct=document.getElementById("contact-"+pid);
+  if(ct)ct.classList.add("active");
+
+  var main=document.getElementById("msgMain");
+  main.innerHTML=
+    "<div class='msg-main-header'>"+
+      "<div class='user-avatar'>"+p.firstName.charAt(0)+"</div>"+
+      "<div><div class='msg-main-name'>"+escHtml(p.firstName+" "+p.lastName)+"</div>"+
+      "<div class='msg-main-role'>Personel</div></div>"+
+    "</div>"+
+    "<div class='msg-body' id='msgBody'></div>"+
+    "<div class='msg-input-area'>"+
+      "<textarea class='msg-input' id='msgInput' placeholder='Mesaj yazin...' rows='1' onkeydown='msgKeydown(event,\""+pid+"\")'></textarea>"+
+      "<button class='msg-send-btn' onclick='sendMsg(\""+pid+"\")'>&#10148;</button>"+
+    "</div>";
+
+  renderMessages(pid);
+}
+
+function renderMessages(pid){
+  var body=document.getElementById("msgBody");
+  if(!body)return;
+  var conv=getConversation(pid);
+  if(!conv.length){
+    body.innerHTML="<div class='msg-empty'><div class='msg-empty-icon'>&#128172;</div><div style='font-size:13px'>Henuz mesaj yok. Ilk mesaji siz gonderin!</div></div>";
+    return;
+  }
+  var html="";
+  var lastDate="";
+  for(var i=0;i<conv.length;i++){
+    var m=conv[i];
+    var isAdmin=(m.from==="admin");
+    if(m.date!==lastDate){
+      html+="<div class='msg-date-sep'>"+fmtDate(m.date)+"</div>";
+      lastDate=m.date;
+    }
+    html+="<div class='msg-bubble-wrap"+(isAdmin?" mine":"")+"'>";
+    if(!isAdmin){html+="<div class='user-avatar' style='width:28px;height:28px;font-size:12px'>P</div>";}
+    html+="<div class='msg-bubble"+(isAdmin?" mine":" theirs")+"'>"+escHtml(m.text)+"</div>";
+    html+="<div class='msg-time'>"+m.time+"</div>";
+    html+="</div>";
+  }
+  body.innerHTML=html;
+  body.scrollTop=body.scrollHeight;
+}
+
+function sendMsg(pid){
+  var inp=document.getElementById("msgInput");
+  if(!inp)return;
+  var text=inp.value.trim();
+  if(!text)return;
+  var now=new Date();
+  var h=("0"+now.getHours()).slice(-2);
+  var mn=("0"+now.getMinutes()).slice(-2);
+  var conv=getConversation(pid);
+  conv.push({id:uid(),from:"admin",to:pid,text:text,date:todayISO(),time:h+":"+mn,readByAdmin:true});
+  saveMsgs();
+  inp.value="";
+  inp.style.height="auto";
+  renderMessages(pid);
+  renderMsgContacts();
+}
+
+function msgKeydown(e,pid){
+  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMsg(pid);}
+}
+
+function updateMsgNotif(){
+  var dot=document.getElementById("msgNotifDot");
+  if(!dot)return;
+  var total=0;
+  for(var i=0;i<personnelList.length;i++){
+    var conv=getConversation(personnelList[i].id);
+    for(var j=0;j<conv.length;j++){if(conv[j].from===personnelList[i].id&&!conv[j].readByAdmin)total++;}
+  }
+  if(total>0){dot.style.display="inline-flex";dot.textContent=total;}
+  else{dot.style.display="none";}
+}
+
+// Personnel messaging view
+function renderPersonnelMsgArea(p){
+  // Add message tab to personnel panel
+  var pc=document.getElementById("persShiftList").parentNode;
+  // Create msg card if not exists
+  var existingMsgCard=document.getElementById("persMsgCard");
+  if(existingMsgCard)existingMsgCard.parentNode.removeChild(existingMsgCard);
+  var msgCard=document.createElement("div");
+  msgCard.id="persMsgCard";
+  msgCard.className="card";
+  msgCard.style.marginTop="20px";
+  msgCard.style.padding="0";
+  msgCard.style.overflow="hidden";
+  msgCard.innerHTML=
+    "<div style='padding:16px 20px;border-bottom:1px solid var(--border);background:var(--bg2);font-family:Syne,sans-serif;font-weight:700;font-size:15px'>&#128172; Admin ile Mesajlasma</div>"+
+    "<div class='msg-body' id='persMsgBody' style='height:300px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px'></div>"+
+    "<div class='msg-input-area'>"+
+      "<textarea class='msg-input' id='persMsgInput' placeholder='Mesaj yazin...' rows='1' onkeydown='persMsgKeydown(event,\""+p.id+"\")'></textarea>"+
+      "<button class='msg-send-btn' onclick='sendPersMsg(\""+p.id+"\")'>&#10148;</button>"+
+    "</div>";
+  pc.appendChild(msgCard);
+  renderPersMessages(p.id);
+}
+
+function renderPersMessages(pid){
+  var body=document.getElementById("persMsgBody");
+  if(!body)return;
+  var conv=getConversation(pid);
+  // mark admin messages as read by personnel
+  for(var i=0;i<conv.length;i++){if(conv[i].from==="admin")conv[i].readByPers=true;}
+  saveMsgs();
+  if(!conv.length){
+    body.innerHTML="<div class='msg-empty'><div class='msg-empty-icon'>&#128172;</div><div style='font-size:13px'>Henuz mesaj yok.</div></div>";
+    return;
+  }
+  var html="";
+  var lastDate="";
+  for(var i=0;i<conv.length;i++){
+    var m=conv[i];
+    var isMine=(m.from===pid);
+    if(m.date!==lastDate){
+      html+="<div class='msg-date-sep'>"+fmtDate(m.date)+"</div>";
+      lastDate=m.date;
+    }
+    html+="<div class='msg-bubble-wrap"+(isMine?" mine":"")+"'>";
+    if(!isMine){html+="<div class='user-avatar' style='width:28px;height:28px;font-size:12px'>A</div>";}
+    html+="<div class='msg-bubble"+(isMine?" mine":" theirs")+"'>"+escHtml(m.text)+"</div>";
+    html+="<div class='msg-time'>"+m.time+"</div>";
+    html+="</div>";
+  }
+  body.innerHTML=html;
+  body.scrollTop=body.scrollHeight;
+}
+
+function sendPersMsg(pid){
+  var inp=document.getElementById("persMsgInput");
+  if(!inp)return;
+  var text=inp.value.trim();
+  if(!text)return;
+  var now=new Date();
+  var h=("0"+now.getHours()).slice(-2);
+  var mn=("0"+now.getMinutes()).slice(-2);
+  var conv=getConversation(pid);
+  conv.push({id:uid(),from:pid,to:"admin",text:text,date:todayISO(),time:h+":"+mn,readByAdmin:false,readByPers:true});
+  saveMsgs();
+  inp.value="";
+  renderPersMessages(pid);
+  updateMsgNotif();
+}
+
+function persMsgKeydown(e,pid){
+  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendPersMsg(pid);}
+}
+
+// Patch showPersonnelPanel to also show banners and messages
+var _origShowPersonnelPanel=showPersonnelPanel;
+showPersonnelPanel=function(p){
+  _origShowPersonnelPanel(p);
+  renderPersBanners(p.id);
+  renderPersonnelMsgArea(p);
+};
+
+// Patch showApp to init announce/message views
+var _origShowApp=showApp;
+showApp=function(){
+  _origShowApp();
+  renderAnnouncementList();
+  renderMsgContacts();
+  updateAnnNotif();
+  updateMsgNotif();
+};
+
+// Patch showTab to refresh msg contacts when opening messages
+var _origShowTab=showTab;
+showTab=function(name,btn){
+  _origShowTab(name,btn);
+  if(name==="messages"){renderMsgContacts();if(activeChatPid)openChat(activeChatPid);}
+  if(name==="announce"){markAllAnnRead("admin");updateAnnNotif();}
+};
 </script>
 </body>
 </html>
