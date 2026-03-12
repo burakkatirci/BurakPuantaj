@@ -484,6 +484,17 @@ select option{background:var(–bg2);color:var(–text)}
   <div class="grid-4" style="margin-bottom:24px" id="kasaStatCards"></div>
 
   <div class="card">
+    <div class="card-title"><span class="icon icon-yellow">📝</span> Gecmis Yatirma Ekle</div>
+    <p style="color:var(--text2);font-size:14px;margin-bottom:16px">Onceki haftalar yatirdiginiz tutarlari manuel olarak girin.</p>
+    <div class="form-row form-row-3">
+      <div class="form-group"><label>Tutar (TL)</label><input type="number" class="form-control" id="kasaManualAmount" placeholder="0.00" min="0" step="0.01" /></div>
+      <div class="form-group"><label>Yatirma Tarihi</label><input type="date" class="form-control" id="kasaManualDate" /></div>
+      <div class="form-group"><label>Not (Istege Bagli)</label><input type="text" class="form-control" id="kasaManualNote" placeholder="Ornek: Gecmis hafta yatirmasi" /></div>
+    </div>
+    <button class="btn btn-warning" onclick="kasaManualEkle()">💾 Kaydet</button>
+  </div>
+
+  <div class="card">
     <div class="card-title"><span class="icon icon-green">💵</span> Bu Hafta Nakit Durumu</div>
     <div id="kasaWeekDetail"></div>
     <div style="margin-top:20px">
@@ -947,7 +958,7 @@ async function switchTab(tab) {
   else if (tab === 'income') await renderIncome();
   else if (tab === 'personnel') await renderPersonnel();
   else if (tab === 'salary') { await populateSalaryDropdowns(); document.getElementById('salDate').value = today(); await renderSalary(); }
-  else if (tab === 'kasa') { await renderKasa(); }
+  else if (tab === 'kasa') { document.getElementById('kasaManualDate').value = today(); await renderKasa(); }
 }
 
 async function addPersonnel() {
@@ -1891,6 +1902,26 @@ async function renderKasa() {
   html += '<tr style="background:var(--bg2)"><td><strong>TOPLAM</strong></td><td>-</td><td><strong style="color:var(--success)">' + fmtMoney(toplamYatirilan) + '</strong></td><td>-</td><td>-</td></tr>';
   html += '</tbody></table></div>';
   histWrap.innerHTML = html;
+}
+
+async function kasaManualEkle() {
+  const amount = parseFloat(document.getElementById('kasaManualAmount').value);
+  const date = document.getElementById('kasaManualDate').value;
+  const note = document.getElementById('kasaManualNote').value.trim() || 'Manuel gecmis yatirma';
+  if (!amount || amount <= 0 || !date) { showToast('Tutar ve tarih girin.', 'error'); return; }
+  const ok = await dbInsert('kasa_transfers', {
+    id: genId(),
+    amount: amount,
+    week_from: date,
+    week_to: date,
+    date: date,
+    note: note
+  });
+  if (!ok) return;
+  document.getElementById('kasaManualAmount').value = '';
+  document.getElementById('kasaManualNote').value = '';
+  await renderKasa();
+  showToast('Gecmis yatirma kaydedildi!');
 }
 
 async function bankayaYatir() {
