@@ -1821,6 +1821,12 @@ async function deleteSalary(id) {
 }
 
 // ===================== KASA =====================
+async function getKasaTransfers() {
+  return (await dbGet('kasa_transfers')).map(function(r) {
+    return { id: r.id, amount: Number(r.amount || 0), weekFrom: r.week_from, weekTo: r.week_to, date: r.date, note: r.note || '' };
+  });
+}
+
 async function renderKasa() {
   showLoading('kasaWeekDetail');
   showLoading('kasaHistoryWrap');
