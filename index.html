@@ -1821,65 +1821,41 @@ async function deleteSalary(id) {
 }
 
 // ===================== KASA =====================
-function getWeekRange() {
-  const now = new Date();
-  const day = now.getDay();
-  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-  const mon = new Date(now.setDate(diff));
-  const sun = new Date(mon);
-  sun.setDate(mon.getDate() + 6);
-  return {
-    from: mon.toISOString().split('T')[0],
-    to: sun.toISOString().split('T')[0]
-  };
-}
-
-async function getKasaTransfers() {
-  return (await dbGet('kasa_transfers')).map(function(r) {
-    return { id: r.id, amount: Number(r.amount || 0), weekFrom: r.week_from, weekTo: r.week_to, date: r.date, note: r.note || '' };
-  });
-}
-
 async function renderKasa() {
   showLoading('kasaWeekDetail');
   showLoading('kasaHistoryWrap');
 
-  const week = getWeekRange();
   const allIncome = await getIncome();
   const allExpenses = await getExpenses();
   const transfers = await getKasaTransfers();
 
-  const weekIncome = allIncome.filter(function(i) { return i.date >= week.from && i.date <= week.to; });
-  const weekExpenses = allExpenses.filter(function(e) { return e.date >= week.from && e.date <= week.to; });
-
-  const totalNakit = weekIncome.reduce(function(s, i) { return s + i.cash; }, 0);
-  const totalGider = weekExpenses.reduce(function(s, e) { return s + e.amount; }, 0);
-  const netNakit = totalNakit - totalGider;
-
-  const allNakit = allIncome.reduce(function(s, i) { return s + i.cash; }, 0);
-  const allGider = allExpenses.reduce(function(s, e) { return s + e.amount; }, 0);
+  const totalNakit = allIncome.reduce(function(s, i) { return s + i.cash; }, 0);
+  const totalGider = allExpenses.reduce(function(s, e) { return s + e.amount; }, 0);
   const totalYatirilan = transfers.reduce(function(s, t) { return s + t.amount; }, 0);
-  const kasaBakiye = allNakit - allGider - totalYatirilan;
+  const kasaBakiye = totalNakit - totalGider - totalYatirilan;
 
   document.getElementById('kasaStatCards').innerHTML =
-    '<div class="stat-card green"><span class="stat-icon">\u{1F4B5}</span><div class="stat-label">Bu Hafta Nakit Gelir</div><div class="stat-value green">' + fmtMoney(totalNakit) + '</div><div class="stat-sub">' + fmtDate(week.from) + ' - ' + fmtDate(week.to) + '</div></div>' +
-    '<div class="stat-card pink"><span class="stat-icon">\u{1F4B8}</span><div class="stat-label">Bu Hafta Gider</div><div class="stat-value pink">' + fmtMoney(totalGider) + '</div><div class="stat-sub">Dusulecek tutar</div></div>' +
-    '<div class="stat-card purple"><span class="stat-icon">\u{1F3E6}</span><div class="stat-label">Bankaya Yatirilacak</div><div class="stat-value purple">' + fmtMoney(netNakit > 0 ? netNakit : 0) + '</div><div class="stat-sub">Net nakit</div></div>' +
-    '<div class="stat-card cyan"><span class="stat-icon">\u{1F4BC}</span><div class="stat-label">Toplam Kasada</div><div class="stat-value cyan">' + fmtMoney(kasaBakiye > 0 ? kasaBakiye : 0) + '</div><div class="stat-sub">Hic yatirilmamis</div></div>';
+    '<div class="stat-card green"><span class="stat-icon">\u{1F4B5}</span><div class="stat-label">Toplam Nakit Gelir</div><div class="stat-value green">' + fmtMoney(totalNakit) + '</div><div class="stat-sub">Tum zamanlar</div></div>' +
+    '<div class="stat-card pink"><span class="stat-icon">\u{1F4B8}</span><div class="stat-label">Toplam Gider</div><div class="stat-value pink">' + fmtMoney(totalGider) + '</div><div class="stat-sub">Nakit giderler</div></div>' +
+    '<div class="stat-card cyan"><span class="stat-icon">\u{1F3E6}</span><div class="stat-label">Toplam Yatirilan</div><div class="stat-value cyan">' + fmtMoney(totalYatirilan) + '</div><div class="stat-sub">' + transfers.length + ' yatirma</div></div>' +
+    '<div class="stat-card ' + (kasaBakiye >= 0 ? 'purple' : 'red') + '"><span class="stat-icon">\u{1F4BC}</span><div class="stat-label">Kasadaki Nakit</div><div class="stat-value ' + (kasaBakiye >= 0 ? 'purple' : 'red') + '">' + fmtMoney(kasaBakiye > 0 ? kasaBakiye : 0) + '</div><div class="stat-sub">Bankaya yatirilacak</div></div>';
 
   const detailWrap = document.getElementById('kasaWeekDetail');
   detailWrap.innerHTML =
     '<div style="display:flex;flex-direction:column;gap:12px">' +
     '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--bg2);border-radius:10px">' +
-    '<span style="color:var(--text2)">Bu hafta nakit gelir</span>' +
+    '<span style="color:var(--text2)">Toplam nakit gelir</span>' +
     '<strong style="color:var(--success)">' + fmtMoney(totalNakit) + '</strong></div>' +
     '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--bg2);border-radius:10px">' +
-    '<span style="color:var(--text2)">Bu hafta giderler</span>' +
+    '<span style="color:var(--text2)">Toplam giderler</span>' +
     '<strong style="color:var(--danger)">- ' + fmtMoney(totalGider) + '</strong></div>' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--bg2);border-radius:10px">' +
+    '<span style="color:var(--text2)">Daha once yatirilanlar</span>' +
+    '<strong style="color:var(--accent3)">- ' + fmtMoney(totalYatirilan) + '</strong></div>' +
     '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:linear-gradient(135deg,rgba(108,99,255,0.15),rgba(6,214,160,0.15));border-radius:10px;border:1px solid var(--border)">' +
-    '<strong>Bankaya Yatirilacak Net</strong>' +
-    '<strong style="font-size:20px;color:var(--accent)">' + fmtMoney(netNakit > 0 ? netNakit : 0) + '</strong></div>' +
-    (netNakit <= 0 ? '<div style="text-align:center;color:var(--warning);font-size:13px;padding:8px">Bu hafta yatirilacak nakit yok.</div>' : '') +
+    '<strong style="font-size:16px">Simdi Kasada Biriken</strong>' +
+    '<strong style="font-size:22px;color:var(--accent)">' + fmtMoney(kasaBakiye > 0 ? kasaBakiye : 0) + '</strong></div>' +
+    (kasaBakiye <= 0 ? '<div style="text-align:center;color:var(--warning);font-size:13px;padding:8px">Kasada yatirilacak nakit yok.</div>' : '') +
     '</div>';
 
   const histWrap = document.getElementById('kasaHistoryWrap');
@@ -1888,18 +1864,17 @@ async function renderKasa() {
     return;
   }
   const sorted = transfers.slice().sort(function(a, b) { return b.date.localeCompare(a.date); });
-  let html = '<div class="table-wrap"><table><thead><tr><th>Yatirma Tarihi</th><th>Hafta</th><th>Tutar</th><th>Not</th><th>Islem</th></tr></thead><tbody>';
+  let html = '<div class="table-wrap"><table><thead><tr><th>Yatirma Tarihi</th><th>Tutar</th><th>Not</th><th>Islem</th></tr></thead><tbody>';
   sorted.forEach(function(t) {
     html += '<tr>';
     html += '<td>' + fmtDate(t.date) + '</td>';
-    html += '<td style="color:var(--text2)">' + fmtDate(t.weekFrom) + ' - ' + fmtDate(t.weekTo) + '</td>';
     html += '<td><strong style="color:var(--success)">' + fmtMoney(t.amount) + '</strong></td>';
     html += '<td style="color:var(--text2)">' + (t.note || '-') + '</td>';
     html += '<td><button class="btn btn-danger btn-sm btn-icon" onclick="deleteKasaTransfer(\'' + t.id + '\')">\u{1F5D1}\uFE0F</button></td>';
     html += '</tr>';
   });
   const toplamYatirilan = sorted.reduce(function(s, t) { return s + t.amount; }, 0);
-  html += '<tr style="background:var(--bg2)"><td><strong>TOPLAM</strong></td><td>-</td><td><strong style="color:var(--success)">' + fmtMoney(toplamYatirilan) + '</strong></td><td>-</td><td>-</td></tr>';
+  html += '<tr style="background:var(--bg2)"><td><strong>TOPLAM</strong></td><td><strong style="color:var(--success)">' + fmtMoney(toplamYatirilan) + '</strong></td><td>-</td><td>-</td></tr>';
   html += '</tbody></table></div>';
   histWrap.innerHTML = html;
 }
@@ -1925,29 +1900,28 @@ async function kasaManualEkle() {
 }
 
 async function bankayaYatir() {
-  const week = getWeekRange();
   const allIncome = await getIncome();
   const allExpenses = await getExpenses();
-  const weekIncome = allIncome.filter(function(i) { return i.date >= week.from && i.date <= week.to; });
-  const weekExpenses = allExpenses.filter(function(e) { return e.date >= week.from && e.date <= week.to; });
-  const totalNakit = weekIncome.reduce(function(s, i) { return s + i.cash; }, 0);
-  const totalGider = weekExpenses.reduce(function(s, e) { return s + e.amount; }, 0);
-  const netNakit = totalNakit - totalGider;
+  const transfers = await getKasaTransfers();
+  const totalNakit = allIncome.reduce(function(s, i) { return s + i.cash; }, 0);
+  const totalGider = allExpenses.reduce(function(s, e) { return s + e.amount; }, 0);
+  const totalYatirilan = transfers.reduce(function(s, t) { return s + t.amount; }, 0);
+  const kasaBakiye = totalNakit - totalGider - totalYatirilan;
 
-  if (netNakit <= 0) { showToast('Bu hafta yatirilacak nakit yok.', 'error'); return; }
+  if (kasaBakiye <= 0) { showToast('Kasada yatirilacak nakit yok.', 'error'); return; }
 
-  showConfirm('Bankaya Yatir', fmtMoney(netNakit) + ' tutarini bankaya yatirdiniz mi?', async function() {
+  showConfirm('Bankaya Yatir', fmtMoney(kasaBakiye) + ' tutarini bankaya yatirdiniz mi?', async function() {
     const ok = await dbInsert('kasa_transfers', {
       id: genId(),
-      amount: netNakit,
-      week_from: week.from,
-      week_to: week.to,
+      amount: kasaBakiye,
+      week_from: today(),
+      week_to: today(),
       date: today(),
-      note: 'Haftalik nakit yatirma'
+      note: 'Bankaya yatirma'
     });
     if (!ok) return;
     await renderKasa();
-    showToast(fmtMoney(netNakit) + ' bankaya yatirildi!');
+    showToast(fmtMoney(kasaBakiye) + ' bankaya yatirildi!');
   });
 }
 
