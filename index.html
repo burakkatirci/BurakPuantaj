@@ -2,748 +2,748 @@
 
 <html lang="tr">
 <head>
-<meta charset="UTF--8" />
-<meta name="viewport" content="width=device--width, initial--scale=1.0" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>İşletme Yönetim Paneli</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase--js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf--autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <style>
 :root {
-  ----accent: #6c63ff;
-  ----accent2: #f72585;
-  ----accent3: #4cc9f0;
-  ----success: #06d6a0;
-  ----warning: #ffd166;
-  ----danger: #ef233c;
-  ----bg: #0f0e17;
-  ----bg2: #1a1828;
-  ----bg3: #252338;
-  ----card: #1e1c2e;
-  ----border: #2e2b4a;
-  ----text: #fffffe;
-  ----text2: #a7a3c2;
-  ----text3: #6b6890;
-  ----shadow: 0 8px 32px rgba(0,0,0,0.4);
-  ----radius: 16px;
-  ----radius--sm: 8px;
-  ----transition: 0.25s cubic--bezier(0.4,0,0.2,1);
-  ----font--head: 'Syne', sans--serif;
-  ----font--body: 'DM Sans', sans--serif;
+  --accent: #6c63ff;
+  --accent2: #f72585;
+  --accent3: #4cc9f0;
+  --success: #06d6a0;
+  --warning: #ffd166;
+  --danger: #ef233c;
+  --bg: #0f0e17;
+  --bg2: #1a1828;
+  --bg3: #252338;
+  --card: #1e1c2e;
+  --border: #2e2b4a;
+  --text: #fffffe;
+  --text2: #a7a3c2;
+  --text3: #6b6890;
+  --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  --radius: 16px;
+  --radius-sm: 8px;
+  --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
 }
-[data--theme="light"] {
-  ----bg: #f4f3ff;
-  ----bg2: #eae8ff;
-  ----bg3: #dddaf7;
-  ----card: #ffffff;
-  ----border: #d0cdf0;
-  ----text: #0f0e17;
-  ----text2: #4a4870;
-  ----text3: #8885aa;
-  ----shadow: 0 8px 32px rgba(108,99,255,0.12);
+[data-theme="light"] {
+  --bg: #f4f3ff;
+  --bg2: #eae8ff;
+  --bg3: #dddaf7;
+  --card: #ffffff;
+  --border: #d0cdf0;
+  --text: #0f0e17;
+  --text2: #4a4870;
+  --text3: #8885aa;
+  --shadow: 0 8px 32px rgba(108,99,255,0.12);
 }
-*,*::before,*::after{box--sizing:border--box;margin:0;padding:0}
-html{scroll--behavior:smooth}
-body{font--family:var(----font--body);background:var(----bg);color:var(----text);min--height:100vh;transition:background var(----transition),color var(----transition);overflow--x:hidden}
-::--webkit--scrollbar{width:6px}
-::--webkit--scrollbar--track{background:var(----bg2)}
-::--webkit--scrollbar--thumb{background:var(----accent);border--radius:3px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;transition:background var(--transition),color var(--transition);overflow-x:hidden}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
 
 /* LOGIN */
-#loginScreen{display:flex;align--items:center;justify--content:center;min--height:100vh;background:var(–bg);position:relative;overflow:hidden}
-#loginScreen::before{content:’’;position:absolute;width:600px;height:600px;background:radial--gradient(circle,rgba(108,99,255,0.15) 0%,transparent 70%);top:--100px;right:--100px;border--radius:50%;pointer--events:none}
-#loginScreen::after{content:’’;position:absolute;width:400px;height:400px;background:radial--gradient(circle,rgba(247,37,133,0.1) 0%,transparent 70%);bottom:--100px;left:--100px;border--radius:50%;pointer--events:none}
-.login--card{background:var(–card);border:1px solid var(–border);border--radius:24px;padding:48px 40px;width:100%;max--width:420px;box--shadow:var(–shadow);position:relative;z--index:1;animation:slideUp 0.5s ease}
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(–bg);position:relative;overflow:hidden}
+#loginScreen::before{content:’’;position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(108,99,255,0.15) 0%,transparent 70%);top:-100px;right:-100px;border-radius:50%;pointer-events:none}
+#loginScreen::after{content:’’;position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(247,37,133,0.1) 0%,transparent 70%);bottom:-100px;left:-100px;border-radius:50%;pointer-events:none}
+.login-card{background:var(–card);border:1px solid var(–border);border-radius:24px;padding:48px 40px;width:100%;max-width:420px;box-shadow:var(–shadow);position:relative;z-index:1;animation:slideUp 0.5s ease}
 @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-.login--logo{text--align:center;margin--bottom:32px}
-.login--logo h1{font--family:var(–font--head);font--size:28px;font--weight:800;background:linear--gradient(135deg,var(–accent),var(–accent2));--webkit--background--clip:text;--webkit--text--fill--color:transparent;background--clip:text}
-.login--logo p{color:var(–text2);font--size:14px;margin--top:4px}
-.login--logo .logo--icon{width:64px;height:64px;background:linear--gradient(135deg,var(–accent),var(–accent2));border--radius:16px;display:flex;align--items:center;justify--content:center;font--size:28px;margin:0 auto 16px;box--shadow:0 8px 24px rgba(108,99,255,0.4)}
-.form--group{margin--bottom:20px}
-.form--group label{display:block;font--size:13px;font--weight:600;color:var(–text2);margin--bottom:8px;text--transform:uppercase;letter--spacing:0.5px}
-.form--control{width:100%;padding:12px 16px;background:var(–bg2);border:1.5px solid var(–border);border--radius:var(–radius--sm);color:var(–text);font--family:var(–font--body);font--size:15px;transition:border--color var(–transition),box--shadow var(–transition);outline:none}
-.form--control:focus{border--color:var(–accent);box--shadow:0 0 0 3px rgba(108,99,255,0.2)}
-.form--control::placeholder{color:var(–text3)}
-.btn{padding:12px 24px;border:none;border--radius:var(–radius--sm);font--family:var(–font--body);font--size:15px;font--weight:600;cursor:pointer;transition:all var(–transition);display:inline--flex;align--items:center;gap:8px;text--decoration:none;white--space:nowrap}
-.btn--primary{background:linear--gradient(135deg,var(–accent),var(–accent2));color:#fff;box--shadow:0 4px 16px rgba(108,99,255,0.4)}
-.btn--primary:hover{transform:translateY(--2px);box--shadow:0 8px 24px rgba(108,99,255,0.5)}
-.btn--primary:active{transform:translateY(0)}
-.btn--success{background:linear--gradient(135deg,var(–success),#00b4d8);color:#fff;box--shadow:0 4px 16px rgba(6,214,160,0.3)}
-.btn--success:hover{transform:translateY(--2px);box--shadow:0 8px 24px rgba(6,214,160,0.4)}
-.btn--danger{background:var(–danger);color:#fff}
-.btn--danger:hover{background:#c81d2e;transform:translateY(--2px)}
-.btn--warning{background:var(–warning);color:#0f0e17}
-.btn--warning:hover{background:#e6bc56;transform:translateY(--2px)}
-.btn--ghost{background:transparent;border:1.5px solid var(–border);color:var(–text2)}
-.btn--ghost:hover{border--color:var(–accent);color:var(–accent)}
-.btn--sm{padding:7px 14px;font--size:13px}
-.btn--full{width:100%;justify--content:center}
-.btn--icon{padding:8px;border--radius:8px;aspect--ratio:1}
+.login-logo{text-align:center;margin-bottom:32px}
+.login-logo h1{font-family:var(–font-head);font-size:28px;font-weight:800;background:linear-gradient(135deg,var(–accent),var(–accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.login-logo p{color:var(–text2);font-size:14px;margin-top:4px}
+.login-logo .logo-icon{width:64px;height:64px;background:linear-gradient(135deg,var(–accent),var(–accent2));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;box-shadow:0 8px 24px rgba(108,99,255,0.4)}
+.form-group{margin-bottom:20px}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(–text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
+.form-control{width:100%;padding:12px 16px;background:var(–bg2);border:1.5px solid var(–border);border-radius:var(–radius-sm);color:var(–text);font-family:var(–font-body);font-size:15px;transition:border-color var(–transition),box-shadow var(–transition);outline:none}
+.form-control:focus{border-color:var(–accent);box-shadow:0 0 0 3px rgba(108,99,255,0.2)}
+.form-control::placeholder{color:var(–text3)}
+.btn{padding:12px 24px;border:none;border-radius:var(–radius-sm);font-family:var(–font-body);font-size:15px;font-weight:600;cursor:pointer;transition:all var(–transition);display:inline-flex;align-items:center;gap:8px;text-decoration:none;white-space:nowrap}
+.btn-primary{background:linear-gradient(135deg,var(–accent),var(–accent2));color:#fff;box-shadow:0 4px 16px rgba(108,99,255,0.4)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(108,99,255,0.5)}
+.btn-primary:active{transform:translateY(0)}
+.btn-success{background:linear-gradient(135deg,var(–success),#00b4d8);color:#fff;box-shadow:0 4px 16px rgba(6,214,160,0.3)}
+.btn-success:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(6,214,160,0.4)}
+.btn-danger{background:var(–danger);color:#fff}
+.btn-danger:hover{background:#c81d2e;transform:translateY(-2px)}
+.btn-warning{background:var(–warning);color:#0f0e17}
+.btn-warning:hover{background:#e6bc56;transform:translateY(-2px)}
+.btn-ghost{background:transparent;border:1.5px solid var(–border);color:var(–text2)}
+.btn-ghost:hover{border-color:var(–accent);color:var(–accent)}
+.btn-sm{padding:7px 14px;font-size:13px}
+.btn-full{width:100%;justify-content:center}
+.btn-icon{padding:8px;border-radius:8px;aspect-ratio:1}
 
 /* APP */
-#app{display:none;min--height:100vh;flex--direction:column}
+#app{display:none;min-height:100vh;flex-direction:column}
 
 /* HEADER */
-.header{background:var(–card);border--bottom:1px solid var(–border);padding:0 24px;height:64px;display:flex;align--items:center;justify--content:space--between;position:sticky;top:0;z--index:100;backdrop--filter:blur(20px)}
-.header--left{display:flex;align--items:center;gap:16px}
-.header--logo{font--family:var(–font--head);font--size:20px;font--weight:800;background:linear--gradient(135deg,var(–accent),var(–accent2));--webkit--background--clip:text;--webkit--text--fill--color:transparent;background--clip:text}
-.header--user{display:flex;align--items:center;gap:8px;background:var(–bg2);padding:6px 12px;border--radius:20px;font--size:13px;color:var(–text2)}
-.user--avatar{width:28px;height:28px;background:linear--gradient(135deg,var(–accent),var(–accent2));border--radius:50%;display:flex;align--items:center;justify--content:center;font--size:11px;font--weight:700;color:#fff}
-.header--right{display:flex;align--items:center;gap:12px}
-.theme--toggle{width:40px;height:40px;border--radius:50%;background:var(–bg2);border:1.5px solid var(–border);cursor:pointer;display:flex;align--items:center;justify--content:center;font--size:18px;transition:all var(–transition)}
-.theme--toggle:hover{border--color:var(–accent);transform:rotate(20deg)}
+.header{background:var(–card);border-bottom:1px solid var(–border);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+.header-left{display:flex;align-items:center;gap:16px}
+.header-logo{font-family:var(–font-head);font-size:20px;font-weight:800;background:linear-gradient(135deg,var(–accent),var(–accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header-user{display:flex;align-items:center;gap:8px;background:var(–bg2);padding:6px 12px;border-radius:20px;font-size:13px;color:var(–text2)}
+.user-avatar{width:28px;height:28px;background:linear-gradient(135deg,var(–accent),var(–accent2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+.header-right{display:flex;align-items:center;gap:12px}
+.theme-toggle{width:40px;height:40px;border-radius:50%;background:var(–bg2);border:1.5px solid var(–border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all var(–transition)}
+.theme-toggle:hover{border-color:var(–accent);transform:rotate(20deg)}
 
 /* TABS */
-.tab--nav{background:var(–card);border--bottom:1px solid var(–border);padding:0 24px;display:flex;gap:4px;overflow--x:auto;--webkit--overflow--scrolling:touch}
-.tab--nav::--webkit--scrollbar{height:0}
-.tab--btn{padding:16px 20px;background:transparent;border:none;color:var(–text2);font--family:var(–font--body);font--size:14px;font--weight:500;cursor:pointer;position:relative;white--space:nowrap;transition:color var(–transition);display:flex;align--items:center;gap:8px}
-.tab--btn::after{content:’’;position:absolute;bottom:0;left:0;right:0;height:3px;background:linear--gradient(90deg,var(–accent),var(–accent2));border--radius:3px 3px 0 0;opacity:0;transition:opacity var(–transition)}
-.tab--btn.active{color:var(–accent);font--weight:600}
-.tab--btn.active::after{opacity:1}
-.tab--btn:hover{color:var(–text)}
+.tab-nav{background:var(–card);border-bottom:1px solid var(–border);padding:0 24px;display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab-nav::-webkit-scrollbar{height:0}
+.tab-btn{padding:16px 20px;background:transparent;border:none;color:var(–text2);font-family:var(–font-body);font-size:14px;font-weight:500;cursor:pointer;position:relative;white-space:nowrap;transition:color var(–transition);display:flex;align-items:center;gap:8px}
+.tab-btn::after{content:’’;position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(–accent),var(–accent2));border-radius:3px 3px 0 0;opacity:0;transition:opacity var(–transition)}
+.tab-btn.active{color:var(–accent);font-weight:600}
+.tab-btn.active::after{opacity:1}
+.tab-btn:hover{color:var(–text)}
 
 /* CONTENT */
-.content{flex:1;padding:24px;max--width:1400px;margin:0 auto;width:100%}
-.tab--panel{display:none;animation:fadeIn 0.3s ease}
-.tab--panel.active{display:block}
+.content{flex:1;padding:24px;max-width:1400px;margin:0 auto;width:100%}
+.tab-panel{display:none;animation:fadeIn 0.3s ease}
+.tab-panel.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 /* CARDS */
-.card{background:var(–card);border:1px solid var(–border);border--radius:var(–radius);padding:24px;margin--bottom:20px;box--shadow:var(–shadow)}
-.card--title{font--family:var(–font--head);font--size:18px;font--weight:700;margin--bottom:20px;display:flex;align--items:center;gap:10px;color:var(–text)}
-.card--title .icon{width:36px;height:36px;border--radius:10px;display:flex;align--items:center;justify--content:center;font--size:18px}
-.icon--purple{background:rgba(108,99,255,0.15);color:var(–accent)}
-.icon--pink{background:rgba(247,37,133,0.15);color:var(–accent2)}
-.icon--cyan{background:rgba(76,201,240,0.15);color:var(–accent3)}
-.icon--green{background:rgba(6,214,160,0.15);color:var(–success)}
-.icon--yellow{background:rgba(255,209,102,0.15);color:var(–warning)}
+.card{background:var(–card);border:1px solid var(–border);border-radius:var(–radius);padding:24px;margin-bottom:20px;box-shadow:var(–shadow)}
+.card-title{font-family:var(–font-head);font-size:18px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:10px;color:var(–text)}
+.card-title .icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.icon-purple{background:rgba(108,99,255,0.15);color:var(–accent)}
+.icon-pink{background:rgba(247,37,133,0.15);color:var(–accent2)}
+.icon-cyan{background:rgba(76,201,240,0.15);color:var(–accent3)}
+.icon-green{background:rgba(6,214,160,0.15);color:var(–success)}
+.icon-yellow{background:rgba(255,209,102,0.15);color:var(–warning)}
 
 /* GRID */
-.grid--2{display:grid;grid--template--columns:1fr 1fr;gap:20px}
-.grid--3{display:grid;grid--template--columns:1fr 1fr 1fr;gap:20px}
-.grid--4{display:grid;grid--template--columns:repeat(4,1fr);gap:16px}
-@media(max--width:1024px){.grid--4{grid--template--columns:repeat(2,1fr)}.grid--3{grid--template--columns:1fr 1fr}}
-@media(max--width:768px){.grid--2,.grid--3,.grid--4{grid--template--columns:1fr}.content{padding:16px}.tab--btn{padding:12px 14px;font--size:13px}}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:1024px){.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}.content{padding:16px}.tab-btn{padding:12px 14px;font-size:13px}}
 
 /* FORM ROW */
-.form--row{display:grid;gap:16px}
-.form--row--2{grid--template--columns:1fr 1fr}
-.form--row--3{grid--template--columns:1fr 1fr 1fr}
-@media(max--width:640px){.form--row--2,.form--row--3{grid--template--columns:1fr}}
+.form-row{display:grid;gap:16px}
+.form-row-2{grid-template-columns:1fr 1fr}
+.form-row-3{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:640px){.form-row-2,.form-row-3{grid-template-columns:1fr}}
 
 /* TABLE */
-.table--wrap{overflow--x:auto;border--radius:var(–radius--sm);border:1px solid var(–border)}
-table{width:100%;border--collapse:collapse;font--size:14px}
+.table-wrap{overflow-x:auto;border-radius:var(–radius-sm);border:1px solid var(–border)}
+table{width:100%;border-collapse:collapse;font-size:14px}
 thead{background:var(–bg2)}
-th{padding:12px 16px;text--align:left;font--size:12px;font--weight:700;text--transform:uppercase;letter--spacing:0.5px;color:var(–text2);border--bottom:1px solid var(–border);white--space:nowrap}
-td{padding:12px 16px;border--bottom:1px solid var(–border);color:var(–text);vertical--align:middle}
-tr:last--child td{border--bottom:none}
+th{padding:12px 16px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(–text2);border-bottom:1px solid var(–border);white-space:nowrap}
+td{padding:12px 16px;border-bottom:1px solid var(–border);color:var(–text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
 tr:hover td{background:var(–bg2)}
-.actions{display:flex;gap:6px;flex--wrap:wrap}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
 
 /* STAT CARDS */
-.stat--card{background:var(–card);border:1px solid var(–border);border--radius:var(–radius);padding:20px;position:relative;overflow:hidden;transition:transform var(–transition)}
-.stat--card:hover{transform:translateY(--4px)}
-.stat--card::before{content:’’;position:absolute;top:--20px;right:--20px;width:80px;height:80px;border--radius:50%;opacity:0.15}
-.stat--card.purple::before{background:var(–accent)}
-.stat--card.pink::before{background:var(–accent2)}
-.stat--card.cyan::before{background:var(–accent3)}
-.stat--card.green::before{background:var(–success)}
-.stat--card.orange::before{background:#ff9f1c}
-.stat--card.red::before{background:var(–danger)}
-.stat--label{font--size:12px;text--transform:uppercase;letter--spacing:0.5px;font--weight:700;color:var(–text2);margin--bottom:8px}
-.stat--value{font--family:var(–font--head);font--size:28px;font--weight:800;margin--bottom:4px}
-.stat--value.purple{color:var(–accent)}
-.stat--value.pink{color:var(–accent2)}
-.stat--value.cyan{color:var(–accent3)}
-.stat--value.green{color:var(–success)}
-.stat--value.orange{color:#ff9f1c}
-.stat--value.red{color:var(–danger)}
-.stat--sub{font--size:12px;color:var(–text3)}
-.stat--icon{position:absolute;top:16px;right:16px;font--size:28px;opacity:0.7}
+.stat-card{background:var(–card);border:1px solid var(–border);border-radius:var(–radius);padding:20px;position:relative;overflow:hidden;transition:transform var(–transition)}
+.stat-card:hover{transform:translateY(-4px)}
+.stat-card::before{content:’’;position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;opacity:0.15}
+.stat-card.purple::before{background:var(–accent)}
+.stat-card.pink::before{background:var(–accent2)}
+.stat-card.cyan::before{background:var(–accent3)}
+.stat-card.green::before{background:var(–success)}
+.stat-card.orange::before{background:#ff9f1c}
+.stat-card.red::before{background:var(–danger)}
+.stat-label{font-size:12px;text-transform:uppercase;letter-spacing:0.5px;font-weight:700;color:var(–text2);margin-bottom:8px}
+.stat-value{font-family:var(–font-head);font-size:28px;font-weight:800;margin-bottom:4px}
+.stat-value.purple{color:var(–accent)}
+.stat-value.pink{color:var(–accent2)}
+.stat-value.cyan{color:var(–accent3)}
+.stat-value.green{color:var(–success)}
+.stat-value.orange{color:#ff9f1c}
+.stat-value.red{color:var(–danger)}
+.stat-sub{font-size:12px;color:var(–text3)}
+.stat-icon{position:absolute;top:16px;right:16px;font-size:28px;opacity:0.7}
 
 /* BADGE */
-.badge{padding:4px 10px;border--radius:20px;font--size:12px;font--weight:600;display:inline--flex;align--items:center;gap:4px}
-.badge--purple{background:rgba(108,99,255,0.15);color:var(–accent)}
-.badge--green{background:rgba(6,214,160,0.15);color:var(–success)}
-.badge--red{background:rgba(239,35,60,0.15);color:var(–danger)}
-.badge--yellow{background:rgba(255,209,102,0.15);color:var(–warning)}
+.badge{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.badge-purple{background:rgba(108,99,255,0.15);color:var(–accent)}
+.badge-green{background:rgba(6,214,160,0.15);color:var(–success)}
+.badge-red{background:rgba(239,35,60,0.15);color:var(–danger)}
+.badge-yellow{background:rgba(255,209,102,0.15);color:var(–warning)}
 
 /* EMPTY STATE */
-.empty--state{text--align:center;padding:60px 20px;color:var(–text3)}
-.empty--state .empty--icon{font--size:64px;margin--bottom:16px;opacity:0.5}
-.empty--state h3{font--size:18px;color:var(–text2);margin--bottom:8px;font--family:var(–font--head)}
-.empty--state p{font--size:14px}
+.empty-state{text-align:center;padding:60px 20px;color:var(–text3)}
+.empty-state .empty-icon{font-size:64px;margin-bottom:16px;opacity:0.5}
+.empty-state h3{font-size:18px;color:var(–text2);margin-bottom:8px;font-family:var(–font-head)}
+.empty-state p{font-size:14px}
 
 /* TOAST */
-#toastContainer{position:fixed;top:80px;right:20px;z--index:9999;display:flex;flex--direction:column;gap:8px;max--width:320px}
-.toast{background:var(–card);border:1px solid var(–border);border--radius:12px;padding:14px 18px;box--shadow:var(–shadow);display:flex;align--items:center;gap:12px;animation:toastIn 0.3s ease;font--size:14px;font--weight:500}
-.toast.success{border--left:4px solid var(–success)}
-.toast.error{border--left:4px solid var(–danger)}
-.toast.warning{border--left:4px solid var(–warning)}
+#toastContainer{position:fixed;top:80px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;max-width:320px}
+.toast{background:var(–card);border:1px solid var(–border);border-radius:12px;padding:14px 18px;box-shadow:var(–shadow);display:flex;align-items:center;gap:12px;animation:toastIn 0.3s ease;font-size:14px;font-weight:500}
+.toast.success{border-left:4px solid var(–success)}
+.toast.error{border-left:4px solid var(–danger)}
+.toast.warning{border-left:4px solid var(–warning)}
 @keyframes toastIn{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
 @keyframes toastOut{to{opacity:0;transform:translateX(100%)}}
 
 /* MODAL */
-.modal--overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z--index:1000;backdrop--filter:blur(4px);align--items:center;justify--content:center;padding:20px}
-.modal--overlay.active{display:flex}
-.modal{background:var(–card);border:1px solid var(–border);border--radius:20px;padding:32px;width:100%;max--width:520px;box--shadow:var(–shadow);animation:slideUp 0.3s ease;max--height:90vh;overflow--y:auto}
-.modal--header{display:flex;justify--content:space--between;align--items:center;margin--bottom:24px}
-.modal--title{font--family:var(–font--head);font--size:20px;font--weight:700}
-.modal--close{width:32px;height:32px;background:var(–bg2);border:none;border--radius:8px;cursor:pointer;color:var(–text2);font--size:18px;display:flex;align--items:center;justify--content:center;transition:all var(–transition)}
-.modal--close:hover{background:var(–danger);color:#fff}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px}
+.modal-overlay.active{display:flex}
+.modal{background:var(–card);border:1px solid var(–border);border-radius:20px;padding:32px;width:100%;max-width:520px;box-shadow:var(–shadow);animation:slideUp 0.3s ease;max-height:90vh;overflow-y:auto}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.modal-title{font-family:var(–font-head);font-size:20px;font-weight:700}
+.modal-close{width:32px;height:32px;background:var(–bg2);border:none;border-radius:8px;cursor:pointer;color:var(–text2);font-size:18px;display:flex;align-items:center;justify-content:center;transition:all var(–transition)}
+.modal-close:hover{background:var(–danger);color:#fff}
 
 /* DIVIDER */
 .divider{height:1px;background:var(–border);margin:20px 0}
 
 /* SECTION TITLE */
-.section--title{font--family:var(–font--head);font--size:22px;font--weight:800;margin--bottom:6px;display:flex;align--items:center;gap:10px}
-.section--sub{color:var(–text2);font--size:14px;margin--bottom:24px}
+.section-title{font-family:var(–font-head);font-size:22px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.section-sub{color:var(–text2);font-size:14px;margin-bottom:24px}
 
 /* FILTER BAR */
-.filter--bar{display:flex;gap:12px;flex--wrap:wrap;align--items:center;margin--bottom:20px}
-.filter--btn{padding:8px 16px;border--radius:20px;border:1.5px solid var(–border);background:transparent;color:var(–text2);font--size:13px;font--weight:600;cursor:pointer;transition:all var(–transition)}
-.filter--btn.active,.filter--btn:hover{background:var(–accent);border--color:var(–accent);color:#fff}
+.filter-bar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px}
+.filter-btn{padding:8px 16px;border-radius:20px;border:1.5px solid var(–border);background:transparent;color:var(–text2);font-size:13px;font-weight:600;cursor:pointer;transition:all var(–transition)}
+.filter-btn.active,.filter-btn:hover{background:var(–accent);border-color:var(–accent);color:#fff}
 
 /* CHART CONTAINER */
-.chart--container{position:relative;height:280px;width:100%}
+.chart-container{position:relative;height:280px;width:100%}
 
 /* PASSWORD DOT */
-.pwd--mask{letter--spacing:3px;color:var(–text3)}
+.pwd-mask{letter-spacing:3px;color:var(–text3)}
 
 /* TOGGLE SWITCH */
-.toggle--wrap{display:flex;align--items:center;justify--content:space--between;padding:16px 0;border--bottom:1px solid var(–border)}
-.toggle--wrap:last--child{border--bottom:none}
-.toggle--info h4{font--size:15px;font--weight:600;margin--bottom:2px}
-.toggle--info p{font--size:13px;color:var(–text2)}
-.toggle{position:relative;width:48px;height:26px;flex--shrink:0}
+.toggle-wrap{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(–border)}
+.toggle-wrap:last-child{border-bottom:none}
+.toggle-info h4{font-size:15px;font-weight:600;margin-bottom:2px}
+.toggle-info p{font-size:13px;color:var(–text2)}
+.toggle{position:relative;width:48px;height:26px;flex-shrink:0}
 .toggle input{opacity:0;width:0;height:0}
-.toggle--slider{position:absolute;inset:0;background:var(–bg3);border--radius:13px;cursor:pointer;transition:var(–transition)}
-.toggle--slider:before{content:’’;position:absolute;width:20px;height:20px;bottom:3px;left:3px;background:#fff;border--radius:50%;transition:var(–transition)}
-.toggle input:checked + .toggle--slider{background:var(–accent)}
-.toggle input:checked + .toggle--slider:before{transform:translateX(22px)}
+.toggle-slider{position:absolute;inset:0;background:var(–bg3);border-radius:13px;cursor:pointer;transition:var(–transition)}
+.toggle-slider:before{content:’’;position:absolute;width:20px;height:20px;bottom:3px;left:3px;background:#fff;border-radius:50%;transition:var(–transition)}
+.toggle input:checked + .toggle-slider{background:var(–accent)}
+.toggle input:checked + .toggle-slider:before{transform:translateX(22px)}
 
 /* PERSONNEL DASHBOARD */
-.personnel--dashboard{display:none;min--height:100vh;flex--direction:column}
-.pers--header{background:var(–card);border--bottom:1px solid var(–border);padding:0 24px;height:64px;display:flex;align--items:center;justify--content:space--between;position:sticky;top:0;z--index:100}
-.pers--content{flex:1;padding:24px;max--width:900px;margin:0 auto;width:100%}
-.pers--hero{background:linear--gradient(135deg,var(–accent),var(–accent2));border--radius:20px;padding:32px;margin--bottom:24px;color:#fff;position:relative;overflow:hidden}
-.pers--hero::after{content:’’;position:absolute;right:--40px;top:--40px;width:160px;height:160px;background:rgba(255,255,255,0.1);border--radius:50%}
-.pers--hero h2{font--family:var(–font--head);font--size:26px;font--weight:800;margin--bottom:4px}
-.pers--hero p{opacity:0.8;font--size:14px}
+.personnel-dashboard{display:none;min-height:100vh;flex-direction:column}
+.pers-header{background:var(–card);border-bottom:1px solid var(–border);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.pers-content{flex:1;padding:24px;max-width:900px;margin:0 auto;width:100%}
+.pers-hero{background:linear-gradient(135deg,var(–accent),var(–accent2));border-radius:20px;padding:32px;margin-bottom:24px;color:#fff;position:relative;overflow:hidden}
+.pers-hero::after{content:’’;position:absolute;right:-40px;top:-40px;width:160px;height:160px;background:rgba(255,255,255,0.1);border-radius:50%}
+.pers-hero h2{font-family:var(–font-head);font-size:26px;font-weight:800;margin-bottom:4px}
+.pers-hero p{opacity:0.8;font-size:14px}
 
 /* LOADING */
-.loading{display:flex;align--items:center;justify--content:center;padding:40px;color:var(–text2)}
-.spinner{width:32px;height:32px;border:3px solid var(–border);border--top--color:var(–accent);border--radius:50%;animation:spin 0.8s linear infinite;margin--right:12px}
+.loading{display:flex;align-items:center;justify-content:center;padding:40px;color:var(–text2)}
+.spinner{width:32px;height:32px;border:3px solid var(–border);border-top-color:var(–accent);border-radius:50%;animation:spin 0.8s linear infinite;margin-right:12px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* CONFIRM DIALOG */
-.confirm--dialog{position:fixed;inset:0;background:rgba(0,0,0,0.6);z--index:2000;display:none;align--items:center;justify--content:center;padding:20px;backdrop--filter:blur(4px)}
-.confirm--dialog.active{display:flex}
-.confirm--box{background:var(–card);border:1px solid var(–border);border--radius:16px;padding:28px;max--width:360px;width:100%;box--shadow:var(–shadow);text--align:center;animation:slideUp 0.2s ease}
-.confirm--box h3{font--family:var(–font--head);font--size:18px;margin--bottom:8px}
-.confirm--box p{color:var(–text2);font--size:14px;margin--bottom:24px}
-.confirm--actions{display:flex;gap:12px;justify--content:center}
+.confirm-dialog{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.confirm-dialog.active{display:flex}
+.confirm-box{background:var(–card);border:1px solid var(–border);border-radius:16px;padding:28px;max-width:360px;width:100%;box-shadow:var(–shadow);text-align:center;animation:slideUp 0.2s ease}
+.confirm-box h3{font-family:var(–font-head);font-size:18px;margin-bottom:8px}
+.confirm-box p{color:var(–text2);font-size:14px;margin-bottom:24px}
+.confirm-actions{display:flex;gap:12px;justify-content:center}
 
 /* PROGRESS BAR */
-.progress--bar{height:8px;background:var(–bg3);border--radius:4px;overflow:hidden;margin--top:8px}
-.progress--fill{height:100%;border--radius:4px;background:linear--gradient(90deg,var(–accent),var(–accent2));transition:width 0.8s ease}
+.progress-bar{height:8px;background:var(–bg3);border-radius:4px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(–accent),var(–accent2));transition:width 0.8s ease}
 
 select option{background:var(–bg2);color:var(–text)}
-.form--control option{background:var(–bg2)}
+.form-control option{background:var(–bg2)}
 
-@media(max--width:480px){.login--card{padding:32px 24px}.modal{padding:24px}}
+@media(max-width:480px){.login-card{padding:32px 24px}.modal{padding:24px}}
 </style>
 
 </head>
 <body>
 
-<!---- TOAST ---->
+<!-- TOAST -->
 
 <div id="toastContainer"></div>
 
-<!---- CONFIRM ---->
+<!-- CONFIRM -->
 
-<div class="confirm--dialog" id="confirmDialog">
-  <div class="confirm--box">
-    <div style="font--size:48px;margin--bottom:12px">⚠️</div>
+<div class="confirm-dialog" id="confirmDialog">
+  <div class="confirm-box">
+    <div style="font-size:48px;margin-bottom:12px">⚠️</div>
     <h3 id="confirmTitle">Emin misiniz?</h3>
     <p id="confirmMsg">Bu işlem geri alınamaz.</p>
-    <div class="confirm--actions">
-      <button class="btn btn--ghost" onclick="closeConfirm()">İptal</button>
-      <button class="btn btn--danger" id="confirmOk">Sil</button>
+    <div class="confirm-actions">
+      <button class="btn btn-ghost" onclick="closeConfirm()">İptal</button>
+      <button class="btn btn-danger" id="confirmOk">Sil</button>
     </div>
   </div>
 </div>
 
-<!---- LOGIN ---->
+<!-- LOGIN -->
 
 <div id="loginScreen">
-  <div class="login--card">
-    <div class="login--logo">
-      <div class="logo--icon">🏢</div>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-icon">🏢</div>
       <h1>İşletme Paneli</h1>
       <p>Yönetim &amp; Takip Sistemi</p>
     </div>
-    <div class="form--group">
+    <div class="form-group">
       <label>Kullanıcı Adı</label>
-      <input type="text" class="form--control" id="loginUser" placeholder="Kullanıcı adınız" autocomplete="username" />
+      <input type="text" class="form-control" id="loginUser" placeholder="Kullanıcı adınız" autocomplete="username" />
     </div>
-    <div class="form--group">
+    <div class="form-group">
       <label>Şifre</label>
-      <input type="password" class="form--control" id="loginPass" placeholder="••••••••" autocomplete="current--password" />
+      <input type="password" class="form-control" id="loginPass" placeholder="••••••••" autocomplete="current-password" />
     </div>
-    <div id="loginError" style="color:var(----danger);font--size:13px;margin--bottom:12px;display:none">Kullanıcı adı veya şifre hatalı.</div>
-    <button class="btn btn--primary btn--full" onclick="handleLogin()">🚀 Giriş Yap</button>
+    <div id="loginError" style="color:var(--danger);font-size:13px;margin-bottom:12px;display:none">Kullanıcı adı veya şifre hatalı.</div>
+    <button class="btn btn-primary btn-full" onclick="handleLogin()">🚀 Giriş Yap</button>
 
   </div>
 </div>
 
-<!---- ADMIN APP ---->
+<!-- ADMIN APP -->
 
-<div id="app" style="display:none;flex--direction:column">
+<div id="app" style="display:none;flex-direction:column">
   <div class="header">
-    <div class="header--left">
-      <span class="header--logo">🏢 İşletme Paneli</span>
+    <div class="header-left">
+      <span class="header-logo">🏢 İşletme Paneli</span>
     </div>
-    <div class="header--right">
-      <button class="theme--toggle" onclick="toggleTheme()" title="Tema Değiştir" id="themeBtn">🌙</button>
-      <div class="header--user">
-        <div class="user--avatar">A</div>
+    <div class="header-right">
+      <button class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir" id="themeBtn">🌙</button>
+      <div class="header-user">
+        <div class="user-avatar">A</div>
         <span>Admin</span>
       </div>
-      <button class="btn btn--ghost btn--sm" onclick="handleLogout()">🚪 Çıkış</button>
+      <button class="btn btn-ghost btn-sm" onclick="handleLogout()">🚪 Çıkış</button>
     </div>
   </div>
-  <div class="tab--nav" id="tabNav">
-    <button class="tab--btn active" onclick="switchTab('personnel')" data--tab="personnel">👥 Personel</button>
-    <button class="tab--btn" onclick="switchTab('timesheet')" data--tab="timesheet">🕐 Puantaj</button>
-    <button class="tab--btn" onclick="switchTab('income')" data--tab="income">💰 Gelir</button>
-    <button class="tab--btn" onclick="switchTab('expense')" data--tab="expense">💸 Gider</button>
-    <button class="tab--btn" onclick="switchTab('summary')" data--tab="summary">📊 Ozet</button>
-    <button class="tab--btn" onclick="switchTab('salary')" data--tab="salary">💳 Maas</button>
-    <button class="tab--btn" onclick="switchTab('kasa')" data--tab="kasa">🏦 Kasa</button>
-    <button class="tab--btn" onclick="switchTab('settings')" data--tab="settings">⚙️ Ayarlar</button>
+  <div class="tab-nav" id="tabNav">
+    <button class="tab-btn active" onclick="switchTab('personnel')" data-tab="personnel">👥 Personel</button>
+    <button class="tab-btn" onclick="switchTab('timesheet')" data-tab="timesheet">🕐 Puantaj</button>
+    <button class="tab-btn" onclick="switchTab('income')" data-tab="income">💰 Gelir</button>
+    <button class="tab-btn" onclick="switchTab('expense')" data-tab="expense">💸 Gider</button>
+    <button class="tab-btn" onclick="switchTab('summary')" data-tab="summary">📊 Ozet</button>
+    <button class="tab-btn" onclick="switchTab('salary')" data-tab="salary">💳 Maas</button>
+    <button class="tab-btn" onclick="switchTab('kasa')" data-tab="kasa">🏦 Kasa</button>
+    <button class="tab-btn" onclick="switchTab('settings')" data-tab="settings">⚙️ Ayarlar</button>
   </div>
   <div class="content">
 
 ```
-<!---- TAB 1: PERSONNEL ---->
-<div class="tab--panel active" id="tab--personnel">
-  <div class="section--title"><span>👥</span> Personel Yönetimi</div>
-  <p class="section--sub">Personel ekleyin, düzenleyin ve yönetin.</p>
+<!-- TAB 1: PERSONNEL -->
+<div class="tab-panel active" id="tab-personnel">
+  <div class="section-title"><span>👥</span> Personel Yönetimi</div>
+  <p class="section-sub">Personel ekleyin, düzenleyin ve yönetin.</p>
   <div class="card">
-    <div class="card--title"><span class="icon icon--purple">➕</span> Yeni Personel Ekle</div>
-    <div class="form--row form--row--3">
-      <div class="form--group"><label>Ad</label><input type="text" class="form--control" id="pName" placeholder="Ad" /></div>
-      <div class="form--group"><label>Soyad</label><input type="text" class="form--control" id="pSurname" placeholder="Soyad" /></div>
-      <div class="form--group"><label>Saatlik Ücret (₺)</label><input type="number" class="form--control" id="pWage" placeholder="0.00" min="0" step="0.01" /></div>
+    <div class="card-title"><span class="icon icon-purple">➕</span> Yeni Personel Ekle</div>
+    <div class="form-row form-row-3">
+      <div class="form-group"><label>Ad</label><input type="text" class="form-control" id="pName" placeholder="Ad" /></div>
+      <div class="form-group"><label>Soyad</label><input type="text" class="form-control" id="pSurname" placeholder="Soyad" /></div>
+      <div class="form-group"><label>Saatlik Ücret (₺)</label><input type="number" class="form-control" id="pWage" placeholder="0.00" min="0" step="0.01" /></div>
     </div>
-    <div class="form--row form--row--2">
-      <div class="form--group"><label>Kullanıcı Adı</label><input type="text" class="form--control" id="pUsername" placeholder="kullanici_adi" /></div>
-      <div class="form--group"><label>Şifre</label><input type="password" class="form--control" id="pPassword" placeholder="••••••••" /></div>
+    <div class="form-row form-row-2">
+      <div class="form-group"><label>Kullanıcı Adı</label><input type="text" class="form-control" id="pUsername" placeholder="kullanici_adi" /></div>
+      <div class="form-group"><label>Şifre</label><input type="password" class="form-control" id="pPassword" placeholder="••••••••" /></div>
     </div>
-    <button class="btn btn--primary" onclick="addPersonnel()">✅ Personel Ekle</button>
+    <button class="btn btn-primary" onclick="addPersonnel()">✅ Personel Ekle</button>
   </div>
   <div class="card">
-    <div class="card--title"><span class="icon icon--purple">👥</span> Personel Listesi</div>
-    <div class="table--wrap" id="personnelTableWrap"></div>
+    <div class="card-title"><span class="icon icon-purple">👥</span> Personel Listesi</div>
+    <div class="table-wrap" id="personnelTableWrap"></div>
   </div>
 </div>
 
-<!---- TAB 2: TIMESHEET ---->
-<div class="tab--panel" id="tab--timesheet">
-  <div class="section--title"><span>🕐</span> Puantaj</div>
-  <p class="section--sub">Personel çalışma saatlerini kaydedin.</p>
+<!-- TAB 2: TIMESHEET -->
+<div class="tab-panel" id="tab-timesheet">
+  <div class="section-title"><span>🕐</span> Puantaj</div>
+  <p class="section-sub">Personel çalışma saatlerini kaydedin.</p>
   <div class="card">
-    <div class="card--title"><span class="icon icon--cyan">➕</span> Puantaj Girişi</div>
-    <div class="form--row form--row--3">
-      <div class="form--group"><label>Personel</label>
-        <select class="form--control" id="tsPersonnel"><option value="">Personel Seçin</option></select>
+    <div class="card-title"><span class="icon icon-cyan">➕</span> Puantaj Girişi</div>
+    <div class="form-row form-row-3">
+      <div class="form-group"><label>Personel</label>
+        <select class="form-control" id="tsPersonnel"><option value="">Personel Seçin</option></select>
       </div>
-      <div class="form--group"><label>Tarih</label><input type="date" class="form--control" id="tsDate" /></div>
-      <div class="form--group"><label>Çalışma Saati</label><input type="number" class="form--control" id="tsHours" placeholder="0" min="0" max="24" step="0.5" /></div>
+      <div class="form-group"><label>Tarih</label><input type="date" class="form-control" id="tsDate" /></div>
+      <div class="form-group"><label>Çalışma Saati</label><input type="number" class="form-control" id="tsHours" placeholder="0" min="0" max="24" step="0.5" /></div>
     </div>
-    <div class="form--group"><label>Not (İsteğe Bağlı)</label><input type="text" class="form--control" id="tsNote" placeholder="Vardiya notu..." /></div>
-    <button class="btn btn--primary" onclick="addTimesheet()">✅ Kaydet</button>
+    <div class="form-group"><label>Not (İsteğe Bağlı)</label><input type="text" class="form-control" id="tsNote" placeholder="Vardiya notu..." /></div>
+    <button class="btn btn-primary" onclick="addTimesheet()">✅ Kaydet</button>
   </div>
   <div class="card">
-    <div class="card--title"><span class="icon icon--cyan">🕐</span> Puantaj Kayıtları</div>
-    <div class="filter--bar">
-      <input type="month" class="form--control" id="tsFilterMonth" style="width:180px" onchange="renderTimesheet()" />
-      <select class="form--control" id="tsFilterPersonnel" style="width:180px" onchange="renderTimesheet()"><option value="">Tüm Personel</option></select>
-      <button class="btn btn--ghost btn--sm" onclick="clearTsFilter()">Temizle</button>
+    <div class="card-title"><span class="icon icon-cyan">🕐</span> Puantaj Kayıtları</div>
+    <div class="filter-bar">
+      <input type="month" class="form-control" id="tsFilterMonth" style="width:180px" onchange="renderTimesheet()" />
+      <select class="form-control" id="tsFilterPersonnel" style="width:180px" onchange="renderTimesheet()"><option value="">Tüm Personel</option></select>
+      <button class="btn btn-ghost btn-sm" onclick="clearTsFilter()">Temizle</button>
     </div>
     <div id="timesheetTableWrap"></div>
   </div>
 </div>
 
-<!---- TAB 3: INCOME ---->
-<div class="tab--panel" id="tab--income">
-  <div class="section--title"><span>💰</span> Gelir Takibi</div>
-  <p class="section--sub">Nakit ve kredi kartı gelirlerinizi kaydedin.</p>
+<!-- TAB 3: INCOME -->
+<div class="tab-panel" id="tab-income">
+  <div class="section-title"><span>💰</span> Gelir Takibi</div>
+  <p class="section-sub">Nakit ve kredi kartı gelirlerinizi kaydedin.</p>
   <div class="card">
-    <div class="card--title"><span class="icon icon--green">➕</span> Gelir Girişi</div>
-    <div class="form--row form--row--3">
-      <div class="form--group"><label>Tarih</label><input type="date" class="form--control" id="incDate" /></div>
-      <div class="form--group"><label>Nakit Gelir (₺)</label><input type="number" class="form--control" id="incCash" placeholder="0.00" min="0" step="0.01" /></div>
-      <div class="form--group"><label>Kredi Kartı (₺)</label><input type="number" class="form--control" id="incCard" placeholder="0.00" min="0" step="0.01" /></div>
+    <div class="card-title"><span class="icon icon-green">➕</span> Gelir Girişi</div>
+    <div class="form-row form-row-3">
+      <div class="form-group"><label>Tarih</label><input type="date" class="form-control" id="incDate" /></div>
+      <div class="form-group"><label>Nakit Gelir (₺)</label><input type="number" class="form-control" id="incCash" placeholder="0.00" min="0" step="0.01" /></div>
+      <div class="form-group"><label>Kredi Kartı (₺)</label><input type="number" class="form-control" id="incCard" placeholder="0.00" min="0" step="0.01" /></div>
     </div>
-    <div class="form--group"><label>Açıklama (İsteğe Bağlı)</label><input type="text" class="form--control" id="incNote" placeholder="Gelir açıklaması..." /></div>
-    <button class="btn btn--success" onclick="addIncome()">✅ Kaydet</button>
+    <div class="form-group"><label>Açıklama (İsteğe Bağlı)</label><input type="text" class="form-control" id="incNote" placeholder="Gelir açıklaması..." /></div>
+    <button class="btn btn-success" onclick="addIncome()">✅ Kaydet</button>
   </div>
   <div class="card">
-    <div class="card--title"><span class="icon icon--green">💰</span> Gelir Kayıtları</div>
-    <div class="filter--bar">
-      <input type="month" class="form--control" id="incFilterMonth" style="width:180px" onchange="renderIncome()" />
-      <button class="btn btn--ghost btn--sm" onclick="document.getElementById('incFilterMonth').value='';renderIncome()">Temizle</button>
+    <div class="card-title"><span class="icon icon-green">💰</span> Gelir Kayıtları</div>
+    <div class="filter-bar">
+      <input type="month" class="form-control" id="incFilterMonth" style="width:180px" onchange="renderIncome()" />
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('incFilterMonth').value='';renderIncome()">Temizle</button>
     </div>
     <div id="incomeTableWrap"></div>
   </div>
 </div>
 
-<!---- TAB 4: EXPENSE ---->
-<div class="tab--panel" id="tab--expense">
-  <div class="section--title"><span>💸</span> Gider Takibi</div>
-  <p class="section--sub">Gider kategorileri ve harcamalarınızı yönetin.</p>
-  <div class="grid--2">
+<!-- TAB 4: EXPENSE -->
+<div class="tab-panel" id="tab-expense">
+  <div class="section-title"><span>💸</span> Gider Takibi</div>
+  <p class="section-sub">Gider kategorileri ve harcamalarınızı yönetin.</p>
+  <div class="grid-2">
     <div class="card">
-      <div class="card--title"><span class="icon icon--yellow">🏷️</span> Kategoriler</div>
-      <div style="display:flex;gap:8px;margin--bottom:16px">
-        <input type="text" class="form--control" id="catName" placeholder="Kategori adı..." style="flex:1" />
-        <button class="btn btn--primary" onclick="addCategory()">➕ Ekle</button>
+      <div class="card-title"><span class="icon icon-yellow">🏷️</span> Kategoriler</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <input type="text" class="form-control" id="catName" placeholder="Kategori adı..." style="flex:1" />
+        <button class="btn btn-primary" onclick="addCategory()">➕ Ekle</button>
       </div>
       <div id="categoryList"></div>
     </div>
     <div class="card">
-      <div class="card--title"><span class="icon icon--pink">➕</span> Gider Ekle</div>
-      <div class="form--group"><label>Kategori</label>
-        <select class="form--control" id="expCategory"><option value="">Kategori Seçin</option></select>
+      <div class="card-title"><span class="icon icon-pink">➕</span> Gider Ekle</div>
+      <div class="form-group"><label>Kategori</label>
+        <select class="form-control" id="expCategory"><option value="">Kategori Seçin</option></select>
       </div>
-      <div class="form--group"><label>Tutar (₺)</label><input type="number" class="form--control" id="expAmount" placeholder="0.00" min="0" step="0.01" /></div>
-      <div class="form--group"><label>Tarih</label><input type="date" class="form--control" id="expDate" /></div>
-      <div class="form--group"><label>Açıklama</label><input type="text" class="form--control" id="expNote" placeholder="Gider açıklaması..." /></div>
-      <button class="btn btn--warning" onclick="addExpense()">✅ Kaydet</button>
+      <div class="form-group"><label>Tutar (₺)</label><input type="number" class="form-control" id="expAmount" placeholder="0.00" min="0" step="0.01" /></div>
+      <div class="form-group"><label>Tarih</label><input type="date" class="form-control" id="expDate" /></div>
+      <div class="form-group"><label>Açıklama</label><input type="text" class="form-control" id="expNote" placeholder="Gider açıklaması..." /></div>
+      <button class="btn btn-warning" onclick="addExpense()">✅ Kaydet</button>
     </div>
   </div>
   <div class="card">
-    <div class="card--title"><span class="icon icon--pink">💸</span> Gider Kayıtları</div>
-    <div class="filter--bar">
-      <input type="month" class="form--control" id="expFilterMonth" style="width:180px" onchange="renderExpenses()" />
-      <select class="form--control" id="expFilterCat" style="width:180px" onchange="renderExpenses()"><option value="">Tüm Kategoriler</option></select>
-      <button class="btn btn--ghost btn--sm" onclick="clearExpFilter()">Temizle</button>
+    <div class="card-title"><span class="icon icon-pink">💸</span> Gider Kayıtları</div>
+    <div class="filter-bar">
+      <input type="month" class="form-control" id="expFilterMonth" style="width:180px" onchange="renderExpenses()" />
+      <select class="form-control" id="expFilterCat" style="width:180px" onchange="renderExpenses()"><option value="">Tüm Kategoriler</option></select>
+      <button class="btn btn-ghost btn-sm" onclick="clearExpFilter()">Temizle</button>
     </div>
     <div id="expenseTableWrap"></div>
   </div>
 </div>
 
-<!---- TAB 5: SUMMARY ---->
-<div class="tab--panel" id="tab--summary">
-  <div style="display:flex;justify--content:space--between;align--items:center;flex--wrap:wrap;gap:12px;margin--bottom:24px">
+<!-- TAB 5: SUMMARY -->
+<div class="tab-panel" id="tab-summary">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:24px">
     <div>
-      <div class="section--title"><span>📊</span> Özet &amp; Analiz</div>
-      <p class="section--sub" style="margin--bottom:0">Tüm verilerin detaylı özeti ve raporları.</p>
+      <div class="section-title"><span>📊</span> Özet &amp; Analiz</div>
+      <p class="section-sub" style="margin-bottom:0">Tüm verilerin detaylı özeti ve raporları.</p>
     </div>
-    <button class="btn btn--primary" onclick="downloadPDF()">📄 PDF İndir</button>
+    <button class="btn btn-primary" onclick="downloadPDF()">📄 PDF İndir</button>
   </div>
-  <div class="filter--bar" style="margin--bottom:20px">
-    <button class="filter--btn active" onclick="setSummaryFilter('week',this)">Bu Hafta</button>
-    <button class="filter--btn" onclick="setSummaryFilter('month',this)">Bu Ay</button>
-    <button class="filter--btn" onclick="setSummaryFilter('year',this)">Bu Yıl</button>
-    <button class="filter--btn" onclick="setSummaryFilter('all',this)">Tümü</button>
-    <div style="display:flex;gap:8px;align--items:center">
-      <input type="date" class="form--control" id="summaryFrom" style="width:150px" onchange="setSummaryFilter('custom',null)" />
-      <span style="color:var(----text2)">--</span>
-      <input type="date" class="form--control" id="summaryTo" style="width:150px" onchange="setSummaryFilter('custom',null)" />
+  <div class="filter-bar" style="margin-bottom:20px">
+    <button class="filter-btn active" onclick="setSummaryFilter('week',this)">Bu Hafta</button>
+    <button class="filter-btn" onclick="setSummaryFilter('month',this)">Bu Ay</button>
+    <button class="filter-btn" onclick="setSummaryFilter('year',this)">Bu Yıl</button>
+    <button class="filter-btn" onclick="setSummaryFilter('all',this)">Tümü</button>
+    <div style="display:flex;gap:8px;align-items:center">
+      <input type="date" class="form-control" id="summaryFrom" style="width:150px" onchange="setSummaryFilter('custom',null)" />
+      <span style="color:var(--text2)">-</span>
+      <input type="date" class="form-control" id="summaryTo" style="width:150px" onchange="setSummaryFilter('custom',null)" />
     </div>
   </div>
-  <div class="grid--4" id="summaryCards" style="margin--bottom:24px"></div>
-  <div class="grid--2" style="margin--bottom:20px">
-    <div class="card"><div class="card--title"><span class="icon icon--purple">📊</span> Gelir vs Gider</div><div class="chart--container"><canvas id="barChart"></canvas></div></div>
-    <div class="card"><div class="card--title"><span class="icon icon--pink">🍩</span> Gider Dağılımı</div><div class="chart--container"><canvas id="pieChart"></canvas></div></div>
+  <div class="grid-4" id="summaryCards" style="margin-bottom:24px"></div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card"><div class="card-title"><span class="icon icon-purple">📊</span> Gelir vs Gider</div><div class="chart-container"><canvas id="barChart"></canvas></div></div>
+    <div class="card"><div class="card-title"><span class="icon icon-pink">🍩</span> Gider Dağılımı</div><div class="chart-container"><canvas id="pieChart"></canvas></div></div>
   </div>
-  <div class="card" style="margin--bottom:20px"><div class="card--title"><span class="icon icon--cyan">📈</span> Net Kar Trendi</div><div class="chart--container"><canvas id="lineChart"></canvas></div></div>
-  <div class="card" style="margin--bottom:20px">
-    <div class="card--title"><span class="icon icon--green">👥</span> Personel Detay Özeti</div>
+  <div class="card" style="margin-bottom:20px"><div class="card-title"><span class="icon icon-cyan">📈</span> Net Kar Trendi</div><div class="chart-container"><canvas id="lineChart"></canvas></div></div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-title"><span class="icon icon-green">👥</span> Personel Detay Özeti</div>
     <div id="personnelSummaryTable"></div>
   </div>
-  <div class="grid--2">
-    <div class="card"><div class="card--title"><span class="icon icon--yellow">💰</span> Gelir Detayı</div><div id="incomeDetailSummary"></div></div>
-    <div class="card"><div class="card--title"><span class="icon icon--pink">💸</span> Gider Detayı</div><div id="expenseDetailSummary"></div></div>
+  <div class="grid-2">
+    <div class="card"><div class="card-title"><span class="icon icon-yellow">💰</span> Gelir Detayı</div><div id="incomeDetailSummary"></div></div>
+    <div class="card"><div class="card-title"><span class="icon icon-pink">💸</span> Gider Detayı</div><div id="expenseDetailSummary"></div></div>
   </div>
 </div>
 
-<!---- TAB 6: SETTINGS ---->
-<!---- TAB: KASA ---->
-<div class="tab--panel" id="tab--kasa">
-  <div class="section--title"><span>🏦</span> Kasa Takibi</div>
-  <p class="section--sub">Haftalik nakit birikimini takip edin ve bankaya yatirin.</p>
+<!-- TAB 6: SETTINGS -->
+<!-- TAB: KASA -->
+<div class="tab-panel" id="tab-kasa">
+  <div class="section-title"><span>🏦</span> Kasa Takibi</div>
+  <p class="section-sub">Haftalik nakit birikimini takip edin ve bankaya yatirin.</p>
 
-  <div class="grid--4" style="margin--bottom:24px" id="kasaStatCards"></div>
+  <div class="grid-4" style="margin-bottom:24px" id="kasaStatCards"></div>
 
   <div class="card">
-    <div class="card--title"><span class="icon icon--yellow">📝</span> Gecmis Yatirma Ekle</div>
-    <p style="color:var(----text2);font--size:14px;margin--bottom:16px">Onceki haftalar yatirdiginiz tutarlari manuel olarak girin.</p>
-    <div class="form--row form--row--3">
-      <div class="form--group"><label>Tutar (TL)</label><input type="number" class="form--control" id="kasaManualAmount" placeholder="0.00" min="0" step="0.01" /></div>
-      <div class="form--group"><label>Yatirma Tarihi</label><input type="date" class="form--control" id="kasaManualDate" /></div>
-      <div class="form--group"><label>Not (Istege Bagli)</label><input type="text" class="form--control" id="kasaManualNote" placeholder="Ornek: Gecmis hafta yatirmasi" /></div>
+    <div class="card-title"><span class="icon icon-yellow">📝</span> Gecmis Yatirma Ekle</div>
+    <p style="color:var(--text2);font-size:14px;margin-bottom:16px">Onceki haftalar yatirdiginiz tutarlari manuel olarak girin.</p>
+    <div class="form-row form-row-3">
+      <div class="form-group"><label>Tutar (TL)</label><input type="number" class="form-control" id="kasaManualAmount" placeholder="0.00" min="0" step="0.01" /></div>
+      <div class="form-group"><label>Yatirma Tarihi</label><input type="date" class="form-control" id="kasaManualDate" /></div>
+      <div class="form-group"><label>Not (Istege Bagli)</label><input type="text" class="form-control" id="kasaManualNote" placeholder="Ornek: Gecmis hafta yatirmasi" /></div>
     </div>
-    <button class="btn btn--warning" onclick="kasaManualEkle()">💾 Kaydet</button>
+    <button class="btn btn-warning" onclick="kasaManualEkle()">💾 Kaydet</button>
   </div>
 
   <div class="card">
-    <div class="card--title"><span class="icon icon--green">💵</span> Bu Hafta Nakit Durumu</div>
+    <div class="card-title"><span class="icon icon-green">💵</span> Bu Hafta Nakit Durumu</div>
     <div id="kasaWeekDetail"></div>
-    <div style="margin--top:20px">
-      <button class="btn btn--primary" style="width:100%;justify--content:center;padding:16px;font--size:16px" onclick="bankayaYatir()">🏦 Bankaya Yatirdim</button>
+    <div style="margin-top:20px">
+      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:16px;font-size:16px" onclick="bankayaYatir()">🏦 Bankaya Yatirdim</button>
     </div>
   </div>
 
   <div class="card">
-    <div class="card--title"><span class="icon icon--cyan">📋</span> Yatirma Gecmisi</div>
+    <div class="card-title"><span class="icon icon-cyan">📋</span> Yatirma Gecmisi</div>
     <div id="kasaHistoryWrap"></div>
   </div>
 </div>
 
-<!---- TAB: MAAS ---->
-<div class="tab--panel" id="tab--salary">
-  <div class="section--title"><span>💳</span> Maas Odemesi</div>
-  <p class="section--sub">Personel maas odemelerini hesaba ve elden olarak ayri kaydedin.</p>
+<!-- TAB: MAAS -->
+<div class="tab-panel" id="tab-salary">
+  <div class="section-title"><span>💳</span> Maas Odemesi</div>
+  <p class="section-sub">Personel maas odemelerini hesaba ve elden olarak ayri kaydedin.</p>
   <div class="card">
-    <div class="card--title"><span class="icon icon--purple">➕</span> Yeni Odeme Ekle</div>
-    <div class="form--row form--row--2">
-      <div class="form--group"><label>Personel</label>
-        <select class="form--control" id="salPersonnel"><option value="">Personel Secin</option></select>
+    <div class="card-title"><span class="icon icon-purple">➕</span> Yeni Odeme Ekle</div>
+    <div class="form-row form-row-2">
+      <div class="form-group"><label>Personel</label>
+        <select class="form-control" id="salPersonnel"><option value="">Personel Secin</option></select>
       </div>
-      <div class="form--group"><label>Tarih</label><input type="date" class="form--control" id="salDate" /></div>
+      <div class="form-group"><label>Tarih</label><input type="date" class="form-control" id="salDate" /></div>
     </div>
-    <div class="form--row form--row--2">
-      <div class="form--group"><label>Hesaba Yatirilan (TL)</label><input type="number" class="form--control" id="salBank" placeholder="0.00" min="0" step="0.01" /></div>
-      <div class="form--group"><label>Elden Verilen (TL)</label><input type="number" class="form--control" id="salCash" placeholder="0.00" min="0" step="0.01" /></div>
+    <div class="form-row form-row-2">
+      <div class="form-group"><label>Hesaba Yatirilan (TL)</label><input type="number" class="form-control" id="salBank" placeholder="0.00" min="0" step="0.01" /></div>
+      <div class="form-group"><label>Elden Verilen (TL)</label><input type="number" class="form-control" id="salCash" placeholder="0.00" min="0" step="0.01" /></div>
     </div>
-    <div class="form--group"><label>Not (Istege Bagli)</label><input type="text" class="form--control" id="salNote" placeholder="Odeme notu..." /></div>
-    <button class="btn btn--primary" onclick="addSalaryPayment()">✅ Odemeyi Kaydet</button>
+    <div class="form-group"><label>Not (Istege Bagli)</label><input type="text" class="form-control" id="salNote" placeholder="Odeme notu..." /></div>
+    <button class="btn btn-primary" onclick="addSalaryPayment()">✅ Odemeyi Kaydet</button>
   </div>
   <div class="card">
-    <div class="card--title"><span class="icon icon--cyan">👥</span> Personel Maas Durumu</div>
-    <div class="filter--bar">
-      <input type="month" class="form--control" id="salFilterMonth" style="width:180px" onchange="renderSalary()" />
-      <select class="form--control" id="salFilterPersonnel" style="width:180px" onchange="renderSalary()"><option value="">Tum Personel</option></select>
-      <button class="btn btn--ghost btn--sm" onclick="clearSalFilter()">Temizle</button>
+    <div class="card-title"><span class="icon icon-cyan">👥</span> Personel Maas Durumu</div>
+    <div class="filter-bar">
+      <input type="month" class="form-control" id="salFilterMonth" style="width:180px" onchange="renderSalary()" />
+      <select class="form-control" id="salFilterPersonnel" style="width:180px" onchange="renderSalary()"><option value="">Tum Personel</option></select>
+      <button class="btn btn-ghost btn-sm" onclick="clearSalFilter()">Temizle</button>
     </div>
     <div id="salaryStatusWrap"></div>
   </div>
   <div class="card">
-    <div class="card--title"><span class="icon icon--green">📋</span> Odeme Gecmisi</div>
+    <div class="card-title"><span class="icon icon-green">📋</span> Odeme Gecmisi</div>
     <div id="salaryHistoryWrap"></div>
   </div>
 </div>
 
-<div class="tab--panel" id="tab--settings">
-  <div class="section--title"><span>⚙️</span> Ayarlar</div>
-  <p class="section--sub">Sistem tercihlerini ve güvenlik ayarlarını yönetin.</p>
-  <div class="grid--2">
+<div class="tab-panel" id="tab-settings">
+  <div class="section-title"><span>⚙️</span> Ayarlar</div>
+  <p class="section-sub">Sistem tercihlerini ve güvenlik ayarlarını yönetin.</p>
+  <div class="grid-2">
     <div class="card">
-      <div class="card--title"><span class="icon icon--purple">🔐</span> Şifre Değiştir</div>
-      <div class="form--group"><label>Mevcut Şifre</label><input type="password" class="form--control" id="oldPass" placeholder="••••••••" /></div>
-      <div class="form--group"><label>Yeni Şifre</label><input type="password" class="form--control" id="newPass" placeholder="••••••••" /></div>
-      <div class="form--group"><label>Yeni Şifre (Tekrar)</label><input type="password" class="form--control" id="newPass2" placeholder="••••••••" /></div>
-      <button class="btn btn--primary" onclick="changeAdminPassword()">🔑 Şifreyi Güncelle</button>
+      <div class="card-title"><span class="icon icon-purple">🔐</span> Şifre Değiştir</div>
+      <div class="form-group"><label>Mevcut Şifre</label><input type="password" class="form-control" id="oldPass" placeholder="••••••••" /></div>
+      <div class="form-group"><label>Yeni Şifre</label><input type="password" class="form-control" id="newPass" placeholder="••••••••" /></div>
+      <div class="form-group"><label>Yeni Şifre (Tekrar)</label><input type="password" class="form-control" id="newPass2" placeholder="••••••••" /></div>
+      <button class="btn btn-primary" onclick="changeAdminPassword()">🔑 Şifreyi Güncelle</button>
     </div>
     <div class="card">
-      <div class="card--title"><span class="icon icon--cyan">🎨</span> Görünüm</div>
-      <div class="toggle--wrap">
-        <div class="toggle--info"><h4>Karanlık Tema</h4><p>Gözlerinizi koruyun</p></div>
-        <label class="toggle"><input type="checkbox" id="darkToggle" onchange="applyThemeFromToggle()" /><span class="toggle--slider"></span></label>
+      <div class="card-title"><span class="icon icon-cyan">🎨</span> Görünüm</div>
+      <div class="toggle-wrap">
+        <div class="toggle-info"><h4>Karanlık Tema</h4><p>Gözlerinizi koruyun</p></div>
+        <label class="toggle"><input type="checkbox" id="darkToggle" onchange="applyThemeFromToggle()" /><span class="toggle-slider"></span></label>
       </div>
-      <div class="toggle--wrap">
-        <div class="toggle--info"><h4>Kompakt Görünüm</h4><p>Daha fazla içerik görün</p></div>
-        <label class="toggle"><input type="checkbox" id="compactToggle" onchange="applyCompact()" /><span class="toggle--slider"></span></label>
+      <div class="toggle-wrap">
+        <div class="toggle-info"><h4>Kompakt Görünüm</h4><p>Daha fazla içerik görün</p></div>
+        <label class="toggle"><input type="checkbox" id="compactToggle" onchange="applyCompact()" /><span class="toggle-slider"></span></label>
       </div>
-      <div class="toggle--wrap">
-        <div class="toggle--info"><h4>Animasyonlar</h4><p>Geçiş efektleri</p></div>
-        <label class="toggle"><input type="checkbox" id="animToggle" checked onchange="applyAnim()" /><span class="toggle--slider"></span></label>
+      <div class="toggle-wrap">
+        <div class="toggle-info"><h4>Animasyonlar</h4><p>Geçiş efektleri</p></div>
+        <label class="toggle"><input type="checkbox" id="animToggle" checked onchange="applyAnim()" /><span class="toggle-slider"></span></label>
       </div>
     </div>
     <div class="card">
-      <div class="card--title"><span class="icon icon--yellow">🏢</span> İşletme Bilgileri</div>
-      <div class="form--group"><label>İşletme Adı</label><input type="text" class="form--control" id="bizName" placeholder="İşletme adınız" /></div>
-      <div class="form--group"><label>Para Birimi Sembolü</label><input type="text" class="form--control" id="bizCurrency" placeholder="₺" maxlength="3" /></div>
-      <div class="form--group"><label>Çalışma Saati Başlangıcı</label><input type="time" class="form--control" id="bizStartTime" /></div>
-      <button class="btn btn--primary" onclick="saveBizSettings()">💾 Kaydet</button>
+      <div class="card-title"><span class="icon icon-yellow">🏢</span> İşletme Bilgileri</div>
+      <div class="form-group"><label>İşletme Adı</label><input type="text" class="form-control" id="bizName" placeholder="İşletme adınız" /></div>
+      <div class="form-group"><label>Para Birimi Sembolü</label><input type="text" class="form-control" id="bizCurrency" placeholder="₺" maxlength="3" /></div>
+      <div class="form-group"><label>Çalışma Saati Başlangıcı</label><input type="time" class="form-control" id="bizStartTime" /></div>
+      <button class="btn btn-primary" onclick="saveBizSettings()">💾 Kaydet</button>
     </div>
     <div class="card">
-      <div class="card--title"><span class="icon icon--pink">🗄️</span> Veri Yönetimi</div>
-      <p style="color:var(----text2);font--size:14px;margin--bottom:16px">Verilerinizi yedekleyin veya sıfırlayın.</p>
-      <div style="display:flex;flex--direction:column;gap:10px">
-        <button class="btn btn--success" onclick="exportData()">📤 Veriyi Dışa Aktar (JSON)</button>
-        <button class="btn btn--ghost" onclick="document.getElementById('importFile').click()">📥 Veriyi İçe Aktar</button>
+      <div class="card-title"><span class="icon icon-pink">🗄️</span> Veri Yönetimi</div>
+      <p style="color:var(--text2);font-size:14px;margin-bottom:16px">Verilerinizi yedekleyin veya sıfırlayın.</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button class="btn btn-success" onclick="exportData()">📤 Veriyi Dışa Aktar (JSON)</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('importFile').click()">📥 Veriyi İçe Aktar</button>
         <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)" />
-        <button class="btn btn--danger" onclick="resetAllData()">🗑️ Tüm Verileri Sıfırla</button>
+        <button class="btn btn-danger" onclick="resetAllData()">🗑️ Tüm Verileri Sıfırla</button>
       </div>
     </div>
   </div>
   <div class="card">
-    <div class="card--title"><span class="icon icon--purple">ℹ️</span> Sistem Bilgisi</div>
-    <div class="grid--3">
-      <div class="stat--card purple"><div class="stat--label">Toplam Personel</div><div class="stat--value purple" id="setStatPersonnel">0</div><div class="stat--sub">Kayıtlı çalışan</div></div>
-      <div class="stat--card cyan"><div class="stat--label">Toplam Kayıt</div><div class="stat--value cyan" id="setStatRecords">0</div><div class="stat--sub">Tüm veri girişleri</div></div>
-      <div class="stat--card green"><div class="stat--label">Son Güncelleme</div><div class="stat--value green" style="font--size:16px" id="setStatDate">--</div><div class="stat--sub">Sistem zamanı</div></div>
+    <div class="card-title"><span class="icon icon-purple">ℹ️</span> Sistem Bilgisi</div>
+    <div class="grid-3">
+      <div class="stat-card purple"><div class="stat-label">Toplam Personel</div><div class="stat-value purple" id="setStatPersonnel">0</div><div class="stat-sub">Kayıtlı çalışan</div></div>
+      <div class="stat-card cyan"><div class="stat-label">Toplam Kayıt</div><div class="stat-value cyan" id="setStatRecords">0</div><div class="stat-sub">Tüm veri girişleri</div></div>
+      <div class="stat-card green"><div class="stat-label">Son Güncelleme</div><div class="stat-value green" style="font-size:16px" id="setStatDate">-</div><div class="stat-sub">Sistem zamanı</div></div>
     </div>
   </div>
 </div>
 ```
 
-  </div><!---- /content ---->
-</div><!---- /app ---->
+  </div><!-- /content -->
+</div><!-- /app -->
 
-<!---- PERSONNEL DASHBOARD ---->
+<!-- PERSONNEL DASHBOARD -->
 
-<div id="personnelDashboard" style="display:none;flex--direction:column;min--height:100vh">
-  <div class="pers--header">
-    <span class="header--logo">🏢 İşletme Paneli</span>
-    <div style="display:flex;align--items:center;gap:12px">
-      <button class="theme--toggle" onclick="toggleTheme()" id="persThemeBtn">🌙</button>
-      <div class="header--user">
-        <div class="user--avatar" id="persAvatarInitial">P</div>
+<div id="personnelDashboard" style="display:none;flex-direction:column;min-height:100vh">
+  <div class="pers-header">
+    <span class="header-logo">🏢 İşletme Paneli</span>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="theme-toggle" onclick="toggleTheme()" id="persThemeBtn">🌙</button>
+      <div class="header-user">
+        <div class="user-avatar" id="persAvatarInitial">P</div>
         <span id="persNameDisplay">Personel</span>
       </div>
-      <button class="btn btn--ghost btn--sm" onclick="handleLogout()">🚪 Çıkış</button>
+      <button class="btn btn-ghost btn-sm" onclick="handleLogout()">🚪 Çıkış</button>
     </div>
   </div>
-  <div class="pers--content">
-    <div class="pers--hero">
+  <div class="pers-content">
+    <div class="pers-hero">
       <h2>Merhaba, <span id="persFullName">Personel</span> 👋</h2>
       <p id="persWelcomeSub">Çalışma takibiniz aşağıda görüntülenmektedir.</p>
-      <span style="position:absolute;right:32px;bottom:24px;font--size:48px;opacity:0.3">🕐</span>
+      <span style="position:absolute;right:32px;bottom:24px;font-size:48px;opacity:0.3">🕐</span>
     </div>
-    <div class="grid--3" id="persStatCards" style="margin--bottom:24px"></div>
-    <div class="card" style="margin--bottom:20px">
-      <div class="card--title"><span class="icon icon--purple">🔐</span> Sifre Degistir</div>
-      <div class="form--row form--row--3">
-        <div class="form--group"><label>Mevcut Sifre</label><input type="password" class="form--control" id="persOldPass" placeholder="........" /></div>
-        <div class="form--group"><label>Yeni Sifre</label><input type="password" class="form--control" id="persNewPass" placeholder="........" /></div>
-        <div class="form--group"><label>Yeni Sifre (Tekrar)</label><input type="password" class="form--control" id="persNewPass2" placeholder="........" /></div>
+    <div class="grid-3" id="persStatCards" style="margin-bottom:24px"></div>
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-title"><span class="icon icon-purple">🔐</span> Sifre Degistir</div>
+      <div class="form-row form-row-3">
+        <div class="form-group"><label>Mevcut Sifre</label><input type="password" class="form-control" id="persOldPass" placeholder="........" /></div>
+        <div class="form-group"><label>Yeni Sifre</label><input type="password" class="form-control" id="persNewPass" placeholder="........" /></div>
+        <div class="form-group"><label>Yeni Sifre (Tekrar)</label><input type="password" class="form-control" id="persNewPass2" placeholder="........" /></div>
       </div>
-      <button class="btn btn--primary" onclick="persChangePassword()">🔑 Sifremi Guncelle</button>
+      <button class="btn btn-primary" onclick="persChangePassword()">🔑 Sifremi Guncelle</button>
     </div>
     <div class="card">
-      <div class="card--title"><span class="icon icon--cyan">📅</span> Calisma Gunleri</div>
-      <div class="filter--bar">
-        <input type="month" class="form--control" id="persFilterMonth" style="width:180px" onchange="renderPersonnelDashboard()" />
-        <button class="btn btn--ghost btn--sm" onclick="document.getElementById('persFilterMonth').value='';renderPersonnelDashboard()">Tümü</button>
+      <div class="card-title"><span class="icon icon-cyan">📅</span> Calisma Gunleri</div>
+      <div class="filter-bar">
+        <input type="month" class="form-control" id="persFilterMonth" style="width:180px" onchange="renderPersonnelDashboard()" />
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('persFilterMonth').value='';renderPersonnelDashboard()">Tümü</button>
       </div>
       <div id="persTimesheetTable"></div>
     </div>
   </div>
 </div>
 
-<!---- EDIT MODALS ---->
+<!-- EDIT MODALS -->
 
-<div class="modal--overlay" id="editPersonnelModal">
+<div class="modal-overlay" id="editPersonnelModal">
   <div class="modal">
-    <div class="modal--header"><span class="modal--title">✏️ Personel Düzenle</span><button class="modal--close" onclick="closeModal('editPersonnelModal')">✕</button></div>
+    <div class="modal-header"><span class="modal-title">✏️ Personel Düzenle</span><button class="modal-close" onclick="closeModal('editPersonnelModal')">✕</button></div>
     <input type="hidden" id="editPId" />
-    <div class="form--row form--row--2">
-      <div class="form--group"><label>Ad</label><input type="text" class="form--control" id="editPName" /></div>
-      <div class="form--group"><label>Soyad</label><input type="text" class="form--control" id="editPSurname" /></div>
+    <div class="form-row form-row-2">
+      <div class="form-group"><label>Ad</label><input type="text" class="form-control" id="editPName" /></div>
+      <div class="form-group"><label>Soyad</label><input type="text" class="form-control" id="editPSurname" /></div>
     </div>
-    <div class="form--group"><label>Saatlik Ücret (₺)</label><input type="number" class="form--control" id="editPWage" min="0" step="0.01" /></div>
-    <div class="form--row form--row--2">
-      <div class="form--group"><label>Kullanıcı Adı</label><input type="text" class="form--control" id="editPUsername" /></div>
-      <div class="form--group"><label>Yeni Şifre (boş bırakın = değişmez)</label><input type="password" class="form--control" id="editPPassword" /></div>
+    <div class="form-group"><label>Saatlik Ücret (₺)</label><input type="number" class="form-control" id="editPWage" min="0" step="0.01" /></div>
+    <div class="form-row form-row-2">
+      <div class="form-group"><label>Kullanıcı Adı</label><input type="text" class="form-control" id="editPUsername" /></div>
+      <div class="form-group"><label>Yeni Şifre (boş bırakın = değişmez)</label><input type="password" class="form-control" id="editPPassword" /></div>
     </div>
-    <div style="display:flex;gap:12px;margin--top:8px">
-      <button class="btn btn--ghost" onclick="closeModal('editPersonnelModal')" style="flex:1">İptal</button>
-      <button class="btn btn--primary" onclick="saveEditPersonnel()" style="flex:1">💾 Kaydet</button>
+    <div style="display:flex;gap:12px;margin-top:8px">
+      <button class="btn btn-ghost" onclick="closeModal('editPersonnelModal')" style="flex:1">İptal</button>
+      <button class="btn btn-primary" onclick="saveEditPersonnel()" style="flex:1">💾 Kaydet</button>
     </div>
   </div>
 </div>
 
-<div class="modal--overlay" id="editTimesheetModal">
+<div class="modal-overlay" id="editTimesheetModal">
   <div class="modal">
-    <div class="modal--header"><span class="modal--title">✏️ Puantaj Düzenle</span><button class="modal--close" onclick="closeModal('editTimesheetModal')">✕</button></div>
+    <div class="modal-header"><span class="modal-title">✏️ Puantaj Düzenle</span><button class="modal-close" onclick="closeModal('editTimesheetModal')">✕</button></div>
     <input type="hidden" id="editTsId" />
-    <div class="form--group"><label>Personel</label>
-      <select class="form--control" id="editTsPersonnel"></select>
+    <div class="form-group"><label>Personel</label>
+      <select class="form-control" id="editTsPersonnel"></select>
     </div>
-    <div class="form--row form--row--2">
-      <div class="form--group"><label>Tarih</label><input type="date" class="form--control" id="editTsDate" /></div>
-      <div class="form--group"><label>Saat</label><input type="number" class="form--control" id="editTsHours" min="0" max="24" step="0.5" /></div>
+    <div class="form-row form-row-2">
+      <div class="form-group"><label>Tarih</label><input type="date" class="form-control" id="editTsDate" /></div>
+      <div class="form-group"><label>Saat</label><input type="number" class="form-control" id="editTsHours" min="0" max="24" step="0.5" /></div>
     </div>
-    <div class="form--group"><label>Not</label><input type="text" class="form--control" id="editTsNote" /></div>
-    <div style="display:flex;gap:12px;margin--top:8px">
-      <button class="btn btn--ghost" onclick="closeModal('editTimesheetModal')" style="flex:1">İptal</button>
-      <button class="btn btn--primary" onclick="saveEditTimesheet()" style="flex:1">💾 Kaydet</button>
+    <div class="form-group"><label>Not</label><input type="text" class="form-control" id="editTsNote" /></div>
+    <div style="display:flex;gap:12px;margin-top:8px">
+      <button class="btn btn-ghost" onclick="closeModal('editTimesheetModal')" style="flex:1">İptal</button>
+      <button class="btn btn-primary" onclick="saveEditTimesheet()" style="flex:1">💾 Kaydet</button>
     </div>
   </div>
 </div>
 
-<div class="modal--overlay" id="editIncomeModal">
+<div class="modal-overlay" id="editIncomeModal">
   <div class="modal">
-    <div class="modal--header"><span class="modal--title">✏️ Gelir Düzenle</span><button class="modal--close" onclick="closeModal('editIncomeModal')">✕</button></div>
+    <div class="modal-header"><span class="modal-title">✏️ Gelir Düzenle</span><button class="modal-close" onclick="closeModal('editIncomeModal')">✕</button></div>
     <input type="hidden" id="editIncId" />
-    <div class="form--group"><label>Tarih</label><input type="date" class="form--control" id="editIncDate" /></div>
-    <div class="form--row form--row--2">
-      <div class="form--group"><label>Nakit (₺)</label><input type="number" class="form--control" id="editIncCash" min="0" step="0.01" /></div>
-      <div class="form--group"><label>Kredi Kartı (₺)</label><input type="number" class="form--control" id="editIncCard" min="0" step="0.01" /></div>
+    <div class="form-group"><label>Tarih</label><input type="date" class="form-control" id="editIncDate" /></div>
+    <div class="form-row form-row-2">
+      <div class="form-group"><label>Nakit (₺)</label><input type="number" class="form-control" id="editIncCash" min="0" step="0.01" /></div>
+      <div class="form-group"><label>Kredi Kartı (₺)</label><input type="number" class="form-control" id="editIncCard" min="0" step="0.01" /></div>
     </div>
-    <div class="form--group"><label>Açıklama</label><input type="text" class="form--control" id="editIncNote" /></div>
-    <div style="display:flex;gap:12px;margin--top:8px">
-      <button class="btn btn--ghost" onclick="closeModal('editIncomeModal')" style="flex:1">İptal</button>
-      <button class="btn btn--primary" onclick="saveEditIncome()" style="flex:1">💾 Kaydet</button>
+    <div class="form-group"><label>Açıklama</label><input type="text" class="form-control" id="editIncNote" /></div>
+    <div style="display:flex;gap:12px;margin-top:8px">
+      <button class="btn btn-ghost" onclick="closeModal('editIncomeModal')" style="flex:1">İptal</button>
+      <button class="btn btn-primary" onclick="saveEditIncome()" style="flex:1">💾 Kaydet</button>
     </div>
   </div>
 </div>
 
-<div class="modal--overlay" id="editExpenseModal">
+<div class="modal-overlay" id="editExpenseModal">
   <div class="modal">
-    <div class="modal--header"><span class="modal--title">✏️ Gider Düzenle</span><button class="modal--close" onclick="closeModal('editExpenseModal')">✕</button></div>
+    <div class="modal-header"><span class="modal-title">✏️ Gider Düzenle</span><button class="modal-close" onclick="closeModal('editExpenseModal')">✕</button></div>
     <input type="hidden" id="editExpId" />
-    <div class="form--group"><label>Kategori</label>
-      <select class="form--control" id="editExpCategory"></select>
+    <div class="form-group"><label>Kategori</label>
+      <select class="form-control" id="editExpCategory"></select>
     </div>
-    <div class="form--group"><label>Tutar (₺)</label><input type="number" class="form--control" id="editExpAmount" min="0" step="0.01" /></div>
-    <div class="form--group"><label>Tarih</label><input type="date" class="form--control" id="editExpDate" /></div>
-    <div class="form--group"><label>Açıklama</label><input type="text" class="form--control" id="editExpNote" /></div>
-    <div style="display:flex;gap:12px;margin--top:8px">
-      <button class="btn btn--ghost" onclick="closeModal('editExpenseModal')" style="flex:1">İptal</button>
-      <button class="btn btn--primary" onclick="saveEditExpense()" style="flex:1">💾 Kaydet</button>
+    <div class="form-group"><label>Tutar (₺)</label><input type="number" class="form-control" id="editExpAmount" min="0" step="0.01" /></div>
+    <div class="form-group"><label>Tarih</label><input type="date" class="form-control" id="editExpDate" /></div>
+    <div class="form-group"><label>Açıklama</label><input type="text" class="form-control" id="editExpNote" /></div>
+    <div style="display:flex;gap:12px;margin-top:8px">
+      <button class="btn btn-ghost" onclick="closeModal('editExpenseModal')" style="flex:1">İptal</button>
+      <button class="btn btn-primary" onclick="saveEditExpense()" style="flex:1">💾 Kaydet</button>
     </div>
   </div>
 </div>
 
-<div class="modal--overlay" id="editCategoryModal">
+<div class="modal-overlay" id="editCategoryModal">
   <div class="modal">
-    <div class="modal--header"><span class="modal--title">✏️ Kategori Düzenle</span><button class="modal--close" onclick="closeModal('editCategoryModal')">✕</button></div>
+    <div class="modal-header"><span class="modal-title">✏️ Kategori Düzenle</span><button class="modal-close" onclick="closeModal('editCategoryModal')">✕</button></div>
     <input type="hidden" id="editCatId" />
-    <div class="form--group"><label>Kategori Adı</label><input type="text" class="form--control" id="editCatName" /></div>
-    <div style="display:flex;gap:12px;margin--top:8px">
-      <button class="btn btn--ghost" onclick="closeModal('editCategoryModal')" style="flex:1">İptal</button>
-      <button class="btn btn--primary" onclick="saveEditCategory()" style="flex:1">💾 Kaydet</button>
+    <div class="form-group"><label>Kategori Adı</label><input type="text" class="form-control" id="editCatName" /></div>
+    <div style="display:flex;gap:12px;margin-top:8px">
+      <button class="btn btn-ghost" onclick="closeModal('editCategoryModal')" style="flex:1">İptal</button>
+      <button class="btn btn-primary" onclick="saveEditCategory()" style="flex:1">💾 Kaydet</button>
     </div>
   </div>
 </div>
 
-<div class="modal--overlay" id="editSalaryModal">
+<div class="modal-overlay" id="editSalaryModal">
   <div class="modal">
-    <div class="modal--header"><span class="modal--title">✏️ Odeme Duzenle</span><button class="modal--close" onclick="closeModal('editSalaryModal')">✕</button></div>
+    <div class="modal-header"><span class="modal-title">✏️ Odeme Duzenle</span><button class="modal-close" onclick="closeModal('editSalaryModal')">✕</button></div>
     <input type="hidden" id="editSalId" />
-    <div class="form--group"><label>Personel</label>
-      <select class="form--control" id="editSalPersonnel"></select>
+    <div class="form-group"><label>Personel</label>
+      <select class="form-control" id="editSalPersonnel"></select>
     </div>
-    <div class="form--group"><label>Tarih</label><input type="date" class="form--control" id="editSalDate" /></div>
-    <div class="form--row form--row--2">
-      <div class="form--group"><label>Hesaba Yatirilan (TL)</label><input type="number" class="form--control" id="editSalBank" min="0" step="0.01" /></div>
-      <div class="form--group"><label>Elden Verilen (TL)</label><input type="number" class="form--control" id="editSalCash" min="0" step="0.01" /></div>
+    <div class="form-group"><label>Tarih</label><input type="date" class="form-control" id="editSalDate" /></div>
+    <div class="form-row form-row-2">
+      <div class="form-group"><label>Hesaba Yatirilan (TL)</label><input type="number" class="form-control" id="editSalBank" min="0" step="0.01" /></div>
+      <div class="form-group"><label>Elden Verilen (TL)</label><input type="number" class="form-control" id="editSalCash" min="0" step="0.01" /></div>
     </div>
-    <div class="form--group"><label>Not</label><input type="text" class="form--control" id="editSalNote" /></div>
-    <div style="display:flex;gap:12px;margin--top:8px">
-      <button class="btn btn--ghost" onclick="closeModal('editSalaryModal')" style="flex:1">Iptal</button>
-      <button class="btn btn--primary" onclick="saveEditSalary()" style="flex:1">💾 Kaydet</button>
+    <div class="form-group"><label>Not</label><input type="text" class="form-control" id="editSalNote" /></div>
+    <div style="display:flex;gap:12px;margin-top:8px">
+      <button class="btn btn-ghost" onclick="closeModal('editSalaryModal')" style="flex:1">Iptal</button>
+      <button class="btn btn-primary" onclick="saveEditSalary()" style="flex:1">💾 Kaydet</button>
     </div>
   </div>
 </div>
@@ -751,7 +751,7 @@ select option{background:var(–bg2);color:var(–text)}
 <script>
 
 const SUPABASE_URL = 'https://ctfdfzghegdsddquhnxj.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0ZmRmemdoZWdkc2RkcXVobnhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQxMTUsImV4cCI6MjA4ODgzMDExNX0.yus0GW--vSrGEChZXfzXetLcz5EcwZd8kvVxpyMJDH_g';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0ZmRmemdoZWdkc2RkcXVobnhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQxMTUsImV4cCI6MjA4ODgzMDExNX0.yus0GW-vSrGEChZXfzXetLcz5EcwZd8kvVxpyMJDH_g';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let adminCredentials = JSON.parse(localStorage.getItem('adminCredentials') || 'null') || { username: 'admin', password: 'admin123' };
@@ -814,13 +814,13 @@ async function getExpenses() { return (await dbGet('expenses')).map(normExpense)
 function genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2,5); }
 function today() { return new Date().toISOString().split('T')[0]; }
 function fmtDate(d) {
-  if (!d) return '--';
+  if (!d) return '-';
   const dt = new Date(d + 'T00:00:00');
-  return dt.toLocaleDateString('tr--TR', { day:'2--digit', month:'2--digit', year:'numeric' });
+  return dt.toLocaleDateString('tr-TR', { day:'2-digit', month:'2-digit', year:'numeric' });
 }
 function fmtMoney(n) {
   const sym = getSetting('bizCurrency', 'TL');
-  return sym + ' ' + Number(n||0).toLocaleString('tr--TR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+  return sym + ' ' + Number(n||0).toLocaleString('tr-TR', { minimumFractionDigits:2, maximumFractionDigits:2 });
 }
 function getSetting(k, def) {
   const s = JSON.parse(localStorage.getItem('bizSettings') || '{}');
@@ -836,7 +836,7 @@ function showLoading(id) {
 }
 
 function applyTheme(t) {
-  document.documentElement.setAttribute('data--theme', t === 'light' ? 'light' : '');
+  document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : '');
   currentTheme = t;
   localStorage.setItem('theme', t);
   const tb = document.getElementById('themeBtn');
@@ -849,7 +849,7 @@ function applyTheme(t) {
 function toggleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
 function applyThemeFromToggle() { const dk = document.getElementById('darkToggle'); applyTheme(dk && dk.checked ? 'dark' : 'light'); }
 function applyCompact() { const c = document.getElementById('compactToggle'); document.body.classList.toggle('compact', c && c.checked); }
-function applyAnim() { const a = document.getElementById('animToggle'); document.body.style.setProperty('----transition', (!a || a.checked) ? '0.25s cubic--bezier(0.4,0,0.2,1)' : '0s'); }
+function applyAnim() { const a = document.getElementById('animToggle'); document.body.style.setProperty('--transition', (!a || a.checked) ? '0.25s cubic-bezier(0.4,0,0.2,1)' : '0s'); }
 applyTheme(currentTheme);
 
 function showToast(msg, type) {
@@ -857,7 +857,7 @@ function showToast(msg, type) {
   const icons = { success: '\u2705', error: '\u274C', warning: '\u26A0\uFE0F' };
   const el = document.createElement('div');
   el.className = 'toast ' + type;
-  el.innerHTML = '<span style="font--size:18px">' + icons[type] + '</span><span>' + msg + '</span>';
+  el.innerHTML = '<span style="font-size:18px">' + icons[type] + '</span><span>' + msg + '</span>';
   document.getElementById('toastContainer').appendChild(el);
   setTimeout(function() { el.style.animation = 'toastOut 0.3s ease forwards'; setTimeout(function() { el.remove(); }, 300); }, 3000);
 }
@@ -873,7 +873,7 @@ document.getElementById('confirmOk').onclick = function() { if (confirmCallback)
 
 function openModal(id) { document.getElementById(id).classList.add('active'); }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-document.querySelectorAll('.modal--overlay').forEach(function(m) {
+document.querySelectorAll('.modal-overlay').forEach(function(m) {
   m.addEventListener('click', function(e) { if (e.target === m) m.classList.remove('active'); });
 });
 
@@ -955,10 +955,10 @@ async function initAdmin() {
 }
 
 async function switchTab(tab) {
-  document.querySelectorAll('.tab--panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.tab--btn').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('tab--' + tab).classList.add('active');
-  document.querySelector('[data--tab="' + tab + '"]').classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
   _cache = {};
   if (tab === 'summary') await updateSummary();
   else if (tab === 'settings') await loadSettingsStats();
@@ -996,18 +996,18 @@ async function renderPersonnel() {
   const list = await getPersonnel();
   const wrap = document.getElementById('personnelTableWrap');
   if (!list.length) {
-    wrap.innerHTML = '<div class="empty--state"><div class="empty--icon">\u{1F465}</div><h3>Henuz personel yok</h3><p>Yukaridan yeni personel ekleyin.</p></div>'; return;
+    wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F465}</div><h3>Henuz personel yok</h3><p>Yukaridan yeni personel ekleyin.</p></div>'; return;
   }
-  let html = '<div class="table--wrap"><table><thead><tr><th>#</th><th>Ad Soyad</th><th>Kullanici Adi</th><th>Sifre</th><th>Saatlik Ucret</th><th>Kayit Tarihi</th><th>Islemler</th></tr></thead><tbody>';
+  let html = '<div class="table-wrap"><table><thead><tr><th>#</th><th>Ad Soyad</th><th>Kullanici Adi</th><th>Sifre</th><th>Saatlik Ucret</th><th>Kayit Tarihi</th><th>Islemler</th></tr></thead><tbody>';
   list.forEach(function(p, i) {
     html += '<tr><td>' + (i+1) + '</td><td><strong>' + p.name + ' ' + p.surname + '</strong></td>';
-    html += '<td><span class="badge badge--purple">' + p.username + '</span></td>';
-    html += '<td><span class="pwd--mask">\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022</span></td>';
+    html += '<td><span class="badge badge-purple">' + p.username + '</span></td>';
+    html += '<td><span class="pwd-mask">\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022</span></td>';
     html += '<td><strong>' + fmtMoney(p.wage) + '</strong></td>';
     html += '<td>' + fmtDate(p.createdAt) + '</td>';
     html += '<td><div class="actions">';
-    html += '<button class="btn btn--warning btn--sm btn--icon" onclick="openEditPersonnel(\'' + p.id + '\')">\u270F\uFE0F</button>';
-    html += '<button class="btn btn--danger btn--sm btn--icon" onclick="deletePersonnel(\'' + p.id + '\')">\u{1F5D1}\uFE0F</button>';
+    html += '<button class="btn btn-warning btn-sm btn-icon" onclick="openEditPersonnel(\'' + p.id + '\')">\u270F\uFE0F</button>';
+    html += '<button class="btn btn-danger btn-sm btn-icon" onclick="deletePersonnel(\'' + p.id + '\')">\u{1F5D1}\uFE0F</button>';
     html += '</div></td></tr>';
   });
   html += '</tbody></table></div>';
@@ -1094,19 +1094,19 @@ async function renderTimesheet() {
   });
   filtered.sort(function(a, b) { return b.date.localeCompare(a.date); });
   const wrap = document.getElementById('timesheetTableWrap');
-  if (!filtered.length) { wrap.innerHTML = '<div class="empty--state"><div class="empty--icon">\u{1F550}</div><h3>Kayit bulunamadi</h3><p>Henuz puantaj kaydi yok.</p></div>'; return; }
-  let html = '<div class="table--wrap"><table><thead><tr><th>Tarih</th><th>Personel</th><th>Saat</th><th>Ucret</th><th>Not</th><th>Islemler</th></tr></thead><tbody>';
+  if (!filtered.length) { wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F550}</div><h3>Kayit bulunamadi</h3><p>Henuz puantaj kaydi yok.</p></div>'; return; }
+  let html = '<div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Personel</th><th>Saat</th><th>Ucret</th><th>Not</th><th>Islemler</th></tr></thead><tbody>';
   filtered.forEach(function(t) {
     const p = personnel.find(function(x) { return x.id === t.personnelId; });
     const earning = p ? p.wage * t.hours : 0;
     html += '<tr><td>' + fmtDate(t.date) + '</td>';
-    html += '<td><strong>' + (p ? p.name + ' ' + p.surname : '--') + '</strong></td>';
-    html += '<td><span class="badge badge--purple">' + t.hours + ' saat</span></td>';
-    html += '<td><strong style="color:var(----success)">' + fmtMoney(earning) + '</strong></td>';
-    html += '<td style="color:var(----text2)">' + (t.note || '--') + '</td>';
+    html += '<td><strong>' + (p ? p.name + ' ' + p.surname : '-') + '</strong></td>';
+    html += '<td><span class="badge badge-purple">' + t.hours + ' saat</span></td>';
+    html += '<td><strong style="color:var(--success)">' + fmtMoney(earning) + '</strong></td>';
+    html += '<td style="color:var(--text2)">' + (t.note || '-') + '</td>';
     html += '<td><div class="actions">';
-    html += '<button class="btn btn--warning btn--sm btn--icon" onclick="openEditTimesheet(\'' + t.id + '\')">\u270F\uFE0F</button>';
-    html += '<button class="btn btn--danger btn--sm btn--icon" onclick="deleteTimesheet(\'' + t.id + '\')">\u{1F5D1}\uFE0F</button>';
+    html += '<button class="btn btn-warning btn-sm btn-icon" onclick="openEditTimesheet(\'' + t.id + '\')">\u270F\uFE0F</button>';
+    html += '<button class="btn btn-danger btn-sm btn-icon" onclick="deleteTimesheet(\'' + t.id + '\')">\u{1F5D1}\uFE0F</button>';
     html += '</div></td></tr>';
   });
   html += '</tbody></table></div>';
@@ -1173,17 +1173,17 @@ async function renderIncome() {
   let filtered = list.filter(function(i) { return !filterMonth || i.date.indexOf(filterMonth) === 0; });
   filtered.sort(function(a, b) { return b.date.localeCompare(a.date); });
   const wrap = document.getElementById('incomeTableWrap');
-  if (!filtered.length) { wrap.innerHTML = '<div class="empty--state"><div class="empty--icon">\u{1F4B0}</div><h3>Gelir kaydi yok</h3><p>Henuz gelir girisi yapilmamis.</p></div>'; return; }
-  let html = '<div class="table--wrap"><table><thead><tr><th>Tarih</th><th>Nakit</th><th>Kredi Karti</th><th>Toplam</th><th>Aciklama</th><th>Islemler</th></tr></thead><tbody>';
+  if (!filtered.length) { wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F4B0}</div><h3>Gelir kaydi yok</h3><p>Henuz gelir girisi yapilmamis.</p></div>'; return; }
+  let html = '<div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Nakit</th><th>Kredi Karti</th><th>Toplam</th><th>Aciklama</th><th>Islemler</th></tr></thead><tbody>';
   filtered.forEach(function(i) {
     html += '<tr><td>' + fmtDate(i.date) + '</td>';
-    html += '<td style="color:var(----success)">' + fmtMoney(i.cash) + '</td>';
-    html += '<td style="color:var(----accent3)">' + fmtMoney(i.card) + '</td>';
+    html += '<td style="color:var(--success)">' + fmtMoney(i.cash) + '</td>';
+    html += '<td style="color:var(--accent3)">' + fmtMoney(i.card) + '</td>';
     html += '<td><strong>' + fmtMoney(i.cash + i.card) + '</strong></td>';
-    html += '<td style="color:var(----text2)">' + (i.note || '--') + '</td>';
+    html += '<td style="color:var(--text2)">' + (i.note || '-') + '</td>';
     html += '<td><div class="actions">';
-    html += '<button class="btn btn--warning btn--sm btn--icon" onclick="openEditIncome(\'' + i.id + '\')">\u270F\uFE0F</button>';
-    html += '<button class="btn btn--danger btn--sm btn--icon" onclick="deleteIncome(\'' + i.id + '\')">\u{1F5D1}\uFE0F</button>';
+    html += '<button class="btn btn-warning btn-sm btn-icon" onclick="openEditIncome(\'' + i.id + '\')">\u270F\uFE0F</button>';
+    html += '<button class="btn btn-danger btn-sm btn-icon" onclick="deleteIncome(\'' + i.id + '\')">\u{1F5D1}\uFE0F</button>';
     html += '</div></td></tr>';
   });
   html += '</tbody></table></div>';
@@ -1237,14 +1237,14 @@ async function addCategory() {
 async function renderCategories() {
   const list = await getCategories();
   const el = document.getElementById('categoryList');
-  if (!list.length) { el.innerHTML = '<p style="color:var(----text3);font--size:14px;text--align:center;padding:20px">Henuz kategori yok.</p>'; return; }
+  if (!list.length) { el.innerHTML = '<p style="color:var(--text3);font-size:14px;text-align:center;padding:20px">Henuz kategori yok.</p>'; return; }
   let html = '';
   list.forEach(function(c) {
-    html += '<div style="display:flex;align--items:center;justify--content:space--between;padding:10px 0;border--bottom:1px solid var(----border)">';
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">';
     html += '<span>' + c.name + '</span>';
     html += '<div class="actions">';
-    html += '<button class="btn btn--warning btn--sm btn--icon" onclick="openEditCategory(\'' + c.id + '\')">\u270F\uFE0F</button>';
-    html += '<button class="btn btn--danger btn--sm btn--icon" onclick="deleteCategory(\'' + c.id + '\')">\u{1F5D1}\uFE0F</button>';
+    html += '<button class="btn btn-warning btn-sm btn-icon" onclick="openEditCategory(\'' + c.id + '\')">\u270F\uFE0F</button>';
+    html += '<button class="btn btn-danger btn-sm btn-icon" onclick="deleteCategory(\'' + c.id + '\')">\u{1F5D1}\uFE0F</button>';
     html += '</div></div>';
   });
   el.innerHTML = html;
@@ -1322,17 +1322,17 @@ async function renderExpenses() {
   });
   filtered.sort(function(a, b) { return b.date.localeCompare(a.date); });
   const wrap = document.getElementById('expenseTableWrap');
-  if (!filtered.length) { wrap.innerHTML = '<div class="empty--state"><div class="empty--icon">\u{1F4B8}</div><h3>Gider kaydi yok</h3><p>Henuz gider girisi yapilmamis.</p></div>'; return; }
-  let html = '<div class="table--wrap"><table><thead><tr><th>Tarih</th><th>Kategori</th><th>Tutar</th><th>Aciklama</th><th>Islemler</th></tr></thead><tbody>';
+  if (!filtered.length) { wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F4B8}</div><h3>Gider kaydi yok</h3><p>Henuz gider girisi yapilmamis.</p></div>'; return; }
+  let html = '<div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Kategori</th><th>Tutar</th><th>Aciklama</th><th>Islemler</th></tr></thead><tbody>';
   filtered.forEach(function(e) {
     const cat = cats.find(function(x) { return x.id === e.categoryId; });
     html += '<tr><td>' + fmtDate(e.date) + '</td>';
-    html += '<td><span class="badge badge--yellow">' + (cat ? cat.name : '--') + '</span></td>';
-    html += '<td><strong style="color:var(----danger)">' + fmtMoney(e.amount) + '</strong></td>';
-    html += '<td style="color:var(----text2)">' + (e.note || '--') + '</td>';
+    html += '<td><span class="badge badge-yellow">' + (cat ? cat.name : '-') + '</span></td>';
+    html += '<td><strong style="color:var(--danger)">' + fmtMoney(e.amount) + '</strong></td>';
+    html += '<td style="color:var(--text2)">' + (e.note || '-') + '</td>';
     html += '<td><div class="actions">';
-    html += '<button class="btn btn--warning btn--sm btn--icon" onclick="openEditExpense(\'' + e.id + '\')">\u270F\uFE0F</button>';
-    html += '<button class="btn btn--danger btn--sm btn--icon" onclick="deleteExpense(\'' + e.id + '\')">\u{1F5D1}\uFE0F</button>';
+    html += '<button class="btn btn-warning btn-sm btn-icon" onclick="openEditExpense(\'' + e.id + '\')">\u270F\uFE0F</button>';
+    html += '<button class="btn btn-danger btn-sm btn-icon" onclick="deleteExpense(\'' + e.id + '\')">\u{1F5D1}\uFE0F</button>';
     html += '</div></td></tr>';
   });
   html += '</tbody></table></div>';
@@ -1379,16 +1379,16 @@ function clearExpFilter() {
 
 function getDateRange() {
   const now = new Date();
-  if (summaryFilter === 'week') { const d = new Date(now); d.setDate(d.getDate()--7); return { from: d.toISOString().split('T')[0], to: now.toISOString().split('T')[0] }; }
+  if (summaryFilter === 'week') { const d = new Date(now); d.setDate(d.getDate()-7); return { from: d.toISOString().split('T')[0], to: now.toISOString().split('T')[0] }; }
   if (summaryFilter === 'month') { return { from: new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0], to: now.toISOString().split('T')[0] }; }
   if (summaryFilter === 'year') { return { from: new Date(now.getFullYear(), 0, 1).toISOString().split('T')[0], to: now.toISOString().split('T')[0] }; }
-  if (summaryFilter === 'custom') { return { from: document.getElementById('summaryFrom').value || '2000--01--01', to: document.getElementById('summaryTo').value || now.toISOString().split('T')[0] }; }
-  return { from: '2000--01--01', to: '2099--12--31' };
+  if (summaryFilter === 'custom') { return { from: document.getElementById('summaryFrom').value || '2000-01-01', to: document.getElementById('summaryTo').value || now.toISOString().split('T')[0] }; }
+  return { from: '2000-01-01', to: '2099-12-31' };
 }
 
 function setSummaryFilter(f, btn) {
   summaryFilter = f;
-  document.querySelectorAll('.filter--btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
   updateSummary();
 }
@@ -1412,59 +1412,59 @@ async function updateSummary() {
   const totalIncome = totalCash + totalCard;
   const totalExp = expenses.reduce(function(s,e) { return s + e.amount; }, 0);
   const totalWages = ts.reduce(function(s,t) { const p = personnel.find(function(x) { return x.id === t.personnelId; }); return s + (p ? p.wage * t.hours : 0); }, 0);
-  const netProfit = totalIncome -- totalExp -- totalWages;
+  const netProfit = totalIncome - totalExp - totalWages;
 
   document.getElementById('summaryCards').innerHTML =
-    '<div class="stat--card purple"><span class="stat--icon">\u{1F4B0}</span><div class="stat--label">Toplam Gelir</div><div class="stat--value purple">' + fmtMoney(totalIncome) + '</div><div class="stat--sub">Nakit: ' + fmtMoney(totalCash) + ' | KK: ' + fmtMoney(totalCard) + '</div></div>' +
-    '<div class="stat--card pink"><span class="stat--icon">\u{1F4B8}</span><div class="stat--label">Toplam Gider</div><div class="stat--value pink">' + fmtMoney(totalExp) + '</div><div class="stat--sub">' + expenses.length + ' kayit</div></div>' +
-    '<div class="stat--card cyan"><span class="stat--icon">\u{1F465}</span><div class="stat--label">Toplam Maas</div><div class="stat--value cyan">' + fmtMoney(totalWages) + '</div><div class="stat--sub">' + ts.length + ' puantaj kaydi</div></div>' +
-    '<div class="stat--card ' + (netProfit >= 0 ? 'green' : 'red') + '"><span class="stat--icon">' + (netProfit >= 0 ? '\u{1F4C8}' : '\u{1F4C9}') + '</span><div class="stat--label">Net Kar</div><div class="stat--value ' + (netProfit >= 0 ? 'green' : 'red') + '">' + fmtMoney(netProfit) + '</div><div class="stat--sub">Gelir -- Gider -- Maas</div></div>';
+    '<div class="stat-card purple"><span class="stat-icon">\u{1F4B0}</span><div class="stat-label">Toplam Gelir</div><div class="stat-value purple">' + fmtMoney(totalIncome) + '</div><div class="stat-sub">Nakit: ' + fmtMoney(totalCash) + ' | KK: ' + fmtMoney(totalCard) + '</div></div>' +
+    '<div class="stat-card pink"><span class="stat-icon">\u{1F4B8}</span><div class="stat-label">Toplam Gider</div><div class="stat-value pink">' + fmtMoney(totalExp) + '</div><div class="stat-sub">' + expenses.length + ' kayit</div></div>' +
+    '<div class="stat-card cyan"><span class="stat-icon">\u{1F465}</span><div class="stat-label">Toplam Maas</div><div class="stat-value cyan">' + fmtMoney(totalWages) + '</div><div class="stat-sub">' + ts.length + ' puantaj kaydi</div></div>' +
+    '<div class="stat-card ' + (netProfit >= 0 ? 'green' : 'red') + '"><span class="stat-icon">' + (netProfit >= 0 ? '\u{1F4C8}' : '\u{1F4C9}') + '</span><div class="stat-label">Net Kar</div><div class="stat-value ' + (netProfit >= 0 ? 'green' : 'red') + '">' + fmtMoney(netProfit) + '</div><div class="stat-sub">Gelir - Gider - Maas</div></div>';
 
   const persEl = document.getElementById('personnelSummaryTable');
-  if (!personnel.length) { persEl.innerHTML = '<div class="empty--state"><h3>Personel yok</h3></div>'; }
+  if (!personnel.length) { persEl.innerHTML = '<div class="empty-state"><h3>Personel yok</h3></div>'; }
   else {
-    let html = '<div class="table--wrap"><table><thead><tr><th>Ad Soyad</th><th>Saatlik Ucret</th><th>Toplam Saat</th><th>Toplam Kazanc</th><th>Kayit Sayisi</th><th>Oran</th></tr></thead><tbody>';
+    let html = '<div class="table-wrap"><table><thead><tr><th>Ad Soyad</th><th>Saatlik Ucret</th><th>Toplam Saat</th><th>Toplam Kazanc</th><th>Kayit Sayisi</th><th>Oran</th></tr></thead><tbody>';
     personnel.forEach(function(p) {
       const pTs = ts.filter(function(t) { return t.personnelId === p.id; });
       const totalHours = pTs.reduce(function(s,t) { return s + t.hours; }, 0);
       const totalEarn = totalHours * p.wage;
       const pct = totalWages > 0 ? (totalEarn / totalWages * 100) : 0;
       html += '<tr><td><strong>' + p.name + ' ' + p.surname + '</strong></td><td>' + fmtMoney(p.wage) + '</td>';
-      html += '<td><span class="badge badge--purple">' + totalHours + ' saat</span></td>';
-      html += '<td><strong style="color:var(----accent)">' + fmtMoney(totalEarn) + '</strong></td>';
+      html += '<td><span class="badge badge-purple">' + totalHours + ' saat</span></td>';
+      html += '<td><strong style="color:var(--accent)">' + fmtMoney(totalEarn) + '</strong></td>';
       html += '<td>' + pTs.length + ' kayit</td>';
-      html += '<td style="min--width:120px"><div style="font--size:12px;color:var(----text2);margin--bottom:4px">' + pct.toFixed(1) + '%</div><div class="progress--bar"><div class="progress--fill" style="width:' + pct + '%"></div></div></td></tr>';
+      html += '<td style="min-width:120px"><div style="font-size:12px;color:var(--text2);margin-bottom:4px">' + pct.toFixed(1) + '%</div><div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></td></tr>';
     });
     const totHours = ts.reduce(function(s,t) { return s + t.hours; }, 0);
-    html += '<tr style="background:var(----bg2)"><td><strong>TOPLAM</strong></td><td>--</td><td><strong>' + totHours + ' saat</strong></td><td><strong style="color:var(----accent)">' + fmtMoney(totalWages) + '</strong></td><td>' + ts.length + '</td><td>100%</td></tr>';
+    html += '<tr style="background:var(--bg2)"><td><strong>TOPLAM</strong></td><td>-</td><td><strong>' + totHours + ' saat</strong></td><td><strong style="color:var(--accent)">' + fmtMoney(totalWages) + '</strong></td><td>' + ts.length + '</td><td>100%</td></tr>';
     html += '</tbody></table></div>';
     persEl.innerHTML = html;
   }
 
   const incEl = document.getElementById('incomeDetailSummary');
-  if (!income.length) { incEl.innerHTML = '<p style="color:var(----text3);text--align:center;padding:20px">Bu donemde gelir kaydi yok.</p>'; }
+  if (!income.length) { incEl.innerHTML = '<p style="color:var(--text3);text-align:center;padding:20px">Bu donemde gelir kaydi yok.</p>'; }
   else {
-    incEl.innerHTML = '<div style="display:flex;flex--direction:column;gap:12px;margin--bottom:16px">' +
-      '<div style="display:flex;justify--content:space--between;padding:12px;background:var(----bg2);border--radius:10px"><span>Nakit Toplam</span><strong style="color:var(----success)">' + fmtMoney(totalCash) + '</strong></div>' +
-      '<div style="display:flex;justify--content:space--between;padding:12px;background:var(----bg2);border--radius:10px"><span>Kredi Karti Toplam</span><strong style="color:var(----accent3)">' + fmtMoney(totalCard) + '</strong></div>' +
-      '<div style="display:flex;justify--content:space--between;padding:12px;background:linear--gradient(135deg,rgba(108,99,255,0.1),rgba(247,37,133,0.1));border--radius:10px;border:1px solid var(----border)"><strong>Genel Toplam</strong><strong style="color:var(----accent)">' + fmtMoney(totalIncome) + '</strong></div></div>' +
-      '<p style="font--size:12px;color:var(----text3)">' + income.length + ' kayit</p>';
+    incEl.innerHTML = '<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">' +
+      '<div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg2);border-radius:10px"><span>Nakit Toplam</span><strong style="color:var(--success)">' + fmtMoney(totalCash) + '</strong></div>' +
+      '<div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg2);border-radius:10px"><span>Kredi Karti Toplam</span><strong style="color:var(--accent3)">' + fmtMoney(totalCard) + '</strong></div>' +
+      '<div style="display:flex;justify-content:space-between;padding:12px;background:linear-gradient(135deg,rgba(108,99,255,0.1),rgba(247,37,133,0.1));border-radius:10px;border:1px solid var(--border)"><strong>Genel Toplam</strong><strong style="color:var(--accent)">' + fmtMoney(totalIncome) + '</strong></div></div>' +
+      '<p style="font-size:12px;color:var(--text3)">' + income.length + ' kayit</p>';
   }
 
   const expEl = document.getElementById('expenseDetailSummary');
   const byCat = {};
   expenses.forEach(function(e) { const cat = cats.find(function(c) { return c.id === e.categoryId; }); const key = cat ? cat.name : 'Diger'; byCat[key] = (byCat[key] || 0) + e.amount; });
-  const catEntries = Object.entries(byCat).sort(function(a,b) { return b[1]--a[1]; });
-  if (!catEntries.length) { expEl.innerHTML = '<p style="color:var(----text3);text--align:center;padding:20px">Bu donemde gider kaydi yok.</p>'; }
+  const catEntries = Object.entries(byCat).sort(function(a,b) { return b[1]-a[1]; });
+  if (!catEntries.length) { expEl.innerHTML = '<p style="color:var(--text3);text-align:center;padding:20px">Bu donemde gider kaydi yok.</p>'; }
   else {
-    let html = '<div style="display:flex;flex--direction:column;gap:8px">';
+    let html = '<div style="display:flex;flex-direction:column;gap:8px">';
     catEntries.forEach(function(entry) {
       const name = entry[0], amt = entry[1];
       const pct = totalExp > 0 ? (amt / totalExp * 100) : 0;
-      html += '<div style="padding:12px;background:var(----bg2);border--radius:10px"><div style="display:flex;justify--content:space--between;margin--bottom:6px"><span>' + name + '</span><strong style="color:var(----danger)">' + fmtMoney(amt) + '</strong></div>';
-      html += '<div style="display:flex;align--items:center;gap:8px"><div class="progress--bar" style="flex:1"><div class="progress--fill" style="width:' + pct + '%;background:linear--gradient(90deg,var(----accent2),var(----accent))"></div></div><span style="font--size:12px;color:var(----text2);width:40px">' + pct.toFixed(0) + '%</span></div></div>';
+      html += '<div style="padding:12px;background:var(--bg2);border-radius:10px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>' + name + '</span><strong style="color:var(--danger)">' + fmtMoney(amt) + '</strong></div>';
+      html += '<div style="display:flex;align-items:center;gap:8px"><div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:' + pct + '%;background:linear-gradient(90deg,var(--accent2),var(--accent))"></div></div><span style="font-size:12px;color:var(--text2);width:40px">' + pct.toFixed(0) + '%</span></div></div>';
     });
-    html += '<div style="display:flex;justify--content:space--between;padding:12px;background:linear--gradient(135deg,rgba(239,35,60,0.1),rgba(247,37,133,0.1));border--radius:10px;border:1px solid var(----border)"><strong>Toplam</strong><strong style="color:var(----danger)">' + fmtMoney(totalExp) + '</strong></div></div>';
+    html += '<div style="display:flex;justify-content:space-between;padding:12px;background:linear-gradient(135deg,rgba(239,35,60,0.1),rgba(247,37,133,0.1));border-radius:10px;border:1px solid var(--border)"><strong>Toplam</strong><strong style="color:var(--danger)">' + fmtMoney(totalExp) + '</strong></div></div>';
     expEl.innerHTML = html;
   }
 
@@ -1484,7 +1484,7 @@ function buildCharts(income, expenses, ts, personnel, cats) {
 
   const barCtx = document.getElementById('barChart').getContext('2d');
   if (barChartInst) barChartInst.destroy();
-  barChartInst = new Chart(barCtx, { type:'bar', data: { labels: labels.map(function(l) { const s = l.split('--'); return s[1] + '/' + s[0]; }), datasets: [{ label:'Gelir', data: labels.map(function(l) { return months[l].income; }), backgroundColor:'rgba(6,214,160,0.7)', borderColor:'#06d6a0', borderWidth:2, borderRadius:8 }, { label:'Gider+Maas', data: labels.map(function(l) { return months[l].expense; }), backgroundColor:'rgba(247,37,133,0.7)', borderColor:'#f72585', borderWidth:2, borderRadius:8 }] }, options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'top' } }, scales:{ x:{ grid:{ color:gridColor } }, y:{ grid:{ color:gridColor }, ticks:{ callback: function(v) { return 'TL ' + v.toLocaleString('tr--TR'); } } } } } });
+  barChartInst = new Chart(barCtx, { type:'bar', data: { labels: labels.map(function(l) { const s = l.split('-'); return s[1] + '/' + s[0]; }), datasets: [{ label:'Gelir', data: labels.map(function(l) { return months[l].income; }), backgroundColor:'rgba(6,214,160,0.7)', borderColor:'#06d6a0', borderWidth:2, borderRadius:8 }, { label:'Gider+Maas', data: labels.map(function(l) { return months[l].expense; }), backgroundColor:'rgba(247,37,133,0.7)', borderColor:'#f72585', borderWidth:2, borderRadius:8 }] }, options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'top' } }, scales:{ x:{ grid:{ color:gridColor } }, y:{ grid:{ color:gridColor }, ticks:{ callback: function(v) { return 'TL ' + v.toLocaleString('tr-TR'); } } } } } });
 
   const pieCtx = document.getElementById('pieChart').getContext('2d');
   if (pieChartInst) pieChartInst.destroy();
@@ -1496,7 +1496,7 @@ function buildCharts(income, expenses, ts, personnel, cats) {
 
   const lineCtx = document.getElementById('lineChart').getContext('2d');
   if (lineChartInst) lineChartInst.destroy();
-  lineChartInst = new Chart(lineCtx, { type:'line', data: { labels: labels.map(function(l) { const s = l.split('--'); return s[1] + '/' + s[0]; }), datasets: [{ label:'Net Kar', data: labels.map(function(l) { return months[l].income -- months[l].expense; }), borderColor:'#6c63ff', backgroundColor:'rgba(108,99,255,0.15)', fill:true, tension:0.4, pointBackgroundColor:'#6c63ff', pointRadius:5, borderWidth:3 }] }, options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'top' } }, scales:{ x:{ grid:{ color:gridColor } }, y:{ grid:{ color:gridColor }, ticks:{ callback: function(v) { return 'TL ' + v.toLocaleString('tr--TR'); } } } } } });
+  lineChartInst = new Chart(lineCtx, { type:'line', data: { labels: labels.map(function(l) { const s = l.split('-'); return s[1] + '/' + s[0]; }), datasets: [{ label:'Net Kar', data: labels.map(function(l) { return months[l].income - months[l].expense; }), borderColor:'#6c63ff', backgroundColor:'rgba(108,99,255,0.15)', fill:true, tension:0.4, pointBackgroundColor:'#6c63ff', pointRadius:5, borderWidth:3 }] }, options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'top' } }, scales:{ x:{ grid:{ color:gridColor } }, y:{ grid:{ color:gridColor }, ticks:{ callback: function(v) { return 'TL ' + v.toLocaleString('tr-TR'); } } } } } });
 }
 
 async function downloadPDF() {
@@ -1518,7 +1518,7 @@ async function downloadPDF() {
   const totalIncome = totalCash + totalCard;
   const totalExp = expenses.reduce(function(s,e) { return s + e.amount; }, 0);
   const totalWages = ts.reduce(function(s,t) { const p = personnel.find(function(x) { return x.id === t.personnelId; }); return s + (p ? p.wage * t.hours : 0); }, 0);
-  const netProfit = totalIncome -- totalExp -- totalWages;
+  const netProfit = totalIncome - totalExp - totalWages;
   const bizName = getSetting('bizName', 'Isletme Paneli');
 
   doc.setFillColor(108,99,255);
@@ -1528,7 +1528,7 @@ async function downloadPDF() {
   doc.text(bizName, 14, 20);
   doc.setFontSize(9); doc.setFont('helvetica','normal');
   doc.text('Ozet Raporu: ' + fmtDate(range.from) + ' / ' + fmtDate(range.to), 14, 27);
-  doc.text('Olusturulma: ' + new Date().toLocaleDateString('tr--TR'), 150, 27);
+  doc.text('Olusturulma: ' + new Date().toLocaleDateString('tr-TR'), 150, 27);
 
   let y = 45;
   doc.setTextColor(30,30,50);
@@ -1537,12 +1537,12 @@ async function downloadPDF() {
   doc.setDrawColor(108,99,255); doc.line(14,y,196,y); y += 6;
 
   doc.autoTable({ startY:y, head:[['Metrik','Tutar']], body:[
-    ['Toplam Gelir','TL ' + totalIncome.toLocaleString('tr--TR',{minimumFractionDigits:2})],
-    ['  Nakit','TL ' + totalCash.toLocaleString('tr--TR',{minimumFractionDigits:2})],
-    ['  Kredi Karti','TL ' + totalCard.toLocaleString('tr--TR',{minimumFractionDigits:2})],
-    ['Toplam Gider','TL ' + totalExp.toLocaleString('tr--TR',{minimumFractionDigits:2})],
-    ['Toplam Maaslar','TL ' + totalWages.toLocaleString('tr--TR',{minimumFractionDigits:2})],
-    ['NET KAR / ZARAR','TL ' + netProfit.toLocaleString('tr--TR',{minimumFractionDigits:2})]
+    ['Toplam Gelir','TL ' + totalIncome.toLocaleString('tr-TR',{minimumFractionDigits:2})],
+    ['  Nakit','TL ' + totalCash.toLocaleString('tr-TR',{minimumFractionDigits:2})],
+    ['  Kredi Karti','TL ' + totalCard.toLocaleString('tr-TR',{minimumFractionDigits:2})],
+    ['Toplam Gider','TL ' + totalExp.toLocaleString('tr-TR',{minimumFractionDigits:2})],
+    ['Toplam Maaslar','TL ' + totalWages.toLocaleString('tr-TR',{minimumFractionDigits:2})],
+    ['NET KAR / ZARAR','TL ' + netProfit.toLocaleString('tr-TR',{minimumFractionDigits:2})]
   ], theme:'grid', headStyles:{ fillColor:[108,99,255], textColor:255, fontStyle:'bold' }, styles:{ fontSize:10, cellPadding:4 }, columnStyles:{ 1:{ halign:'right', fontStyle:'bold' } },
   didParseCell: function(d) { if (d.row.index === 5 && d.section === 'body') { d.cell.styles.fillColor = netProfit >= 0 ? [6,214,160] : [239,35,60]; d.cell.styles.textColor = 255; } } });
 
@@ -1554,7 +1554,7 @@ async function downloadPDF() {
     doc.autoTable({ startY:y, head:[['Ad Soyad','Saatlik Ucret','Toplam Saat','Kayit','Toplam Kazanc']], body: personnel.map(function(p) {
       const pTs = ts.filter(function(t) { return t.personnelId === p.id; });
       const h = pTs.reduce(function(s,t) { return s+t.hours; },0);
-      return [p.name+' '+p.surname, 'TL '+p.wage.toLocaleString('tr--TR'), h+' saat', pTs.length.toString(), 'TL '+(h*p.wage).toLocaleString('tr--TR',{minimumFractionDigits:2})];
+      return [p.name+' '+p.surname, 'TL '+p.wage.toLocaleString('tr-TR'), h+' saat', pTs.length.toString(), 'TL '+(h*p.wage).toLocaleString('tr-TR',{minimumFractionDigits:2})];
     }), theme:'striped', headStyles:{ fillColor:[76,201,240], textColor:30, fontStyle:'bold' }, styles:{ fontSize:9 }, columnStyles:{ 4:{ halign:'right', fontStyle:'bold' } } });
     y = doc.lastAutoTable.finalY + 14;
   }
@@ -1565,16 +1565,16 @@ async function downloadPDF() {
     if (y > 220) { doc.addPage(); y = 20; }
     doc.setFontSize(13); doc.setFont('helvetica','bold'); doc.setTextColor(30,30,50);
     doc.text('GIDER KATEGORILERI', 14, y); y += 4; doc.line(14,y,196,y); y += 4;
-    doc.autoTable({ startY:y, head:[['Kategori','Toplam','Oran']], body: Object.entries(byCat2).sort(function(a,b){return b[1]--a[1];}).map(function(entry) { return [entry[0], 'TL '+entry[1].toLocaleString('tr--TR',{minimumFractionDigits:2}), (totalExp>0?(entry[1]/totalExp*100).toFixed(1):'0')+'%']; }), theme:'striped', headStyles:{ fillColor:[247,37,133], textColor:255, fontStyle:'bold' }, styles:{ fontSize:9 }, columnStyles:{ 1:{ halign:'right' }, 2:{ halign:'right' } } });
+    doc.autoTable({ startY:y, head:[['Kategori','Toplam','Oran']], body: Object.entries(byCat2).sort(function(a,b){return b[1]-a[1];}).map(function(entry) { return [entry[0], 'TL '+entry[1].toLocaleString('tr-TR',{minimumFractionDigits:2}), (totalExp>0?(entry[1]/totalExp*100).toFixed(1):'0')+'%']; }), theme:'striped', headStyles:{ fillColor:[247,37,133], textColor:255, fontStyle:'bold' }, styles:{ fontSize:9 }, columnStyles:{ 1:{ halign:'right' }, 2:{ halign:'right' } } });
   }
 
   const pageCount = doc.internal.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i); doc.setFontSize(8); doc.setTextColor(150,150,150);
     doc.text('Sayfa ' + i + ' / ' + pageCount, 196, 287, { align:'right' });
-    doc.text(bizName + ' -- Gizli Belge', 14, 287);
+    doc.text(bizName + ' - Gizli Belge', 14, 287);
   }
-  doc.save('ozet--raporu--' + range.from + '--' + range.to + '.pdf');
+  doc.save('ozet-raporu-' + range.from + '-' + range.to + '.pdf');
   showToast('PDF basariyla indirildi!');
 }
 
@@ -1591,17 +1591,17 @@ async function renderPersonnelDashboard() {
   const totalEarning = totalHours * person.wage;
 
   document.getElementById('persStatCards').innerHTML =
-    '<div class="stat--card purple"><span class="stat--icon">\u{1F4C5}</span><div class="stat--label">Calisma Gunu</div><div class="stat--value purple">' + ts.length + '</div><div class="stat--sub">Toplam gun</div></div>' +
-    '<div class="stat--card cyan"><span class="stat--icon">\u23F1\uFE0F</span><div class="stat--label">Toplam Saat</div><div class="stat--value cyan">' + totalHours + '</div><div class="stat--sub">Saat</div></div>' +
-    '<div class="stat--card green"><span class="stat--icon">\u{1F4B0}</span><div class="stat--label">Toplam Kazanc</div><div class="stat--value green">' + fmtMoney(totalEarning) + '</div><div class="stat--sub">' + fmtMoney(person.wage) + ' x ' + totalHours + ' saat</div></div>';
+    '<div class="stat-card purple"><span class="stat-icon">\u{1F4C5}</span><div class="stat-label">Calisma Gunu</div><div class="stat-value purple">' + ts.length + '</div><div class="stat-sub">Toplam gun</div></div>' +
+    '<div class="stat-card cyan"><span class="stat-icon">\u23F1\uFE0F</span><div class="stat-label">Toplam Saat</div><div class="stat-value cyan">' + totalHours + '</div><div class="stat-sub">Saat</div></div>' +
+    '<div class="stat-card green"><span class="stat-icon">\u{1F4B0}</span><div class="stat-label">Toplam Kazanc</div><div class="stat-value green">' + fmtMoney(totalEarning) + '</div><div class="stat-sub">' + fmtMoney(person.wage) + ' x ' + totalHours + ' saat</div></div>';
 
   const wrap = document.getElementById('persTimesheetTable');
-  if (!ts.length) { wrap.innerHTML = '<div class="empty--state"><div class="empty--icon">\u{1F4C5}</div><h3>Kayit bulunamadi</h3><p>Bu donem icin calisma kaydiniz yok.</p></div>'; return; }
-  let html = '<div class="table--wrap"><table><thead><tr><th>Tarih</th><th>Calisma Saati</th><th>Gunluk Kazanc</th><th>Not</th></tr></thead><tbody>';
+  if (!ts.length) { wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F4C5}</div><h3>Kayit bulunamadi</h3><p>Bu donem icin calisma kaydiniz yok.</p></div>'; return; }
+  let html = '<div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Calisma Saati</th><th>Gunluk Kazanc</th><th>Not</th></tr></thead><tbody>';
   ts.forEach(function(t) {
-    html += '<tr><td>' + fmtDate(t.date) + '</td><td><span class="badge badge--purple">' + t.hours + ' saat</span></td><td><strong style="color:var(----success)">' + fmtMoney(t.hours * person.wage) + '</strong></td><td style="color:var(----text2)">' + (t.note || '--') + '</td></tr>';
+    html += '<tr><td>' + fmtDate(t.date) + '</td><td><span class="badge badge-purple">' + t.hours + ' saat</span></td><td><strong style="color:var(--success)">' + fmtMoney(t.hours * person.wage) + '</strong></td><td style="color:var(--text2)">' + (t.note || '-') + '</td></tr>';
   });
-  html += '<tr style="background:var(----bg2)"><td><strong>TOPLAM</strong></td><td><strong>' + totalHours + ' saat</strong></td><td><strong style="color:var(----success)">' + fmtMoney(totalEarning) + '</strong></td><td>--</td></tr>';
+  html += '<tr style="background:var(--bg2)"><td><strong>TOPLAM</strong></td><td><strong>' + totalHours + ' saat</strong></td><td><strong style="color:var(--success)">' + fmtMoney(totalEarning) + '</strong></td><td>-</td></tr>';
   html += '</tbody></table></div>';
   wrap.innerHTML = html;
 }
@@ -1663,7 +1663,7 @@ async function loadSettingsStats() {
   const cats = (await getCategories()).length;
   document.getElementById('setStatPersonnel').textContent = p;
   document.getElementById('setStatRecords').textContent = ts + inc + exp + cats;
-  document.getElementById('setStatDate').textContent = new Date().toLocaleDateString('tr--TR');
+  document.getElementById('setStatDate').textContent = new Date().toLocaleDateString('tr-TR');
 }
 
 async function exportData() {
@@ -1678,7 +1678,7 @@ async function exportData() {
   const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = 'yedek--' + today() + '.json'; a.click();
+  a.href = url; a.download = 'yedek-' + today() + '.json'; a.click();
   URL.revokeObjectURL(url);
   showToast('Veriler disa aktarildi!');
 }
@@ -1766,9 +1766,9 @@ async function renderSalary() {
   });
 
   const statusWrap = document.getElementById('salaryStatusWrap');
-  if (!personnel.length) { statusWrap.innerHTML = '<div class="empty--state"><div class="empty--icon">\u{1F465}</div><h3>Personel yok</h3></div>'; }
+  if (!personnel.length) { statusWrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F465}</div><h3>Personel yok</h3></div>'; }
   else {
-    let html = '<div class="table--wrap"><table><thead><tr><th>Personel</th><th>Kazanilan</th><th>Hesaba</th><th>Elden</th><th>Toplam Odenen</th><th>Kalan Borc</th><th>Durum</th></tr></thead><tbody>';
+    let html = '<div class="table-wrap"><table><thead><tr><th>Personel</th><th>Kazanilan</th><th>Hesaba</th><th>Elden</th><th>Toplam Odenen</th><th>Kalan Borc</th><th>Durum</th></tr></thead><tbody>';
     personnel.forEach(function(p) {
       if (filterPers && p.id !== filterPers) return;
       const pTs = filteredTs.filter(function(t) { return t.personnelId === p.id; });
@@ -1777,15 +1777,15 @@ async function renderSalary() {
       const totalBank = pPayments.reduce(function(s,pay) { return s + pay.bank; }, 0);
       const totalCash = pPayments.reduce(function(s,pay) { return s + pay.cash; }, 0);
       const totalPaid = totalBank + totalCash;
-      const remaining = earned -- totalPaid;
-      const statusBadge = remaining <= 0 ? '<span class="badge badge--green">Odendi</span>' : '<span class="badge badge--red">Bekliyor</span>';
+      const remaining = earned - totalPaid;
+      const statusBadge = remaining <= 0 ? '<span class="badge badge-green">Odendi</span>' : '<span class="badge badge-red">Bekliyor</span>';
       html += '<tr>';
       html += '<td><strong>' + p.name + ' ' + p.surname + '</strong></td>';
-      html += '<td><strong style="color:var(----accent)">' + fmtMoney(earned) + '</strong></td>';
-      html += '<td style="color:var(----accent3)">' + fmtMoney(totalBank) + '</td>';
-      html += '<td style="color:var(----success)">' + fmtMoney(totalCash) + '</td>';
+      html += '<td><strong style="color:var(--accent)">' + fmtMoney(earned) + '</strong></td>';
+      html += '<td style="color:var(--accent3)">' + fmtMoney(totalBank) + '</td>';
+      html += '<td style="color:var(--success)">' + fmtMoney(totalCash) + '</td>';
       html += '<td><strong>' + fmtMoney(totalPaid) + '</strong></td>';
-      html += '<td><strong style="color:' + (remaining > 0 ? 'var(----danger)' : 'var(----success)') + '">' + fmtMoney(remaining > 0 ? remaining : 0) + '</strong></td>';
+      html += '<td><strong style="color:' + (remaining > 0 ? 'var(--danger)' : 'var(--success)') + '">' + fmtMoney(remaining > 0 ? remaining : 0) + '</strong></td>';
       html += '<td>' + statusBadge + '</td>';
       html += '</tr>';
     });
@@ -1795,20 +1795,20 @@ async function renderSalary() {
 
   const histWrap = document.getElementById('salaryHistoryWrap');
   const sorted = filteredPayments.sort(function(a,b) { return b.date.localeCompare(a.date); });
-  if (!sorted.length) { histWrap.innerHTML = '<div class="empty--state"><div class="empty--icon">\u{1F4B3}</div><h3>Odeme gecmisi yok</h3><p>Henuz odeme yapilmamis.</p></div>'; return; }
-  let html2 = '<div class="table--wrap"><table><thead><tr><th>Tarih</th><th>Personel</th><th>Hesaba</th><th>Elden</th><th>Toplam</th><th>Not</th><th>Islemler</th></tr></thead><tbody>';
+  if (!sorted.length) { histWrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F4B3}</div><h3>Odeme gecmisi yok</h3><p>Henuz odeme yapilmamis.</p></div>'; return; }
+  let html2 = '<div class="table-wrap"><table><thead><tr><th>Tarih</th><th>Personel</th><th>Hesaba</th><th>Elden</th><th>Toplam</th><th>Not</th><th>Islemler</th></tr></thead><tbody>';
   sorted.forEach(function(pay) {
     const p = personnel.find(function(x) { return x.id === pay.personnelId; });
     const total = pay.bank + pay.cash;
     html2 += '<tr><td>' + fmtDate(pay.date) + '</td>';
-    html2 += '<td><strong>' + (p ? p.name + ' ' + p.surname : '--') + '</strong></td>';
-    html2 += '<td style="color:var(----accent3)">' + fmtMoney(pay.bank) + '</td>';
-    html2 += '<td style="color:var(----success)">' + fmtMoney(pay.cash) + '</td>';
+    html2 += '<td><strong>' + (p ? p.name + ' ' + p.surname : '-') + '</strong></td>';
+    html2 += '<td style="color:var(--accent3)">' + fmtMoney(pay.bank) + '</td>';
+    html2 += '<td style="color:var(--success)">' + fmtMoney(pay.cash) + '</td>';
     html2 += '<td><strong>' + fmtMoney(total) + '</strong></td>';
-    html2 += '<td style="color:var(----text2)">' + (pay.note || '--') + '</td>';
+    html2 += '<td style="color:var(--text2)">' + (pay.note || '-') + '</td>';
     html2 += '<td><div class="actions">';
-    html2 += '<button class="btn btn--warning btn--sm btn--icon" onclick="openEditSalary(\'' + pay.id + '\')">\u270F\uFE0F</button>';
-    html2 += '<button class="btn btn--danger btn--sm btn--icon" onclick="deleteSalary(\'' + pay.id + '\')">\u{1F5D1}\uFE0F</button>';
+    html2 += '<button class="btn btn-warning btn-sm btn-icon" onclick="openEditSalary(\'' + pay.id + '\')">\u270F\uFE0F</button>';
+    html2 += '<button class="btn btn-danger btn-sm btn-icon" onclick="deleteSalary(\'' + pay.id + '\')">\u{1F5D1}\uFE0F</button>';
     html2 += '</div></td></tr>';
   });
   html2 += '</tbody></table></div>';
@@ -1866,49 +1866,49 @@ async function renderKasa() {
   const totalNakit = allIncome.reduce(function(s, i) { return s + i.cash; }, 0);
   const totalGider = allExpenses.reduce(function(s, e) { return s + e.amount; }, 0);
   const totalYatirilan = transfers.reduce(function(s, t) { return s + t.amount; }, 0);
-  const kasaBakiye = totalNakit -- totalGider -- totalYatirilan;
+  const kasaBakiye = totalNakit - totalGider - totalYatirilan;
 
   document.getElementById('kasaStatCards').innerHTML =
-    '<div class="stat--card green"><span class="stat--icon">\u{1F4B5}</span><div class="stat--label">Toplam Nakit Gelir</div><div class="stat--value green">' + fmtMoney(totalNakit) + '</div><div class="stat--sub">Tum zamanlar</div></div>' +
-    '<div class="stat--card pink"><span class="stat--icon">\u{1F4B8}</span><div class="stat--label">Toplam Gider</div><div class="stat--value pink">' + fmtMoney(totalGider) + '</div><div class="stat--sub">Nakit giderler</div></div>' +
-    '<div class="stat--card cyan"><span class="stat--icon">\u{1F3E6}</span><div class="stat--label">Toplam Yatirilan</div><div class="stat--value cyan">' + fmtMoney(totalYatirilan) + '</div><div class="stat--sub">' + transfers.length + ' yatirma</div></div>' +
-    '<div class="stat--card ' + (kasaBakiye >= 0 ? 'purple' : 'red') + '"><span class="stat--icon">\u{1F4BC}</span><div class="stat--label">Kasadaki Nakit</div><div class="stat--value ' + (kasaBakiye >= 0 ? 'purple' : 'red') + '">' + fmtMoney(kasaBakiye > 0 ? kasaBakiye : 0) + '</div><div class="stat--sub">Bankaya yatirilacak</div></div>';
+    '<div class="stat-card green"><span class="stat-icon">\u{1F4B5}</span><div class="stat-label">Toplam Nakit Gelir</div><div class="stat-value green">' + fmtMoney(totalNakit) + '</div><div class="stat-sub">Tum zamanlar</div></div>' +
+    '<div class="stat-card pink"><span class="stat-icon">\u{1F4B8}</span><div class="stat-label">Toplam Gider</div><div class="stat-value pink">' + fmtMoney(totalGider) + '</div><div class="stat-sub">Nakit giderler</div></div>' +
+    '<div class="stat-card cyan"><span class="stat-icon">\u{1F3E6}</span><div class="stat-label">Toplam Yatirilan</div><div class="stat-value cyan">' + fmtMoney(totalYatirilan) + '</div><div class="stat-sub">' + transfers.length + ' yatirma</div></div>' +
+    '<div class="stat-card ' + (kasaBakiye >= 0 ? 'purple' : 'red') + '"><span class="stat-icon">\u{1F4BC}</span><div class="stat-label">Kasadaki Nakit</div><div class="stat-value ' + (kasaBakiye >= 0 ? 'purple' : 'red') + '">' + fmtMoney(kasaBakiye > 0 ? kasaBakiye : 0) + '</div><div class="stat-sub">Bankaya yatirilacak</div></div>';
 
   const detailWrap = document.getElementById('kasaWeekDetail');
   detailWrap.innerHTML =
-    '<div style="display:flex;flex--direction:column;gap:12px">' +
-    '<div style="display:flex;justify--content:space--between;align--items:center;padding:14px 16px;background:var(----bg2);border--radius:10px">' +
-    '<span style="color:var(----text2)">Toplam nakit gelir</span>' +
-    '<strong style="color:var(----success)">' + fmtMoney(totalNakit) + '</strong></div>' +
-    '<div style="display:flex;justify--content:space--between;align--items:center;padding:14px 16px;background:var(----bg2);border--radius:10px">' +
-    '<span style="color:var(----text2)">Toplam giderler</span>' +
-    '<strong style="color:var(----danger)">-- ' + fmtMoney(totalGider) + '</strong></div>' +
-    '<div style="display:flex;justify--content:space--between;align--items:center;padding:14px 16px;background:var(----bg2);border--radius:10px">' +
-    '<span style="color:var(----text2)">Daha once yatirilanlar</span>' +
-    '<strong style="color:var(----accent3)">-- ' + fmtMoney(totalYatirilan) + '</strong></div>' +
-    '<div style="display:flex;justify--content:space--between;align--items:center;padding:14px 16px;background:linear--gradient(135deg,rgba(108,99,255,0.15),rgba(6,214,160,0.15));border--radius:10px;border:1px solid var(----border)">' +
-    '<strong style="font--size:16px">Simdi Kasada Biriken</strong>' +
-    '<strong style="font--size:22px;color:var(----accent)">' + fmtMoney(kasaBakiye > 0 ? kasaBakiye : 0) + '</strong></div>' +
-    (kasaBakiye <= 0 ? '<div style="text--align:center;color:var(----warning);font--size:13px;padding:8px">Kasada yatirilacak nakit yok.</div>' : '') +
+    '<div style="display:flex;flex-direction:column;gap:12px">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--bg2);border-radius:10px">' +
+    '<span style="color:var(--text2)">Toplam nakit gelir</span>' +
+    '<strong style="color:var(--success)">' + fmtMoney(totalNakit) + '</strong></div>' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--bg2);border-radius:10px">' +
+    '<span style="color:var(--text2)">Toplam giderler</span>' +
+    '<strong style="color:var(--danger)">- ' + fmtMoney(totalGider) + '</strong></div>' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--bg2);border-radius:10px">' +
+    '<span style="color:var(--text2)">Daha once yatirilanlar</span>' +
+    '<strong style="color:var(--accent3)">- ' + fmtMoney(totalYatirilan) + '</strong></div>' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:linear-gradient(135deg,rgba(108,99,255,0.15),rgba(6,214,160,0.15));border-radius:10px;border:1px solid var(--border)">' +
+    '<strong style="font-size:16px">Simdi Kasada Biriken</strong>' +
+    '<strong style="font-size:22px;color:var(--accent)">' + fmtMoney(kasaBakiye > 0 ? kasaBakiye : 0) + '</strong></div>' +
+    (kasaBakiye <= 0 ? '<div style="text-align:center;color:var(--warning);font-size:13px;padding:8px">Kasada yatirilacak nakit yok.</div>' : '') +
     '</div>';
 
   const histWrap = document.getElementById('kasaHistoryWrap');
   if (!transfers.length) {
-    histWrap.innerHTML = '<div class="empty--state"><div class="empty--icon">\u{1F3E6}</div><h3>Henuz yatirma yapilmamis</h3><p>Bankaya yatirinca burada gorunecek.</p></div>';
+    histWrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F3E6}</div><h3>Henuz yatirma yapilmamis</h3><p>Bankaya yatirinca burada gorunecek.</p></div>';
     return;
   }
   const sorted = transfers.slice().sort(function(a, b) { return b.date.localeCompare(a.date); });
-  let html = '<div class="table--wrap"><table><thead><tr><th>Yatirma Tarihi</th><th>Tutar</th><th>Not</th><th>Islem</th></tr></thead><tbody>';
+  let html = '<div class="table-wrap"><table><thead><tr><th>Yatirma Tarihi</th><th>Tutar</th><th>Not</th><th>Islem</th></tr></thead><tbody>';
   sorted.forEach(function(t) {
     html += '<tr>';
     html += '<td>' + fmtDate(t.date) + '</td>';
-    html += '<td><strong style="color:var(----success)">' + fmtMoney(t.amount) + '</strong></td>';
-    html += '<td style="color:var(----text2)">' + (t.note || '--') + '</td>';
-    html += '<td><button class="btn btn--danger btn--sm btn--icon" onclick="deleteKasaTransfer(\'' + t.id + '\')">\u{1F5D1}\uFE0F</button></td>';
+    html += '<td><strong style="color:var(--success)">' + fmtMoney(t.amount) + '</strong></td>';
+    html += '<td style="color:var(--text2)">' + (t.note || '-') + '</td>';
+    html += '<td><button class="btn btn-danger btn-sm btn-icon" onclick="deleteKasaTransfer(\'' + t.id + '\')">\u{1F5D1}\uFE0F</button></td>';
     html += '</tr>';
   });
   const toplamYatirilan = sorted.reduce(function(s, t) { return s + t.amount; }, 0);
-  html += '<tr style="background:var(----bg2)"><td><strong>TOPLAM</strong></td><td><strong style="color:var(----success)">' + fmtMoney(toplamYatirilan) + '</strong></td><td>--</td><td>--</td></tr>';
+  html += '<tr style="background:var(--bg2)"><td><strong>TOPLAM</strong></td><td><strong style="color:var(--success)">' + fmtMoney(toplamYatirilan) + '</strong></td><td>-</td><td>-</td></tr>';
   html += '</tbody></table></div>';
   histWrap.innerHTML = html;
 }
@@ -1940,7 +1940,7 @@ async function bankayaYatir() {
   const totalNakit = allIncome.reduce(function(s, i) { return s + i.cash; }, 0);
   const totalGider = allExpenses.reduce(function(s, e) { return s + e.amount; }, 0);
   const totalYatirilan = transfers.reduce(function(s, t) { return s + t.amount; }, 0);
-  const kasaBakiye = totalNakit -- totalGider -- totalYatirilan;
+  const kasaBakiye = totalNakit - totalGider - totalYatirilan;
 
   if (kasaBakiye <= 0) { showToast('Kasada yatirilacak nakit yok.', 'error'); return; }
 
