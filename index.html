@@ -368,6 +368,7 @@ background-clip: text; margin-bottom: 8px;
     <button class="tab-btn" onclick="switchTab('expense')" data-tab="expense">💸 Gider</button>
     <button class="tab-btn" onclick="switchTab('summary')" data-tab="summary">📊 Ozet</button>
     <button class="tab-btn" onclick="switchTab('salary')" data-tab="salary">💳 Maas</button>
+    <button class="tab-btn" onclick="switchTab('program')" data-tab="program">📅 Program</button>
     <button class="tab-btn" onclick="switchTab('kasa')" data-tab="kasa">🏦 Kasa</button>
     <button class="tab-btn" onclick="switchTab('settings')" data-tab="settings">⚙️ Ayarlar</button>
   </div>
@@ -583,6 +584,46 @@ background-clip: text; margin-bottom: 8px;
   </div>
 </div>
 
+<!-- TAB: PROGRAM -->
+<div class="tab-panel" id="tab-program">
+  <div class="section-title"><span>📅</span> Haftalik Calisma Programi</div>
+  <p class="section-sub">Personel haftalik vardiya programini olusturun.</p>
+  <div class="card">
+    <div class="card-title"><span class="icon icon-purple">➕</span> Vardiya Ekle</div>
+    <div class="form-row form-row-2">
+      <div class="form-group"><label>Personel</label>
+        <select class="form-control" id="progPersonnel"><option value="">Personel Secin</option></select>
+      </div>
+      <div class="form-group"><label>Hafta Baslangici (Pazartesi)</label>
+        <input type="date" class="form-control" id="progWeek" />
+      </div>
+    </div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:13px;color:var(--text2);font-weight:600;margin-bottom:8px">Gunlere gore program:</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:grid;grid-template-columns:110px 1fr 1fr 1fr;gap:8px;align-items:center"><span style="font-size:13px;font-weight:600">Pazartesi</span><input type="time" class="form-control" id="progStart0" /><input type="time" class="form-control" id="progEnd0" /><input type="text" class="form-control" id="progNote0" placeholder="Not..." /></div>
+        <div style="display:grid;grid-template-columns:110px 1fr 1fr 1fr;gap:8px;align-items:center"><span style="font-size:13px;font-weight:600">Sali</span><input type="time" class="form-control" id="progStart1" /><input type="time" class="form-control" id="progEnd1" /><input type="text" class="form-control" id="progNote1" placeholder="Not..." /></div>
+        <div style="display:grid;grid-template-columns:110px 1fr 1fr 1fr;gap:8px;align-items:center"><span style="font-size:13px;font-weight:600">Carsamba</span><input type="time" class="form-control" id="progStart2" /><input type="time" class="form-control" id="progEnd2" /><input type="text" class="form-control" id="progNote2" placeholder="Not..." /></div>
+        <div style="display:grid;grid-template-columns:110px 1fr 1fr 1fr;gap:8px;align-items:center"><span style="font-size:13px;font-weight:600">Persembe</span><input type="time" class="form-control" id="progStart3" /><input type="time" class="form-control" id="progEnd3" /><input type="text" class="form-control" id="progNote3" placeholder="Not..." /></div>
+        <div style="display:grid;grid-template-columns:110px 1fr 1fr 1fr;gap:8px;align-items:center"><span style="font-size:13px;font-weight:600">Cuma</span><input type="time" class="form-control" id="progStart4" /><input type="time" class="form-control" id="progEnd4" /><input type="text" class="form-control" id="progNote4" placeholder="Not..." /></div>
+        <div style="display:grid;grid-template-columns:110px 1fr 1fr 1fr;gap:8px;align-items:center"><span style="font-size:13px;font-weight:600">Cumartesi</span><input type="time" class="form-control" id="progStart5" /><input type="time" class="form-control" id="progEnd5" /><input type="text" class="form-control" id="progNote5" placeholder="Not..." /></div>
+        <div style="display:grid;grid-template-columns:110px 1fr 1fr 1fr;gap:8px;align-items:center"><span style="font-size:13px;font-weight:600">Pazar</span><input type="time" class="form-control" id="progStart6" /><input type="time" class="form-control" id="progEnd6" /><input type="text" class="form-control" id="progNote6" placeholder="Not..." /></div>
+      </div>
+      <p style="font-size:12px;color:var(--text3);margin-top:8px">Bos birakilirsa o gun kapali sayilir.</p>
+    </div>
+    <button class="btn btn-primary" onclick="addProgram()">✅ Programi Kaydet</button>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon icon-cyan">📋</span> Mevcut Programlar</div>
+    <div class="filter-bar">
+      <input type="date" class="form-control" id="progFilterWeek" style="width:200px" onchange="renderProgram()" />
+      <select class="form-control" id="progFilterPersonnel" style="width:180px" onchange="renderProgram()"><option value="">Tum Personel</option></select>
+      <button class="btn btn-ghost btn-sm" onclick="clearProgFilter()">Temizle</button>
+    </div>
+    <div id="programTableWrap"></div>
+  </div>
+</div>
+
 <!-- TAB: MAAS -->
 <div class="tab-panel" id="tab-salary">
   <div class="section-title"><span>💳</span> Maas Odemesi</div>
@@ -696,6 +737,10 @@ background-clip: text; margin-bottom: 8px;
       <span style="position:absolute;right:32px;bottom:24px;font-size:48px;opacity:0.3">🕐</span>
     </div>
     <div class="grid-3" id="persStatCards" style="margin-bottom:24px"></div>
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-title"><span class="icon icon-cyan">📅</span> Haftalik Programim</div>
+      <div id="persProgram"></div>
+    </div>
     <div class="card" style="margin-bottom:20px">
       <div class="card-title"><span class="icon icon-purple">🔐</span> Sifre Degistir</div>
       <div class="form-row form-row-3">
@@ -1027,6 +1072,7 @@ function showPersonnelDash(person) {
   document.getElementById('persWelcomeSub').textContent = 'Saatlik ucret: ' + fmtMoney(person.wage) + ' / Saat';
   currentUser = { role: 'personnel', id: person.id, person: person };
   renderPersonnelDashboard();
+  renderPersonnelProgram();
 }
 
 (async function() {
@@ -1070,6 +1116,7 @@ async function switchTab(tab) {
   else if (tab === 'personnel') await renderPersonnel();
   else if (tab === 'salary') { await populateSalaryDropdowns(); document.getElementById('salDate').value = today(); await renderSalary(); }
   else if (tab === 'kasa') { document.getElementById('kasaManualDate').value = today(); await renderKasa(); }
+  else if (tab === 'program') { await populateProgramDropdowns(); setDefaultProgWeek(); await renderProgram(); }
 }
 
 async function addPersonnel() {
@@ -2147,6 +2194,151 @@ async function deleteKasaTransfer(id) {
     await renderKasa();
     showToast('Kayit silindi.', 'warning');
   });
+}
+
+// ===================== PROGRAM =====================
+const GUNLER = ['Pazartesi', 'Sali', 'Carsamba', 'Persembe', 'Cuma', 'Cumartesi', 'Pazar'];
+
+function setDefaultProgWeek() {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+  const mon = new Date(now);
+  mon.setDate(diff);
+  const el = document.getElementById('progWeek');
+  if (el) el.value = mon.toISOString().split('T')[0];
+}
+
+async function populateProgramDropdowns() {
+  const list = await getPersonnel();
+  ['progPersonnel', 'progFilterPersonnel'].forEach(function(did) {
+    const el = document.getElementById(did);
+    if (!el) return;
+    const cur = el.value;
+    const prefix = did === 'progFilterPersonnel' ? '<option value="">Tum Personel</option>' : '<option value="">Personel Secin</option>';
+    el.innerHTML = prefix + list.map(function(p) { return '<option value="' + p.id + '">' + p.name + ' ' + p.surname + '</option>'; }).join('');
+    if (cur) el.value = cur;
+  });
+}
+
+async function getPrograms() {
+  return (await dbGet('programs')).map(function(r) {
+    return { id: r.id, personnelId: r.personnel_id, weekStart: r.week_start, days: JSON.parse(r.days || '[]'), createdAt: r.created_at };
+  });
+}
+
+async function addProgram() {
+  const personnelId = document.getElementById('progPersonnel').value;
+  const weekStart = document.getElementById('progWeek').value;
+  if (!personnelId || !weekStart) { showToast('Personel ve hafta secin.', 'error'); return; }
+  const days = [];
+  for (var i = 0; i < 7; i++) {
+    const start = document.getElementById('progStart' + i).value;
+    const end = document.getElementById('progEnd' + i).value;
+    const note = document.getElementById('progNote' + i).value.trim();
+    days.push({ gun: GUNLER[i], start: start, end: end, note: note, kapali: !start && !end });
+  }
+  const existing = await getPrograms();
+  const dup = existing.find(function(p) { return p.personnelId === personnelId && p.weekStart === weekStart; });
+  if (dup) {
+    const ok = await dbUpdate('programs', dup.id, { days: JSON.stringify(days) });
+    if (!ok) return;
+  } else {
+    const ok = await dbInsert('programs', { id: genId(), personnel_id: personnelId, week_start: weekStart, days: JSON.stringify(days), created_at: today() });
+    if (!ok) return;
+  }
+  for (var j = 0; j < 7; j++) {
+    document.getElementById('progStart' + j).value = '';
+    document.getElementById('progEnd' + j).value = '';
+    document.getElementById('progNote' + j).value = '';
+  }
+  await renderProgram();
+  showToast('Program kaydedildi!');
+}
+
+async function renderProgram() {
+  showLoading('programTableWrap');
+  const programs = await getPrograms();
+  const personnel = await getPersonnel();
+  const filterWeek = document.getElementById('progFilterWeek') ? document.getElementById('progFilterWeek').value : '';
+  const filterPers = document.getElementById('progFilterPersonnel') ? document.getElementById('progFilterPersonnel').value : '';
+  let filtered = programs.filter(function(p) {
+    if (filterWeek && p.weekStart !== filterWeek) return false;
+    if (filterPers && p.personnelId !== filterPers) return false;
+    return true;
+  });
+  filtered.sort(function(a, b) { return b.weekStart.localeCompare(a.weekStart); });
+  const wrap = document.getElementById('programTableWrap');
+  if (!filtered.length) {
+    wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F4C5}</div><h3>Program bulunamadi</h3><p>Henuz program olusturulmamis.</p></div>';
+    return;
+  }
+  let html = '';
+  filtered.forEach(function(prog) {
+    const p = personnel.find(function(x) { return x.id === prog.personnelId; });
+    const weekEnd = new Date(prog.weekStart);
+    weekEnd.setDate(weekEnd.getDate() + 6);
+    html += '<div style="margin-bottom:20px;border:1px solid var(--border);border-radius:12px;overflow:hidden">';
+    html += '<div style="background:var(--bg2);padding:12px 16px;display:flex;justify-content:space-between;align-items:center">';
+    html += '<div><strong>' + (p ? p.name + ' ' + p.surname : '-') + '</strong><span style="color:var(--text2);font-size:13px;margin-left:12px">' + fmtDate(prog.weekStart) + ' - ' + fmtDate(weekEnd.toISOString().split('T')[0]) + '</span></div>';
+    html += '<button class="btn btn-danger btn-sm btn-icon" onclick="deleteProgram(\'' + prog.id + '\')">\u{1F5D1}\uFE0F</button>';
+    html += '</div><div style="padding:12px 16px"><div style="display:flex;flex-direction:column;gap:6px">';
+    prog.days.forEach(function(d) {
+      if (d.kapali) {
+        html += '<div style="display:flex;align-items:center;gap:12px;padding:8px;border-radius:8px;opacity:0.5"><span style="width:90px;font-size:13px;font-weight:600">' + d.gun + '</span><span class="badge badge-red">Kapali</span></div>';
+      } else {
+        html += '<div style="display:flex;align-items:center;gap:12px;padding:8px;background:var(--bg2);border-radius:8px"><span style="width:90px;font-size:13px;font-weight:600">' + d.gun + '</span><span class="badge badge-green">' + d.start + ' - ' + d.end + '</span>' + (d.note ? '<span style="font-size:12px;color:var(--text2)">' + d.note + '</span>' : '') + '</div>';
+      }
+    });
+    html += '</div></div></div>';
+  });
+  wrap.innerHTML = html;
+}
+
+async function deleteProgram(id) {
+  showConfirm('Programi Sil', 'Bu programi silmek istediginize emin misiniz?', async function() {
+    const ok = await dbDelete('programs', id);
+    if (!ok) return;
+    await renderProgram();
+    showToast('Program silindi.', 'warning');
+  });
+}
+
+function clearProgFilter() {
+  document.getElementById('progFilterWeek').value = '';
+  document.getElementById('progFilterPersonnel').value = '';
+  renderProgram();
+}
+
+async function renderPersonnelProgram() {
+  if (!currentUser || currentUser.role !== 'personnel') return;
+  const wrap = document.getElementById('persProgram');
+  if (!wrap) return;
+  const programs = await getPrograms();
+  const now = new Date();
+  const day = now.getDay();
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+  const mon = new Date(now);
+  mon.setDate(diff);
+  const weekStart = mon.toISOString().split('T')[0];
+  const prog = programs.find(function(p) { return p.personnelId === currentUser.id && p.weekStart === weekStart; });
+  if (!prog) {
+    wrap.innerHTML = '<div class="empty-state"><div class="empty-icon">\u{1F4CB}</div><h3>Bu hafta icin program olusturulmamistir</h3><p>Yoneticinizle iletisime gecin.</p></div>';
+    return;
+  }
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekEnd.getDate() + 6);
+  let html = '<p style="color:var(--text2);font-size:13px;margin-bottom:12px">' + fmtDate(weekStart) + ' - ' + fmtDate(weekEnd.toISOString().split('T')[0]) + '</p>';
+  html += '<div style="display:flex;flex-direction:column;gap:6px">';
+  prog.days.forEach(function(d) {
+    if (d.kapali) {
+      html += '<div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:8px;opacity:0.5"><span style="width:90px;font-size:14px;font-weight:600">' + d.gun + '</span><span class="badge badge-red">Kapali</span></div>';
+    } else {
+      html += '<div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg2);border-radius:8px"><span style="width:90px;font-size:14px;font-weight:600">' + d.gun + '</span><span class="badge badge-green">' + d.start + ' - ' + d.end + '</span>' + (d.note ? '<span style="font-size:12px;color:var(--text2)">' + d.note + '</span>' : '') + '</div>';
+    }
+  });
+  html += '</div>';
+  wrap.innerHTML = html;
 }
 </script>
 
