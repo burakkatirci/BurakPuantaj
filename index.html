@@ -3,13 +3,15 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Isletme Paneli" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="apple-mobile-web-app-title" content="Isletme" />
 <meta name="theme-color" content="#0f0e17" />
+<meta name="mobile-web-app-capable" content="yes" />
 <link rel="manifest" href="manifest.json" />
 <link rel="apple-touch-icon" href="icon.png" />
+<link rel="apple-touch-startup-image" href="icon.png" />
 <title>İşletme Yönetim Paneli</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -260,11 +262,47 @@ tr:hover td{background:var(–bg2)}
 select option{background:var(–bg2);color:var(–text)}
 .form-control option{background:var(–bg2)}
 
+/* PWA */
+@media all and (display-mode: standalone) {
+body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+.header { padding-top: env(safe-area-inset-top); height: calc(64px + env(safe-area-inset-top)); }
+}
+
+#splashScreen {
+position: fixed; inset: 0; background: #0f0e17;
+display: flex; flex-direction: column; align-items: center; justify-content: center;
+z-index: 99999; transition: opacity 0.5s ease;
+}
+#splashScreen .splash-logo {
+width: 100px; height: 100px;
+background: linear-gradient(135deg, #6c63ff, #f72585);
+border-radius: 24px; display: flex; align-items: center; justify-content: center;
+font-size: 48px; margin-bottom: 24px;
+box-shadow: 0 8px 32px rgba(108,99,255,0.5);
+animation: splashPulse 1s ease infinite alternate;
+}
+#splashScreen h1 {
+font-family: ‘Syne’, sans-serif; font-size: 28px; font-weight: 800;
+background: linear-gradient(135deg, #6c63ff, #f72585);
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+background-clip: text; margin-bottom: 8px;
+}
+#splashScreen p { color: #a7a3c2; font-size: 14px; }
+@keyframes splashPulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+
 @media(max-width:480px){.login-card{padding:32px 24px}.modal{padding:24px}}
 </style>
 
 </head>
 <body>
+
+<!-- SPLASH -->
+
+<div id="splashScreen">
+  <div class="splash-logo">🏢</div>
+  <h1>Isletme Paneli</h1>
+  <p>Yonetim ve Takip Sistemi</p>
+</div>
 
 <!-- TOAST -->
 
@@ -389,15 +427,46 @@ select option{background:var(–bg2);color:var(–text)}
 <!-- TAB 3: INCOME -->
 <div class="tab-panel" id="tab-income">
   <div class="section-title"><span>💰</span> Gelir Takibi</div>
-  <p class="section-sub">Nakit ve kredi kartı gelirlerinizi kaydedin.</p>
+  <p class="section-sub">Nakit ve kredi karti gelirlerinizi kaydedin.</p>
   <div class="card">
-    <div class="card-title"><span class="icon icon-green">➕</span> Gelir Girişi</div>
+    <div class="card-title"><span class="icon icon-green">➕</span> Gelir Girisi</div>
     <div class="form-row form-row-3">
       <div class="form-group"><label>Tarih</label><input type="date" class="form-control" id="incDate" /></div>
-      <div class="form-group"><label>Nakit Gelir (₺)</label><input type="number" class="form-control" id="incCash" placeholder="0.00" min="0" step="0.01" /></div>
-      <div class="form-group"><label>Kredi Kartı (₺)</label><input type="number" class="form-control" id="incCard" placeholder="0.00" min="0" step="0.01" /></div>
+      <div class="form-group"><label>Nakit Gelir (TL)</label><input type="number" class="form-control" id="incCash" placeholder="0.00" min="0" step="0.01" /></div>
+      <div class="form-group"><label>Kredi Karti (TL)</label><input type="number" class="form-control" id="incCard" placeholder="0.00" min="0" step="0.01" /></div>
     </div>
-    <div class="form-group"><label>Açıklama (İsteğe Bağlı)</label><input type="text" class="form-control" id="incNote" placeholder="Gelir açıklaması..." /></div>
+    <div class="form-group"><label>Aciklama (Istege Bagli)</label><input type="text" class="form-control" id="incNote" placeholder="Gelir aciklamasi..." /></div>
+
+    <!-- YEMEK KARTI ACCORDION -->
+    <div style="margin-bottom:16px">
+      <button class="btn btn-ghost btn-sm" onclick="toggleYemekKarti()" id="yemekKartiBtn" style="width:100%;justify-content:space-between;display:flex">
+        <span>🍽️ Yemek Karti Geliri Ekle</span>
+        <span id="yemekKartiArrow">▼</span>
+      </button>
+      <div id="yemekKartiForm" style="display:none;margin-top:12px;padding:16px;background:var(--bg2);border-radius:12px;border:1px solid var(--border)">
+        <div class="form-row form-row-2" style="margin-bottom:12px">
+          <div class="form-group"><label>Setcard (TL)</label><input type="number" class="form-control" id="ykSetcard" placeholder="0.00" min="0" step="0.01" oninput="calcYemekKarti()" /></div>
+          <div class="form-group"><label>Metropol (TL)</label><input type="number" class="form-control" id="ykMetropol" placeholder="0.00" min="0" step="0.01" oninput="calcYemekKarti()" /></div>
+        </div>
+        <div class="form-row form-row-2" style="margin-bottom:16px">
+          <div class="form-group"><label>Ticket (TL)</label><input type="number" class="form-control" id="ykTicket" placeholder="0.00" min="0" step="0.01" oninput="calcYemekKarti()" /></div>
+          <div class="form-group"><label>Pluxee / Sodexo (TL)</label><input type="number" class="form-control" id="ykPluxee" placeholder="0.00" min="0" step="0.01" oninput="calcYemekKarti()" /></div>
+        </div>
+        <div id="yemekKartiHesap" style="display:none">
+          <div class="table-wrap" style="margin-bottom:12px">
+            <table>
+              <thead><tr><th>Kart</th><th>Brut</th><th>Komisyon %12</th><th>KDV %10</th><th>Net</th></tr></thead>
+              <tbody id="yemekKartiTablo"></tbody>
+            </table>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:linear-gradient(135deg,rgba(6,214,160,0.15),rgba(108,99,255,0.15));border-radius:10px;border:1px solid var(--border)">
+            <strong>Gelire Eklenecek Net Tutar</strong>
+            <strong style="font-size:20px;color:var(--success)" id="yemekKartiNet">0.00 TL</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <button class="btn btn-success" onclick="addIncome()">✅ Kaydet</button>
   </div>
   <div class="card">
@@ -759,6 +828,14 @@ select option{background:var(–bg2);color:var(–text)}
 const SUPABASE_URL = 'https://ctfdfzghegdsddquhnxj.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0ZmRmemdoZWdkc2RkcXVobnhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQxMTUsImV4cCI6MjA4ODgzMDExNX0.yus0GW-vSrGEChZXfzXetLcz5EcwZd8kvVxpyMJDH_g';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Splash screen
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    const splash = document.getElementById('splashScreen');
+    if (splash) { splash.style.opacity = '0'; setTimeout(function() { splash.style.display = 'none'; }, 500); }
+  }, 1500);
+});
 
 let adminCredentials = JSON.parse(localStorage.getItem('adminCredentials') || 'null') || { username: 'admin', password: 'admin123' };
 
@@ -1176,19 +1253,98 @@ function clearTsFilter() {
   renderTimesheet();
 }
 
+function toggleYemekKarti() {
+  const form = document.getElementById('yemekKartiForm');
+  const arrow = document.getElementById('yemekKartiArrow');
+  if (form.style.display === 'none') {
+    form.style.display = 'block';
+    arrow.textContent = '▲';
+  } else {
+    form.style.display = 'none';
+    arrow.textContent = '▼';
+  }
+}
+
+function calcYemekKarti() {
+  const kartlar = [
+    { name: 'Setcard', val: parseFloat(document.getElementById('ykSetcard').value) || 0 },
+    { name: 'Metropol', val: parseFloat(document.getElementById('ykMetropol').value) || 0 },
+    { name: 'Ticket', val: parseFloat(document.getElementById('ykTicket').value) || 0 },
+    { name: 'Pluxee', val: parseFloat(document.getElementById('ykPluxee').value) || 0 }
+  ];
+  const aktif = kartlar.filter(function(k) { return k.val > 0; });
+  if (!aktif.length) {
+    document.getElementById('yemekKartiHesap').style.display = 'none';
+    return;
+  }
+  document.getElementById('yemekKartiHesap').style.display = 'block';
+  let toplamBrut = 0, toplamKomisyon = 0, toplamKdv = 0, toplamNet = 0;
+  let html = '';
+  kartlar.forEach(function(k) {
+    if (k.val <= 0) return;
+    const komisyon = k.val * 0.12;
+    const sonraKomisyon = k.val - komisyon;
+    const kdv = sonraKomisyon * 0.10;
+    const net = sonraKomisyon - kdv;
+    toplamBrut += k.val;
+    toplamKomisyon += komisyon;
+    toplamKdv += kdv;
+    toplamNet += net;
+    html += '<tr>';
+    html += '<td><strong>' + k.name + '</strong></td>';
+    html += '<td>' + k.val.toFixed(2) + ' TL</td>';
+    html += '<td style="color:var(--danger)">-' + komisyon.toFixed(2) + ' TL</td>';
+    html += '<td style="color:var(--warning)">-' + kdv.toFixed(2) + ' TL</td>';
+    html += '<td><strong style="color:var(--success)">' + net.toFixed(2) + ' TL</strong></td>';
+    html += '</tr>';
+  });
+  html += '<tr style="background:var(--bg2)">';
+  html += '<td><strong>Toplam</strong></td>';
+  html += '<td><strong>' + toplamBrut.toFixed(2) + ' TL</strong></td>';
+  html += '<td style="color:var(--danger)"><strong>-' + toplamKomisyon.toFixed(2) + ' TL</strong></td>';
+  html += '<td style="color:var(--warning)"><strong>-' + toplamKdv.toFixed(2) + ' TL</strong></td>';
+  html += '<td><strong style="color:var(--success)">' + toplamNet.toFixed(2) + ' TL</strong></td>';
+  html += '</tr>';
+  document.getElementById('yemekKartiTablo').innerHTML = html;
+  document.getElementById('yemekKartiNet').textContent = toplamNet.toFixed(2) + ' TL';
+}
+
+function getYemekKartiNet() {
+  const kartlar = [
+    parseFloat(document.getElementById('ykSetcard').value) || 0,
+    parseFloat(document.getElementById('ykMetropol').value) || 0,
+    parseFloat(document.getElementById('ykTicket').value) || 0,
+    parseFloat(document.getElementById('ykPluxee').value) || 0
+  ];
+  return kartlar.reduce(function(s, v) {
+    const komisyon = v * 0.12;
+    const sonra = v - komisyon;
+    const kdv = sonra * 0.10;
+    return s + (sonra - kdv);
+  }, 0);
+}
+
 async function addIncome() {
   const date = document.getElementById('incDate').value;
   const cash = parseFloat(document.getElementById('incCash').value) || 0;
   const card = parseFloat(document.getElementById('incCard').value) || 0;
   const note = document.getElementById('incNote').value.trim();
-  if (!date || (cash === 0 && card === 0)) { showToast('Tarih ve en az bir gelir giriniz.', 'error'); return; }
-  const ok = await dbInsert('income', { id: genId(), date: date, cash: cash, card: card, note: note || null, created_at: today() });
+  const ykNet = getYemekKartiNet();
+  const totalCash = cash + ykNet;
+  if (!date || (totalCash === 0 && card === 0)) { showToast('Tarih ve en az bir gelir giriniz.', 'error'); return; }
+  const noteText = ykNet > 0 ? (note ? note + ' + Yemek Karti ' + ykNet.toFixed(2) + ' TL net' : 'Yemek Karti ' + ykNet.toFixed(2) + ' TL net') : (note || null);
+  const ok = await dbInsert('income', { id: genId(), date: date, cash: totalCash, card: card, note: noteText, created_at: today() });
   if (!ok) return;
   document.getElementById('incCash').value = '';
   document.getElementById('incCard').value = '';
   document.getElementById('incNote').value = '';
+  document.getElementById('ykSetcard').value = '';
+  document.getElementById('ykMetropol').value = '';
+  document.getElementById('ykTicket').value = '';
+  document.getElementById('ykPluxee').value = '';
+  document.getElementById('yemekKartiHesap').style.display = 'none';
   await renderIncome();
-  showToast('Gelir kaydedildi!');
+  showToast('Gelir kaydedildi!' + (ykNet > 0 ? ' Yemek karti neti: ' + ykNet.toFixed(2) + ' TL' : ''));
 }
 
 async function renderIncome() {
